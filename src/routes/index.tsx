@@ -1,24 +1,104 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Plus, Trash2 } from "lucide-react";
+import { PageHeader } from "@/components/app-shell";
+import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { StickerArt } from "@/lib/stickers";
+import { actions, useScrap, type Note } from "@/lib/scrap-store";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Notes shelf — Scrap" },
+      {
+        name: "description",
+        content:
+          "Your paper shelf of notes: taped cards, doodles in the margins and stickers stuck wherever they landed.",
+      },
+      { property: "og:title", content: "Notes shelf — Scrap" },
+      {
+        property: "og:description",
+        content: "A cozy shelf of hand-made notes, doodles and marginalia.",
+      },
+    ],
+  }),
+  component: NotesShelf,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+const TAPES = ["var(--petal)", "var(--sage)", "var(--sky)", "var(--amber)", "var(--rose)"];
+
+function preview(n: Note) {
+  const text = n.pages.map((p) => p.text).join(" ").trim();
+  return text ? text.slice(0, 120) : "an empty page, waiting.";
+}
+
+function NotesShelf() {
+  const notes = useScrap((s) => s.notes);
+  const navigate = useNavigate();
+  const mood = useTimeMood("greeting");
+
+  const create = () => {
+    const id = actions.createNote();
+    navigate({ to: "/notes/$noteId", params: { noteId: id } });
+  };
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <div>
+      <PageHeader
+        title="notes"
+        note={`${notes.length} ${notes.length === 1 ? "page" : "pages"} on the shelf`}
+        right={
+          <button
+            onClick={create}
+            className="hand flex items-center gap-1.5 rounded-[4px] bg-primary px-3.5 py-1.5 text-xl text-primary-foreground transition-transform hover:-rotate-1"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2} /> new page
+          </button>
+        }
       />
+
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {notes.map((n, i) => (
+          <div key={n.id} className="relative">
+            <Link
+              to="/notes/$noteId"
+              params={{ noteId: n.id }}
+              className="paper-card paper-grain ruled-lines block h-48 p-4 pt-6 transition-transform hover:-translate-y-1 hover:-rotate-[0.7deg]"
+              style={{ transform: `rotate(${((i % 3) - 1) * 0.6}deg)` }}
+            >
+              <span
+                className="absolute -top-2.5 left-6 h-5 w-16 -rotate-6 opacity-90"
+                style={{ background: TAPES[i % TAPES.length] }}
+              />
+              <h2 className="hand text-2xl leading-none text-espresso">{n.title}</h2>
+              <p className="mt-2 line-clamp-4 text-[0.85rem] leading-relaxed text-ink-soft">
+                {preview(n)}
+              </p>
+              <span className="absolute bottom-2 right-3 text-[0.7rem] text-muted-foreground">
+                {new Date(n.updatedAt).toLocaleDateString()}
+              </span>
+              <span className="absolute -bottom-3 -right-2 opacity-90">
+                <StickerArt id={i % 2 ? "b-daisy" : "m-star"} size={38} />
+              </span>
+            </Link>
+            <button
+              aria-label="throw away"
+              onClick={() => actions.deleteNote(n.id)}
+              className="absolute right-2 top-2 rounded-[3px] p-1 text-muted-foreground opacity-0 transition-opacity hover:text-destructive focus:opacity-100 group-hover:opacity-100 hover:opacity-100"
+            >
+              <Trash2 className="h-4 w-4" strokeWidth={1.7} />
+            </button>
+          </div>
+        ))}
+
+        <button
+          onClick={create}
+          className="grid h-48 place-items-center rounded-[6px] border border-dashed border-espresso/25 text-muted-foreground transition-colors hover:border-espresso/50 hover:text-espresso"
+        >
+          <span className="hand text-2xl">+ start a fresh page</span>
+        </button>
+      </div>
+
+      <ScrapyCompanion room="notes" mood={mood} line="hi! what are we scribbling today?" />
     </div>
   );
 }
