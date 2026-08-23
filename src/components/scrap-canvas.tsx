@@ -50,17 +50,14 @@ export const HIGHLIGHT_COLORS = [
 /* ----------------------------- geometry ---------------------------------- */
 
 function smoothPath(pts: Point[]) {
-  const first = pts[0];
-  const last = pts[pts.length - 1];
-  if (pts.length < 2 || !first || !last) return "";
-  let d = `M ${first.x} ${first.y}`;
+  if (pts.length < 2) return "";
+  let d = `M ${pts[0].x} ${pts[0].y}`;
   for (let i = 1; i < pts.length - 1; i++) {
-    const p = pts[i]!;
-    const n = pts[i + 1]!;
-    const mx = (p.x + n.x) / 2;
-    const my = (p.y + n.y) / 2;
-    d += ` Q ${p.x} ${p.y} ${mx} ${my}`;
+    const mx = (pts[i].x + pts[i + 1].x) / 2;
+    const my = (pts[i].y + pts[i + 1].y) / 2;
+    d += ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
   }
+  const last = pts[pts.length - 1];
   d += ` L ${last.x} ${last.y}`;
   return d;
 }
@@ -112,8 +109,8 @@ function straightLine(pts: Point[]) {
 }
 
 function arrowPaths(pts: Point[]) {
-  const a = pts[0] ?? { x: 0, y: 0 };
-  const b = pts[pts.length - 1] ?? a;
+  const a = pts[0];
+  const b = pts[pts.length - 1];
   const ang = Math.atan2(b.y - a.y, b.x - a.x);
   const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 - 14 };
   const shaft = `M ${a.x} ${a.y} Q ${mid.x} ${mid.y} ${b.x} ${b.y}`;
