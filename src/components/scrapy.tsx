@@ -30,10 +30,10 @@ export function Scrapy({
   size = 64,
   bob = false,
 }: {
-  mood?: Mood;
-  tape?: string;
-  size?: number;
-  bob?: boolean;
+  mood?: Mood | undefined;
+  tape?: string | undefined;
+  size?: number | undefined;
+  bob?: boolean | undefined;
 }) {
   return (
     <svg
