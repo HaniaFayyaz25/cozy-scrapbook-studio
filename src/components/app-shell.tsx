@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             return (
               <Link
                 key={n.to}
-                to={n.to}
+                to={n.to as string}
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-[4px] px-3 py-2 text-[0.95rem] transition-all",
                   on ? "text-espresso" : "text-ink-soft hover:text-espresso",
