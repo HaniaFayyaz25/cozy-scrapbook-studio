@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const tone = TONES[paperTone] ?? TONES.cream;
+    const tone = TONES[paperTone] ?? TONES["cream"]!;
     const root = document.documentElement;
     root.style.setProperty("--paper", tone.paper);
     root.style.setProperty("--paper-deep", tone.deep);
