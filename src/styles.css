@@ -257,7 +257,7 @@
   transition: none !important;
 }
 
-.no-grain *::after {
+.no-grain .paper-grain::after {
   background-image: none !important;
 }
 
