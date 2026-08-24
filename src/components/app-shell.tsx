@@ -46,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <aside className="sticky top-0 flex h-screen w-[7.5rem] shrink-0 flex-col items-center gap-1 py-6 md:w-[13rem] md:items-stretch md:px-4">
         <Link to="/" className="mb-6 flex flex-col items-center gap-1 md:flex-row md:gap-2 md:pl-2">
-          <Scrapy mood="greeting" tape={ROOM_TAPE[room]} size={40} bob />
+          <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
           <span className="hand text-3xl leading-none tracking-tight text-espresso">scrap</span>
         </Link>
 
