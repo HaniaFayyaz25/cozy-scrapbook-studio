@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as PdfsRouteImport } from './routes/pdfs'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as StickersRouteImport } from './routes/stickers'
 import { Route as NotesNoteIdRouteImport } from './routes/notes.$noteId'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const IdeasRoute = IdeasRouteImport.update({
   id: '/ideas',
   path: '/ideas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdfsRoute = PdfsRouteImport.update({
+  id: '/pdfs',
+  path: '/pdfs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -44,6 +50,7 @@ const NotesNoteIdRoute = NotesNoteIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ideas': typeof IdeasRoute
+  '/pdfs': typeof PdfsRoute
   '/settings': typeof SettingsRoute
   '/stickers': typeof StickersRoute
   '/notes/$noteId': typeof NotesNoteIdRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ideas': typeof IdeasRoute
+  '/pdfs': typeof PdfsRoute
   '/settings': typeof SettingsRoute
   '/stickers': typeof StickersRoute
   '/notes/$noteId': typeof NotesNoteIdRoute
@@ -59,21 +67,31 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ideas': typeof IdeasRoute
+  '/pdfs': typeof PdfsRoute
   '/settings': typeof SettingsRoute
   '/stickers': typeof StickersRoute
   '/notes/$noteId': typeof NotesNoteIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ideas' | '/settings' | '/stickers' | '/notes/$noteId'
+  fullPaths:
+    '/' | '/ideas' | '/pdfs' | '/settings' | '/stickers' | '/notes/$noteId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ideas' | '/settings' | '/stickers' | '/notes/$noteId'
-  id: '__root__' | '/' | '/ideas' | '/settings' | '/stickers' | '/notes/$noteId'
+  to: '/' | '/ideas' | '/pdfs' | '/settings' | '/stickers' | '/notes/$noteId'
+  id:
+    | '__root__'
+    | '/'
+    | '/ideas'
+    | '/pdfs'
+    | '/settings'
+    | '/stickers'
+    | '/notes/$noteId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IdeasRoute: typeof IdeasRoute
+  PdfsRoute: typeof PdfsRoute
   SettingsRoute: typeof SettingsRoute
   StickersRoute: typeof StickersRoute
   NotesNoteIdRoute: typeof NotesNoteIdRoute
@@ -93,6 +111,13 @@ declare module '@tanstack/react-router' {
       path: '/ideas'
       fullPath: '/ideas'
       preLoaderRoute: typeof IdeasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdfs': {
+      id: '/pdfs'
+      path: '/pdfs'
+      fullPath: '/pdfs'
+      preLoaderRoute: typeof PdfsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -122,6 +147,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IdeasRoute: IdeasRoute,
+  PdfsRoute: PdfsRoute,
   SettingsRoute: SettingsRoute,
   StickersRoute: StickersRoute,
   NotesNoteIdRoute: NotesNoteIdRoute,
