@@ -109,8 +109,8 @@ function straightLine(pts: Point[]) {
 }
 
 function arrowPaths(pts: Point[]) {
-  const a = pts[0];
-  const b = pts[pts.length - 1];
+  const a = pts[0]!;
+  const b = pts[pts.length - 1]!;
   const ang = Math.atan2(b.y - a.y, b.x - a.x);
   const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 - 14 };
   const shaft = `M ${a.x} ${a.y} Q ${mid.x} ${mid.y} ${b.x} ${b.y}`;

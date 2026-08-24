@@ -3,6 +3,7 @@ import { useState } from "react";
 import { PageHeader } from "@/components/app-shell";
 import { ScrapCanvas, useCanvasHistory } from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
+import type { ToolState } from "@/components/scrap-canvas";
 import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
 import { actions, useScrap } from "@/lib/scrap-store";
 
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/ideas")({
 
 function IdeaDump() {
   const items = useScrap((s) => s.ideas.items);
-  const [tool, setTool] = useState({ ...defaultToolState, tool: "pen" as const });
+  const [tool, setTool] = useState<ToolState>({ ...defaultToolState, tool: "pen" });
   const history = useCanvasHistory(items, actions.setIdeas);
   const mood = useTimeMood("excited");
 

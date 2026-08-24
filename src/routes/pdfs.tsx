@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Trash2, Upload } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
-import { ScrapCanvas, useCanvasHistory } from "@/components/scrap-canvas";
+import { ScrapCanvas, useCanvasHistory, type ToolState } from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
 import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
 import {
@@ -53,7 +53,7 @@ function getPdfjs(): Promise<PdfJs> {
 function PdfRoom() {
   const pdfs = useScrap((s) => s.pdfs);
   const [openId, setOpenId] = useState<string | null>(null);
-  const mood = useTimeMood("reading");
+  const mood = useTimeMood("curious");
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
 
@@ -154,11 +154,11 @@ function PdfRoom() {
 
 function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
   const [page, setPage] = useState(1);
-  const [tool, setTool] = useState({ ...defaultToolState, tool: "highlighter" as const });
+  const [tool, setTool] = useState<ToolState>({ ...defaultToolState, tool: "highlighter" });
   const [size, setSize] = useState<{ w: number; h: number }>({ w: 800, h: 1000 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const mood = useTimeMood("reading");
+  const mood = useTimeMood("curious");
 
   const items = doc.annotations[String(page)] ?? [];
   const setItems = useCallback(

@@ -86,7 +86,7 @@ export function ScrapyCompanion({
         className="pointer-events-auto transition-transform hover:-translate-y-1"
         aria-label="scrapy"
       >
-        <Scrapy mood={mood} tape={ROOM_TAPE[room]} size={70} bob />
+        <Scrapy mood={mood} tape={ROOM_TAPE[room] ?? "var(--petal)"} size={70} bob />
       </button>
     </div>
   );

@@ -43,7 +43,7 @@ export function ToolBelt({
   compact?: boolean;
 }) {
   const [trayOpen, setTrayOpen] = useState(false);
-  const [cat, setCat] = useState(CATEGORIES[0].id);
+  const [cat, setCat] = useState(CATEGORIES[0]!.id);
 
   const set = (patch: Partial<ToolState>) => onChange({ ...state, ...patch });
 
