@@ -256,3 +256,8 @@
   animation: none !important;
   transition: none !important;
 }
+
+.no-grain .paper-grain::after {
+  background-image: none !important;
+}
+

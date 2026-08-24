@@ -14,24 +14,39 @@ const NAV = [
   { to: "/settings", room: "settings", label: "settings", icon: Settings2 },
 ] as const;
 
+const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
+  cream: { paper: "oklch(0.972 0.011 88)", deep: "oklch(0.936 0.018 84)", bg: "oklch(0.958 0.014 86)" },
+  warm: { paper: "oklch(0.962 0.024 62)", deep: "oklch(0.922 0.034 58)", bg: "oklch(0.946 0.028 60)" },
+  cool: { paper: "oklch(0.972 0.009 220)", deep: "oklch(0.934 0.014 224)", bg: "oklch(0.956 0.012 222)" },
+};
+
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const reduce = useScrap((s) => s.settings.reduceMotion);
+  const { reduceMotion: reduce, grain, paperTone } = useScrap((s) => s.settings);
 
   useEffect(() => {
     hydrate();
   }, []);
 
+  useEffect(() => {
+    const tone = TONES[paperTone] ?? TONES["cream"]!;
+    const root = document.documentElement;
+    root.style.setProperty("--paper", tone.paper);
+    root.style.setProperty("--paper-deep", tone.deep);
+    root.style.setProperty("--background", tone.bg);
+  }, [paperTone]);
+
   const active = (to: string) => (to === "/" ? path === "/" || path.startsWith("/notes") : path.startsWith(to));
   const room = NAV.find((n) => active(n.to))?.room ?? "notes";
 
   return (
-    <div className={cn("flex min-h-screen w-full", reduce && "reduce-motion")}>
+    <div className={cn("flex min-h-screen w-full", reduce && "reduce-motion", !grain && "no-grain")}>
       <AmbientBackground />
+
 
       <aside className="sticky top-0 flex h-screen w-[7.5rem] shrink-0 flex-col items-center gap-1 py-6 md:w-[13rem] md:items-stretch md:px-4">
         <Link to="/" className="mb-6 flex flex-col items-center gap-1 md:flex-row md:gap-2 md:pl-2">
-          <Scrapy mood="greeting" tape={ROOM_TAPE[room]} size={40} bob />
+          <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
           <span className="hand text-3xl leading-none tracking-tight text-espresso">scrap</span>
         </Link>
 
