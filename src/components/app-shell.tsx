@@ -85,14 +85,15 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
 
-        <div className="mt-auto hidden px-2 md:block">
-          <p className="hand text-base leading-tight text-muted-foreground">
+        <div className="mt-auto hidden px-1 md:block">
+          <p className="hand text-[0.95rem] leading-tight text-muted-foreground">
             a cozy little place to read, write, doodle, and remember.
           </p>
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 pb-10 pr-4 pt-6 md:pr-8">{children}</main>
+        <main className="min-w-0 flex-1 pb-8">{children}</main>
+      </div>
     </div>
   );
 }
