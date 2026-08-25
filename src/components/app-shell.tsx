@@ -40,12 +40,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   const room = NAV.find((n) => active(n.to))?.room ?? "notes";
 
   return (
-    <div className={cn("flex min-h-screen w-full", reduce && "reduce-motion", !grain && "no-grain")}>
+    <div className={cn("min-h-screen w-full", reduce && "reduce-motion", !grain && "no-grain")}>
       <AmbientBackground />
 
-
-      <aside className="sticky top-0 flex h-screen w-[7.5rem] shrink-0 flex-col items-center gap-1 py-6 md:w-[13rem] md:items-stretch md:px-4">
-        <Link to="/" className="mb-6 flex flex-col items-center gap-1 md:flex-row md:gap-2 md:pl-2">
+      <div className="mx-auto flex w-full max-w-[1080px] gap-4 px-3 py-5 md:px-6 md:py-7">
+      <aside className="sticky top-5 flex h-[calc(100vh-3.5rem)] w-[4.25rem] shrink-0 flex-col items-center gap-1 md:w-[10rem] md:items-stretch md:px-2">
+        <Link to="/" className="mb-5 flex flex-col items-center gap-1 md:flex-row md:gap-2 md:pl-1">
           <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
           <span className="hand text-3xl leading-none tracking-tight text-espresso">scrap</span>
         </Link>
