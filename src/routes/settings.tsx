@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/app-shell";
-import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import { actions, getState, useScrap, type ScrapState } from "@/lib/scrap-store";
 import { cn } from "@/lib/utils";
 
@@ -79,7 +79,7 @@ function SettingsPage() {
   };
 
   return (
-    <div className="max-w-2xl pb-16">
+    <div className="relative max-w-2xl pb-16">
       <PageHeader title="settings" note="make it feel like your desk." />
 
       <div className="paper-card paper-grain px-5 py-2">
@@ -142,7 +142,15 @@ function SettingsPage() {
         </Row>
       </div>
 
-      <ScrapyCompanion room="settings" mood={mood} line="i like the cream paper best, personally." />
+      <ScrapyHere
+        room="settings"
+        mood={mood}
+        prop="mug"
+        size={50}
+        flip
+        lines={["i like the cream paper best, personally.", "don't hide me. please.", "grain on. always."]}
+        spots={["-right-6 top-16", "-right-4 bottom-16", "-left-8 top-1/2"]}
+      />
     </div>
   );
 }
