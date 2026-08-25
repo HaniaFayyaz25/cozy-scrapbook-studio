@@ -108,10 +108,10 @@ export function PageHeader({
   right?: ReactNode;
 }) {
   return (
-    <header className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 className="hand text-4xl leading-none text-espresso">{title}</h1>
-        {note && <p className="mt-1.5 text-sm text-muted-foreground">{note}</p>}
+    <header className="mb-4 flex flex-wrap items-end justify-between gap-2.5">
+      <div className="min-w-0">
+        <h1 className="hand text-[2.1rem] leading-none text-espresso">{title}</h1>
+        {note && <p className="mt-1 text-[0.8rem] text-muted-foreground">{note}</p>}
       </div>
       {right}
     </header>
