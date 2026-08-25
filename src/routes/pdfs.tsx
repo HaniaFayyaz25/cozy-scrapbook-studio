@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Trash2, Upload } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
 import { ScrapCanvas, useCanvasHistory, type ToolState } from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
-import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import {
   actions,
   loadFile,
@@ -147,7 +147,15 @@ function PdfRoom() {
         </div>
       )}
 
-      <ScrapyCompanion room="pdfs" mood={mood} line="found anything worth underlining?" />
+      <ScrapyHere
+        room="pdfs"
+        mood={mood}
+        prop="book"
+        peek
+        size={56}
+        lines={["found anything worth underlining?", "one more chapter, then tea.", "pick a book, i'll read along."]}
+        spots={["-top-3 right-8", "-bottom-4 left-10", "top-1/2 -left-8"]}
+      />
     </div>
   );
 }
@@ -241,7 +249,18 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
         </div>
       </div>
 
-      <ScrapyCompanion room="pdfs" mood={mood} line="the margins are where the real reading happens." />
+      <ScrapyHere
+        room="pdfs"
+        mood={mood}
+        prop={tool.tool === "highlighter" ? "highlighter" : tool.tool === "pen" ? "pen" : "book"}
+        size={54}
+        lines={[
+          "the margins are where the real reading happens.",
+          "that bit deserves a highlight.",
+          "i'll hold the pen for a sec.",
+        ]}
+        spots={["top-28 -left-10", "bottom-24 -right-10", "top-1/2 -right-10", "bottom-32 -left-10"]}
+      />
     </div>
   );
 }

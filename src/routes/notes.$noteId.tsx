@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowLeft, Plus } from "lucide-react";
 import { ScrapCanvas, useCanvasHistory } from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
-import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import { actions, useScrap, type CanvasItem } from "@/lib/scrap-store";
 
 export const Route = createFileRoute("/notes/$noteId")({
@@ -48,7 +48,7 @@ function NotePageView() {
   }
 
   return (
-    <div className="pb-16">
+    <div className="relative pb-16">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Link
           to="/"
@@ -108,7 +108,18 @@ function NotePageView() {
         </button>
       </div>
 
-      <ScrapyCompanion room="notes" mood={mood} line="try the highlighter — it straightens itself out." />
+      <ScrapyHere
+        room="notes"
+        mood={mood}
+        prop={tool.tool === "highlighter" ? "highlighter" : tool.tool === "pen" ? "pen" : "mug"}
+        size={56}
+        lines={[
+          "try the highlighter — it straightens itself out.",
+          "i'll just sit here while you write.",
+          "the margins are yours too.",
+        ]}
+        spots={["top-24 right-2 lg:-right-6", "bottom-24 left-2 lg:-left-8", "top-1/2 right-2 lg:-right-8"]}
+      />
     </div>
   );
 }

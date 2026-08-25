@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Plus, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
-import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import { StickerArt } from "@/lib/stickers";
 import { actions, useScrap, type Note } from "@/lib/scrap-store";
 
@@ -42,7 +42,7 @@ function NotesShelf() {
   };
 
   return (
-    <div>
+    <div className="relative">
       <PageHeader
         title="notes"
         note={`${notes.length} ${notes.length === 1 ? "page" : "pages"} on the shelf`}
@@ -98,7 +98,19 @@ function NotesShelf() {
         </button>
       </div>
 
-      <ScrapyCompanion room="notes" mood={mood} line="hi! what are we scribbling today?" />
+      <ScrapyHere
+        room="notes"
+        mood={mood}
+        prop="flower"
+        peek
+        size={58}
+        lines={[
+          "hi! what are we scribbling today?",
+          "i tidied nothing. sorry.",
+          "this shelf smells like paper.",
+        ]}
+        spots={["-top-4 right-4", "-bottom-3 left-6", "top-1/3 -left-9", "-bottom-4 right-10"]}
+      />
     </div>
   );
 }

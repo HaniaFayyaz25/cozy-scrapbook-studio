@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/app-shell";
-import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import { CATEGORIES, STICKERS, StickerArt } from "@/lib/stickers";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,7 @@ function StickerDrawer() {
   const active = CATEGORIES.find((c) => c.id === cat);
 
   return (
-    <div className="pb-16">
+    <div className="relative pb-16">
       <PageHeader title="sticker drawer" note={`${STICKERS.length} little paper things`} />
 
       <div className="mb-5 flex flex-wrap gap-1.5">
@@ -74,7 +74,15 @@ function StickerDrawer() {
         ))}
       </div>
 
-      <ScrapyCompanion room="stickers" mood={mood} line="the drawer is a bit full, sorry." />
+      <ScrapyHere
+        room="stickers"
+        mood={mood}
+        prop="sticker"
+        peek
+        size={52}
+        lines={["the drawer is a bit full, sorry.", "i'm in here somewhere.", "take as many as you like."]}
+        spots={["-bottom-4 right-12", "-top-3 left-1/3", "-bottom-3 left-8", "top-1/2 -right-7"]}
+      />
     </div>
   );
 }

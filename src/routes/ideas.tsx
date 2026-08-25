@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/app-shell";
 import { ScrapCanvas, useCanvasHistory } from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
 import type { ToolState } from "@/components/scrap-canvas";
-import { ScrapyCompanion, useTimeMood } from "@/components/scrapy";
+import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import { actions, useScrap } from "@/lib/scrap-store";
 
 export const Route = createFileRoute("/ideas")({
@@ -30,7 +30,7 @@ function IdeaDump() {
   const mood = useTimeMood("excited");
 
   return (
-    <div className="pb-16">
+    <div className="relative pb-16">
       <PageHeader
         title="idea dump"
         note="no rules here. scribble, stick, arrow, repeat."
@@ -47,7 +47,14 @@ function IdeaDump() {
         className="paper-card paper-grain dot-grid min-h-[58vh] w-full p-5"
       />
 
-      <ScrapyCompanion room="ideas" mood={mood} line="messy is the point. keep going!" />
+      <ScrapyHere
+        room="ideas"
+        mood={mood}
+        prop="sticker"
+        size={54}
+        lines={["messy is the point. keep going!", "ooh, what's that one?", "my brain looks like this too."]}
+        spots={["-bottom-4 left-8", "-top-3 right-6", "bottom-10 -right-7", "-bottom-3 right-1/3"]}
+      />
     </div>
   );
 }
