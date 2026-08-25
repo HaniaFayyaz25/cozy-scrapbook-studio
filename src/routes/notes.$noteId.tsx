@@ -73,7 +73,7 @@ function NotePageView() {
         onChange={setItems}
         toolState={tool}
         history={history}
-        className="paper-card paper-grain ruled-lines mx-auto min-h-[70vh] max-w-4xl p-8"
+        className="paper-card paper-grain ruled-lines mx-auto min-h-[56vh] max-w-2xl p-6"
       >
         <textarea
           value={page.text}
@@ -81,7 +81,7 @@ function NotePageView() {
           placeholder="start writing…"
           onPointerDown={(e) => tool.tool === "select" && e.stopPropagation()}
           style={{ pointerEvents: tool.tool === "select" ? "auto" : "none" }}
-          className="hand min-h-[62vh] w-full resize-none bg-transparent text-2xl leading-[2rem] text-espresso outline-none placeholder:text-muted-foreground"
+          className="hand min-h-[50vh] w-full resize-none bg-transparent text-[1.4rem] leading-[2rem] text-espresso outline-none placeholder:text-muted-foreground"
         />
       </ScrapCanvas>
 

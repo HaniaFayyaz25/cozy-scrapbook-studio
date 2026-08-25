@@ -14,28 +14,28 @@ export function AmbientBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 90% at 12% 8%, color-mix(in oklab, var(--petal) 26%, transparent), transparent 55%)," +
-            "radial-gradient(110% 80% at 88% 12%, color-mix(in oklab, var(--sky) 20%, transparent), transparent 58%)," +
-            "radial-gradient(120% 100% at 70% 95%, color-mix(in oklab, var(--sage) 26%, transparent), transparent 60%)," +
-            "linear-gradient(180deg, var(--background), color-mix(in oklab, var(--paper-deep) 60%, var(--background)))",
+            "radial-gradient(120% 90% at 12% 8%, color-mix(in oklab, var(--petal) 13%, transparent), transparent 55%)," +
+            "radial-gradient(110% 80% at 88% 12%, color-mix(in oklab, var(--sky) 10%, transparent), transparent 58%)," +
+            "radial-gradient(120% 100% at 70% 95%, color-mix(in oklab, var(--sage) 13%, transparent), transparent 60%)," +
+            "linear-gradient(180deg, var(--background), color-mix(in oklab, var(--paper-deep) 45%, var(--background)))",
         }}
       />
 
       <div
-        className="absolute -left-40 top-[-10%] h-[46rem] w-[46rem] rounded-full blur-3xl"
-        style={{ background: "color-mix(in oklab, var(--rose) 16%, transparent)", ...anim(46) }}
+        className="absolute -left-40 top-[-10%] h-[40rem] w-[40rem] rounded-full blur-3xl"
+        style={{ background: "color-mix(in oklab, var(--rose) 8%, transparent)", ...anim(46) }}
       />
       <div
-        className="absolute -right-52 top-[18%] h-[40rem] w-[40rem] rounded-full blur-3xl"
-        style={{ background: "color-mix(in oklab, var(--forest) 14%, transparent)", ...anim(64, 3) }}
+        className="absolute -right-52 top-[18%] h-[36rem] w-[36rem] rounded-full blur-3xl"
+        style={{ background: "color-mix(in oklab, var(--forest) 7%, transparent)", ...anim(64, 3) }}
       />
       <div
-        className="absolute bottom-[-24%] left-[26%] h-[38rem] w-[38rem] rounded-full blur-3xl"
-        style={{ background: "color-mix(in oklab, var(--amber) 13%, transparent)", ...anim(58, 8) }}
+        className="absolute bottom-[-24%] left-[26%] h-[34rem] w-[34rem] rounded-full blur-3xl"
+        style={{ background: "color-mix(in oklab, var(--amber) 6%, transparent)", ...anim(58, 8) }}
       />
 
       {/* faint botanical silhouettes hugging the edges */}
-      <svg className="absolute inset-0 h-full w-full opacity-[0.16]" viewBox="0 0 1200 800" preserveAspectRatio="none">
+      <svg className="absolute inset-0 h-full w-full opacity-[0.08]" viewBox="0 0 1200 800" preserveAspectRatio="none">
         <g fill="none" stroke="var(--forest)" strokeWidth={2} strokeLinecap="round">
           <path d="M-10 780c90-40 130-140 150-250" style={anim(70)} />
           <path d="M40 770c40-70 40-150 20-230" />
