@@ -62,7 +62,7 @@ function NotesShelf() {
             <Link
               to="/notes/$noteId"
               params={{ noteId: n.id }}
-              className="paper-card paper-grain ruled-lines block h-48 p-4 pt-6 transition-transform hover:-translate-y-1 hover:-rotate-[0.7deg]"
+              className="paper-card paper-grain ruled-lines block h-44 p-3.5 pt-5 transition-transform hover:-translate-y-1 hover:-rotate-[0.7deg]"
               style={{ transform: `rotate(${((i % 3) - 1) * 0.6}deg)` }}
             >
               <span
@@ -92,9 +92,9 @@ function NotesShelf() {
 
         <button
           onClick={create}
-          className="grid h-48 place-items-center rounded-[6px] border border-dashed border-espresso/25 text-muted-foreground transition-colors hover:border-espresso/50 hover:text-espresso"
+          className="grid h-44 place-items-center rounded-[6px] border border-dashed border-espresso/25 text-muted-foreground transition-colors hover:border-espresso/50 hover:text-espresso"
         >
-          <span className="hand text-2xl">+ start a fresh page</span>
+          <span className="hand text-xl">+ start a fresh page</span>
         </button>
       </div>
 

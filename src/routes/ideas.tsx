@@ -44,7 +44,7 @@ function IdeaDump() {
         onChange={actions.setIdeas}
         toolState={tool}
         history={history}
-        className="paper-card paper-grain dot-grid min-h-[78vh] w-full p-6"
+        className="paper-card paper-grain dot-grid min-h-[58vh] w-full p-5"
       />
 
       <ScrapyCompanion room="ideas" mood={mood} line="messy is the point. keep going!" />
