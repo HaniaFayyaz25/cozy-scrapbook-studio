@@ -44,7 +44,7 @@ function IdeaDump() {
         onChange={actions.setIdeas}
         toolState={tool}
         history={history}
-        className="paper-card paper-grain dot-grid min-h-[58vh] w-full p-5"
+        className="paper-card paper-grain dot-grid min-h-[50vh] w-full p-4 md:min-h-[58vh] md:p-5"
       />
 
       <ScrapyHere
