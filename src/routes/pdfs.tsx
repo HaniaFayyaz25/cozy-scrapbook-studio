@@ -84,7 +84,7 @@ function PdfRoom() {
   if (open) return <PdfReader doc={open} onClose={() => setOpenId(null)} />;
 
   return (
-    <div className="pb-16">
+    <div className="relative pb-16">
       <PageHeader
         title="pdfs"
         note="drop a reading in. scribble in the margins like it's paper."
@@ -204,7 +204,7 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
   }, [doc.id, page]);
 
   return (
-    <div className="pb-16">
+    <div className="relative pb-16">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <button
           onClick={onClose}

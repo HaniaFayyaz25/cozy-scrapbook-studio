@@ -59,7 +59,7 @@ function NotePageView() {
         <input
           value={note.title}
           onChange={(e) => actions.updateNote(note.id, { title: e.target.value })}
-          className="hand min-w-0 flex-1 bg-transparent text-4xl leading-none text-espresso outline-none placeholder:text-muted-foreground"
+          className="hand min-w-0 flex-1 bg-transparent text-[1.75rem] leading-none text-espresso outline-none placeholder:text-muted-foreground md:text-4xl"
           placeholder="untitled page"
         />
       </div>
@@ -73,7 +73,7 @@ function NotePageView() {
         onChange={setItems}
         toolState={tool}
         history={history}
-        className="paper-card paper-grain ruled-lines mx-auto min-h-[56vh] max-w-2xl p-6"
+        className="paper-card paper-grain ruled-lines mx-auto min-h-[50vh] max-w-2xl p-4 md:min-h-[56vh] md:p-6"
       >
         <textarea
           value={page.text}
@@ -81,16 +81,16 @@ function NotePageView() {
           placeholder="start writing…"
           onPointerDown={(e) => tool.tool === "select" && e.stopPropagation()}
           style={{ pointerEvents: tool.tool === "select" ? "auto" : "none" }}
-          className="hand min-h-[50vh] w-full resize-none bg-transparent text-[1.4rem] leading-[2rem] text-espresso outline-none placeholder:text-muted-foreground"
+          className="hand min-h-[44vh] w-full resize-none bg-transparent text-[1.25rem] leading-[1.85rem] text-espresso outline-none placeholder:text-muted-foreground md:min-h-[50vh] md:text-[1.4rem] md:leading-[2rem]"
         />
       </ScrapCanvas>
 
-      <div className="mx-auto mt-4 flex max-w-4xl flex-wrap items-center gap-2">
+      <div className="mx-auto mt-4 flex max-w-4xl flex-wrap items-center gap-1.5 md:gap-2">
         {note.pages.map((p, i) => (
           <button
             key={p.id}
             onClick={() => setPageIdx(i)}
-            className={`hand rounded-[3px] px-2.5 py-0.5 text-lg transition-colors ${
+            className={`hand rounded-[3px] px-2 py-0.5 text-base transition-colors md:text-lg ${
               i === pageIdx ? "bg-secondary text-espresso" : "text-muted-foreground hover:text-espresso"
             }`}
           >
@@ -102,7 +102,7 @@ function NotePageView() {
             actions.addPage(note.id);
             setPageIdx(note.pages.length);
           }}
-          className="hand flex items-center gap-1 rounded-[3px] px-2 py-0.5 text-lg text-muted-foreground hover:text-espresso"
+          className="hand flex items-center gap-1 rounded-[3px] px-2 py-0.5 text-base text-muted-foreground hover:text-espresso md:text-lg"
         >
           <Plus className="h-3.5 w-3.5" /> add page
         </button>

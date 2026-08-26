@@ -110,8 +110,8 @@ export function PageHeader({
   return (
     <header className="mb-4 flex flex-wrap items-end justify-between gap-2.5">
       <div className="min-w-0">
-        <h1 className="hand text-[2.1rem] leading-none text-espresso">{title}</h1>
-        {note && <p className="mt-1 text-[0.8rem] text-muted-foreground">{note}</p>}
+        <h1 className="hand text-[1.75rem] leading-none text-espresso md:text-[2.1rem]">{title}</h1>
+        {note && <p className="mt-1 text-[0.75rem] text-muted-foreground md:text-[0.8rem]">{note}</p>}
       </div>
       {right}
     </header>
