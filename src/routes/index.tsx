@@ -67,7 +67,7 @@ function NotesShelf() {
             >
               <span
                 className="absolute -top-2.5 left-6 h-5 w-16 -rotate-6 opacity-90"
-                style={{ background: TAPES[i % TAPES.length] }}
+                style={{ background: n.tape }}
               />
               <h2 className="hand text-2xl leading-none text-espresso">{n.title}</h2>
               <p className="mt-2 line-clamp-4 text-[0.85rem] leading-relaxed text-ink-soft">

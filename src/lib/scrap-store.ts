@@ -173,10 +173,12 @@ export const getState = () => state;
 
 export const actions = {
   createNote(title = "untitled page") {
+    const tapes = ["var(--petal)", "var(--sage)", "var(--sky)", "var(--amber)", "var(--rose)"];
+    const tape = tapes[state.notes.length % tapes.length]!;
     const n: Note = {
       id: uid(),
       title,
-      tape: "var(--petal)",
+      tape,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       pages: [{ id: uid(), text: "", items: [] }],
