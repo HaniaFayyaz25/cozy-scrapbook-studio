@@ -24,8 +24,8 @@ function Row({ label, note, children }: { label: string; note?: string; children
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 py-3.5 last:border-0">
       <div>
-        <p className="hand text-2xl leading-none text-espresso">{label}</p>
-        {note && <p className="mt-1 text-[0.8rem] text-muted-foreground">{note}</p>}
+        <p className="hand text-xl leading-none text-espresso md:text-2xl">{label}</p>
+        {note && <p className="mt-1 text-[0.75rem] text-muted-foreground md:text-[0.8rem]">{note}</p>}
       </div>
       <div className="flex items-center gap-1.5">{children}</div>
     </div>
@@ -45,7 +45,7 @@ function Choice({
     <button
       onClick={onClick}
       className={cn(
-        "hand rounded-[3px] border px-3 py-0.5 text-lg transition-colors",
+        "hand rounded-[3px] border px-2 py-0.5 text-base transition-colors md:px-3 md:text-lg",
         on ? "border-espresso bg-secondary text-espresso" : "border-border text-muted-foreground hover:text-espresso",
       )}
     >
@@ -127,10 +127,10 @@ function SettingsPage() {
         </Row>
 
         <Row label="your scraps" note="everything lives in this browser">
-          <button onClick={exportAll} className="hand rounded-[3px] border border-border px-3 py-0.5 text-lg">
+          <button onClick={exportAll} className="hand rounded-[3px] border border-border px-2 py-0.5 text-base md:px-3 md:text-lg">
             export
           </button>
-          <label className="hand cursor-pointer rounded-[3px] border border-border px-3 py-0.5 text-lg">
+          <label className="hand cursor-pointer rounded-[3px] border border-border px-2 py-0.5 text-base md:px-3 md:text-lg">
             import
             <input
               type="file"

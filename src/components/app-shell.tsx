@@ -43,8 +43,8 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className={cn("min-h-screen w-full", reduce && "reduce-motion", !grain && "no-grain")}>
       <AmbientBackground />
 
-      <div className="mx-auto flex w-full max-w-[1080px] gap-4 px-3 py-5 md:px-6 md:py-7">
-      <aside className="sticky top-5 flex h-[calc(100vh-3.5rem)] w-[4.25rem] shrink-0 flex-col items-center gap-1 md:w-[10rem] md:items-stretch md:px-2">
+      <div className="mx-auto flex w-full max-w-[960px] gap-3 px-3 py-5 md:gap-4 md:px-6 md:py-7">
+      <aside className="sticky top-5 flex h-[calc(100vh-3.5rem)] w-[4.25rem] shrink-0 flex-col items-center gap-1 md:w-[9.5rem] md:items-stretch md:px-2">
         <Link to="/" className="mb-5 flex flex-col items-center gap-1 md:flex-row md:gap-2 md:pl-1">
           <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
           <span className="hand text-3xl leading-none tracking-tight text-espresso">scrap</span>
@@ -110,8 +110,8 @@ export function PageHeader({
   return (
     <header className="mb-4 flex flex-wrap items-end justify-between gap-2.5">
       <div className="min-w-0">
-        <h1 className="hand text-[2.1rem] leading-none text-espresso">{title}</h1>
-        {note && <p className="mt-1 text-[0.8rem] text-muted-foreground">{note}</p>}
+        <h1 className="hand text-[1.75rem] leading-none text-espresso md:text-[2.1rem]">{title}</h1>
+        {note && <p className="mt-1 text-[0.75rem] text-muted-foreground md:text-[0.8rem]">{note}</p>}
       </div>
       {right}
     </header>

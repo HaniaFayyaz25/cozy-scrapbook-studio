@@ -126,7 +126,7 @@ export function ToolBelt({
 
       {trayOpen && (
         <div
-          className="paper-card paper-grain absolute left-0 top-[calc(100%+10px)] z-30 w-[22rem] p-3"
+          className="paper-card paper-grain absolute left-0 top-[calc(100%+10px)] z-30 w-[calc(100vw-2rem)] max-w-[22rem] p-3"
           style={{ borderRadius: 6 }}
         >
           <div className="mb-2 flex flex-wrap gap-1">

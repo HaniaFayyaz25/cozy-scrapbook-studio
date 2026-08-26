@@ -24,8 +24,6 @@ export const Route = createFileRoute("/")({
   component: NotesShelf,
 });
 
-const TAPES = ["var(--petal)", "var(--sage)", "var(--sky)", "var(--amber)", "var(--rose)"];
-
 function preview(n: Note) {
   const text = n.pages.map((p) => p.text).join(" ").trim();
   return text ? text.slice(0, 120) : "an empty page, waiting.";
@@ -67,7 +65,7 @@ function NotesShelf() {
             >
               <span
                 className="absolute -top-2.5 left-6 h-5 w-16 -rotate-6 opacity-90"
-                style={{ background: TAPES[i % TAPES.length] }}
+                style={{ background: n.tape }}
               />
               <h2 className="hand text-2xl leading-none text-espresso">{n.title}</h2>
               <p className="mt-2 line-clamp-4 text-[0.85rem] leading-relaxed text-ink-soft">
@@ -109,7 +107,7 @@ function NotesShelf() {
           "i tidied nothing. sorry.",
           "this shelf smells like paper.",
         ]}
-        spots={["-top-4 right-4", "-bottom-3 left-6", "top-1/3 -left-9", "-bottom-4 right-10"]}
+        spots={["top-8 right-1/4", "bottom-8 left-1/3", "top-1/2 -left-8", "bottom-4 right-1/4"]}
       />
     </div>
   );

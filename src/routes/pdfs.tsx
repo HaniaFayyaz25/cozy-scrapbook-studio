@@ -84,7 +84,7 @@ function PdfRoom() {
   if (open) return <PdfReader doc={open} onClose={() => setOpenId(null)} />;
 
   return (
-    <div className="pb-16">
+    <div className="relative pb-16">
       <PageHeader
         title="pdfs"
         note="drop a reading in. scribble in the margins like it's paper."
@@ -204,15 +204,17 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
   }, [doc.id, page]);
 
   return (
-    <div className="pb-16">
-      <div className="mb-4 flex flex-wrap items-center gap-3">
+    <div className="relative pb-16">
+      <div className="mb-4 flex flex-wrap items-center gap-2 md:gap-3">
         <button
           onClick={onClose}
           className="flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-espresso"
         >
           <ChevronLeft className="h-4 w-4" strokeWidth={1.7} /> shelf
         </button>
-        <p className="hand text-3xl leading-none text-espresso">{doc.name}</p>
+        <p className="hand max-w-[calc(100%-4rem)] truncate text-2xl leading-none text-espresso md:text-3xl">
+          {doc.name}
+        </p>
         <div className="ml-auto">
           <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} compact />
         </div>

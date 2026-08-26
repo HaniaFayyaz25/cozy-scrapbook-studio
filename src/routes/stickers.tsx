@@ -58,7 +58,7 @@ function StickerDrawer() {
 
       {active && <p className="hand mb-4 text-xl text-ink-soft">{active.note}</p>}
 
-      <div className="paper-card paper-grain grid grid-cols-3 gap-4 p-5 sm:grid-cols-5 lg:grid-cols-8">
+      <div className="paper-card paper-grain grid grid-cols-4 gap-3 p-4 sm:grid-cols-5 md:gap-4 md:p-5 lg:grid-cols-8">
         {list.map((s, i) => (
           <div
             key={s.id}
