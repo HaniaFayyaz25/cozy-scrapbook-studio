@@ -24,8 +24,6 @@ export const Route = createFileRoute("/")({
   component: NotesShelf,
 });
 
-const TAPES = ["var(--petal)", "var(--sage)", "var(--sky)", "var(--amber)", "var(--rose)"];
-
 function preview(n: Note) {
   const text = n.pages.map((p) => p.text).join(" ").trim();
   return text ? text.slice(0, 120) : "an empty page, waiting.";
