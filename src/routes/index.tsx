@@ -109,7 +109,7 @@ function NotesShelf() {
           "i tidied nothing. sorry.",
           "this shelf smells like paper.",
         ]}
-        spots={["-top-4 right-4", "-bottom-3 left-6", "top-1/3 -left-9", "-bottom-4 right-10"]}
+        spots={["top-8 right-1/4", "bottom-8 left-1/3", "top-1/2 -left-8", "bottom-4 right-1/4"]}
       />
     </div>
   );
