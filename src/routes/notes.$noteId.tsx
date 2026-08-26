@@ -47,6 +47,14 @@ function NotePageView() {
     );
   }
 
+  const tapes = [
+    { id: "petal", v: "var(--petal)" },
+    { id: "sage", v: "var(--sage)" },
+    { id: "sky", v: "var(--sky)" },
+    { id: "amber", v: "var(--amber)" },
+    { id: "rose", v: "var(--rose)" },
+  ];
+
   return (
     <div className="relative pb-16">
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -62,6 +70,19 @@ function NotePageView() {
           className="hand min-w-0 flex-1 bg-transparent text-[1.75rem] leading-none text-espresso outline-none placeholder:text-muted-foreground md:text-4xl"
           placeholder="untitled page"
         />
+        <div className="flex items-center gap-1" title="tape colour">
+          {tapes.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => actions.updateNote(note.id, { tape: t.v })}
+              className={`h-5 w-7 -rotate-3 rounded-[2px] transition-transform hover:-translate-y-0.5 ${
+                note.tape === t.v ? "ring-1 ring-espresso" : ""
+              }`}
+              style={{ background: t.v }}
+              aria-label={`${t.id} tape`}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="sticky top-3 z-30 mb-4 w-fit">
