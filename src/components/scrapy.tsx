@@ -128,6 +128,97 @@ export function Scrapy({
 const IDLE_MOODS: Mood[] = ["idle", "happy", "curious", "thinking", "proud"];
 
 /**
+ * A scrapy you can pick up and drop anywhere inside the nearest positioned
+ * parent. Remembers where you left him (localStorage) and stays there.
+ */
+export function DraggableScrapy({
+  storageKey,
+  className = "",
+  children,
+}: {
+  storageKey: string;
+  /** default (undragged) positioning classes, e.g. "right-4 top-3" */
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? (JSON.parse(raw) as { x: number; y: number }) : null;
+    } catch {
+      return null;
+    }
+  });
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const wrap = wrapRef.current;
+    const parent = wrap?.offsetParent as HTMLElement | null;
+    if (!wrap || !parent) return;
+    const w = wrap.getBoundingClientRect();
+    const p = parent.getBoundingClientRect();
+    dragRef.current = { sx: e.clientX, sy: e.clientY, ox: w.left - p.left, oy: w.top - p.top, moved: false };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = dragRef.current;
+    const wrap = wrapRef.current;
+    const parent = wrap?.offsetParent as HTMLElement | null;
+    if (!d || !wrap || !parent) return;
+    const dx = e.clientX - d.sx;
+    const dy = e.clientY - d.sy;
+    if (!d.moved && Math.hypot(dx, dy) < 4) return;
+    d.moved = true;
+    const maxX = parent.clientWidth - wrap.offsetWidth;
+    const maxY = parent.clientHeight - wrap.offsetHeight;
+    setPos({
+      x: Math.min(Math.max(d.ox + dx, -6), Math.max(maxX, 0)),
+      y: Math.min(Math.max(d.oy + dy, -6), Math.max(maxY, 0)),
+    });
+  };
+
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = dragRef.current;
+    dragRef.current = null;
+    if (d?.moved) {
+      setPos((p) => {
+        if (p) {
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(p));
+          } catch {
+            /* ignore */
+          }
+        }
+        return p;
+      });
+    }
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  return (
+    <div
+      ref={wrapRef}
+      role="button"
+      aria-label="scrapy — drag me anywhere"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      className={`absolute z-30 cursor-grab touch-none select-none active:cursor-grabbing ${pos ? "" : className}`}
+      style={pos ? { left: pos.x, top: pos.y } : undefined}
+    >
+      {children}
+    </div>
+  );
+}
+
+/**
  * Scrapy living inside the composition. Placed absolutely inside a `relative`
  * parent using the given `spots`, drifting between them so he never feels pinned.
  */
