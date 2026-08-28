@@ -40,6 +40,9 @@
   --color-sage: var(--sage);
   --color-sky: var(--sky);
   --color-amber: var(--amber);
+  --color-room: var(--room);
+  --color-room-ink: var(--room-ink);
+  --color-room-pill: var(--room-pill);
 
   --font-hand: "Caveat", ui-rounded, cursive;
   --font-sans: "Karla", ui-sans-serif, system-ui, sans-serif;
@@ -59,6 +62,9 @@
   --sage: oklch(0.79 0.048 141);
   --sky: oklch(0.784 0.06 240);
   --amber: oklch(0.808 0.106 78);
+  --room: oklch(0.245 0.018 44);
+  --room-ink: oklch(0.93 0.014 82);
+  --room-pill: oklch(0.335 0.031 42);
 
   --background: oklch(0.958 0.014 86);
   --foreground: var(--espresso);
@@ -261,3 +267,23 @@
   background-image: none !important;
 }
 
+
+/* ---------- the little espresso room ---------- */
+
+.room {
+  background-color: var(--room);
+  color: var(--room-ink);
+  --foreground: var(--room-ink);
+  --muted-foreground: color-mix(in oklab, var(--room-ink) 55%, transparent);
+  --border: color-mix(in oklab, var(--room-ink) 16%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--room-ink) 10%, transparent) inset,
+    0 22px 50px -30px color-mix(in oklab, var(--espresso) 90%, transparent);
+}
+
+.room .paper-card {
+  color: var(--espresso);
+  --foreground: var(--espresso);
+  --muted-foreground: var(--ink-soft);
+  --border: color-mix(in oklab, var(--espresso) 14%, transparent);
+}
