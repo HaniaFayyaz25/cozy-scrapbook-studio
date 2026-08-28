@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrapyBlob } from "@/lib/stickers";
 import { useScrap } from "@/lib/scrap-store";
 
@@ -128,6 +128,97 @@ export function Scrapy({
 const IDLE_MOODS: Mood[] = ["idle", "happy", "curious", "thinking", "proud"];
 
 /**
+ * A scrapy you can pick up and drop anywhere inside the nearest positioned
+ * parent. Remembers where you left him (localStorage) and stays there.
+ */
+export function DraggableScrapy({
+  storageKey,
+  className = "",
+  children,
+}: {
+  storageKey: string;
+  /** default (undragged) positioning classes, e.g. "right-4 top-3" */
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? (JSON.parse(raw) as { x: number; y: number }) : null;
+    } catch {
+      return null;
+    }
+  });
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const wrap = wrapRef.current;
+    const parent = wrap?.offsetParent as HTMLElement | null;
+    if (!wrap || !parent) return;
+    const w = wrap.getBoundingClientRect();
+    const p = parent.getBoundingClientRect();
+    dragRef.current = { sx: e.clientX, sy: e.clientY, ox: w.left - p.left, oy: w.top - p.top, moved: false };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = dragRef.current;
+    const wrap = wrapRef.current;
+    const parent = wrap?.offsetParent as HTMLElement | null;
+    if (!d || !wrap || !parent) return;
+    const dx = e.clientX - d.sx;
+    const dy = e.clientY - d.sy;
+    if (!d.moved && Math.hypot(dx, dy) < 4) return;
+    d.moved = true;
+    const maxX = parent.clientWidth - wrap.offsetWidth;
+    const maxY = parent.clientHeight - wrap.offsetHeight;
+    setPos({
+      x: Math.min(Math.max(d.ox + dx, -6), Math.max(maxX, 0)),
+      y: Math.min(Math.max(d.oy + dy, -6), Math.max(maxY, 0)),
+    });
+  };
+
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = dragRef.current;
+    dragRef.current = null;
+    if (d?.moved) {
+      setPos((p) => {
+        if (p) {
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(p));
+          } catch {
+            /* ignore */
+          }
+        }
+        return p;
+      });
+    }
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  return (
+    <div
+      ref={wrapRef}
+      role="button"
+      aria-label="scrapy — drag me anywhere"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      className={`absolute z-30 cursor-grab touch-none select-none active:cursor-grabbing ${pos ? "" : className}`}
+      style={pos ? { left: pos.x, top: pos.y } : undefined}
+    >
+      {children}
+    </div>
+  );
+}
+
+/**
  * Scrapy living inside the composition. Placed absolutely inside a `relative`
  * parent using the given `spots`, drifting between them so he never feels pinned.
  */
@@ -157,6 +248,21 @@ export function ScrapyHere({
   const [mood, setMood] = useState<Mood>(baseMood);
   const [line, setLine] = useState<string | null>(lines[0] ?? null);
 
+  // user-dragged position (px, relative to the positioned parent) — once
+  // scrapy is placed by hand he stays put instead of wandering
+  const posKey = `scrapy-pos-${room}`;
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = localStorage.getItem(posKey);
+      return raw ? (JSON.parse(raw) as { x: number; y: number }) : null;
+    } catch {
+      return null;
+    }
+  });
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+
   const nightly = useMemo(() => {
     const h = new Date().getHours();
     return h >= 23 || h < 5;
@@ -169,8 +275,10 @@ export function ScrapyHere({
     return () => clearTimeout(t);
   }, [baseMood, nightly]);
 
-  // wander between spots + shift idle expression, so nothing is mechanically static
+  // wander between spots + shift idle expression — only while the user hasn't
+  // placed scrapy by hand
   useEffect(() => {
+    if (pos) return;
     if (spots.length < 2 && lines.length < 2) return;
     const t = setInterval(() => {
       setI((v) => (v + 1) % Math.max(spots.length, 1));
@@ -178,7 +286,7 @@ export function ScrapyHere({
       if (!nightly) setMood(IDLE_MOODS[Math.floor(Math.random() * IDLE_MOODS.length)]!);
     }, 16000);
     return () => clearInterval(t);
-  }, [spots.length, lines, nightly]);
+  }, [spots.length, lines, nightly, pos]);
 
   // the little speech scrap only lingers a moment
   const [showLine, setShowLine] = useState(true);
@@ -190,12 +298,77 @@ export function ScrapyHere({
 
   if (!on) return null;
 
+  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const wrap = wrapRef.current;
+    const parent = wrap?.offsetParent as HTMLElement | null;
+    if (!wrap || !parent) return;
+    const w = wrap.getBoundingClientRect();
+    const p = parent.getBoundingClientRect();
+    dragRef.current = {
+      sx: e.clientX,
+      sy: e.clientY,
+      ox: w.left - p.left,
+      oy: w.top - p.top,
+      moved: false,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = dragRef.current;
+    const wrap = wrapRef.current;
+    const parent = wrap?.offsetParent as HTMLElement | null;
+    if (!d || !wrap || !parent) return;
+    const dx = e.clientX - d.sx;
+    const dy = e.clientY - d.sy;
+    if (!d.moved && Math.hypot(dx, dy) < 4) return;
+    d.moved = true;
+    // keep him inside the room, roughly
+    const maxX = parent.clientWidth - wrap.offsetWidth;
+    const maxY = parent.clientHeight - wrap.offsetHeight * (peek ? 0.7 : 1);
+    setPos({
+      x: Math.min(Math.max(d.ox + dx, -8), Math.max(maxX, 0)),
+      y: Math.min(Math.max(d.oy + dy, -8), Math.max(maxY, 0)),
+    });
+  };
+
+  const onPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = dragRef.current;
+    dragRef.current = null;
+    if (!d) return;
+    if (d.moved) {
+      setPos((p) => {
+        if (p) {
+          try {
+            localStorage.setItem(posKey, JSON.stringify(p));
+          } catch {
+            /* ignore */
+          }
+        }
+        return p;
+      });
+    } else {
+      // a simple tap still toggles the speech scrap
+      setShowLine((v) => !v);
+    }
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+  };
+
   return (
     <div
-      className={`pointer-events-none absolute z-20 select-none transition-all duration-[1200ms] ease-in-out ${
-        spots[i % spots.length] ?? spots[0] ?? ""
+      ref={wrapRef}
+      className={`pointer-events-none absolute z-20 select-none ${
+        pos ? "" : `transition-all duration-[1200ms] ease-in-out ${spots[i % spots.length] ?? spots[0] ?? ""}`
       }`}
-      style={{ opacity: peek ? 0.98 : 1 }}
+      style={
+        pos
+          ? { left: pos.x, top: pos.y, opacity: peek ? 0.98 : 1 }
+          : { opacity: peek ? 0.98 : 1 }
+      }
     >
       <div className="relative flex items-end gap-1.5">
         {showLine && line && (
@@ -208,9 +381,11 @@ export function ScrapyHere({
         )}
         <button
           type="button"
-          onClick={() => setShowLine((v) => !v)}
-          className="pointer-events-auto transition-transform duration-300 hover:-translate-y-1"
-          aria-label="scrapy"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          className="pointer-events-auto cursor-grab touch-none transition-transform duration-300 hover:-translate-y-1 active:cursor-grabbing"
+          aria-label="scrapy — drag me anywhere"
           style={{ clipPath: peek ? "inset(0 0 22% 0)" : undefined }}
         >
           <Scrapy mood={mood} tape={ROOM_TAPE[room] ?? "var(--petal)"} size={size} prop={prop} flip={flip} bob />
