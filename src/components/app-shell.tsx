@@ -1,7 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { BookOpen, FileText, CloudLightning, Smile, Settings2 } from "lucide-react";
-import { AmbientBackground } from "./ambient-background";
 import { Scrapy, ROOM_TAPE } from "./scrapy";
 import { hydrate, useScrap } from "@/lib/scrap-store";
 import { cn } from "@/lib/utils";
@@ -19,6 +18,26 @@ const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
   warm: { paper: "oklch(0.962 0.024 62)", deep: "oklch(0.922 0.034 58)", bg: "oklch(0.946 0.028 60)" },
   cool: { paper: "oklch(0.972 0.009 220)", deep: "oklch(0.934 0.014 224)", bg: "oklch(0.956 0.012 222)" },
 };
+
+function CornerDecor() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-40 select-none">
+      <svg viewBox="0 0 160 200" className="absolute inset-0 h-full w-full opacity-70">
+        <g fill="none" stroke="var(--amber)" strokeWidth={1} strokeLinecap="round" opacity={0.55}>
+          <path d="M156 30c-22 14-34 40-38 74" />
+          <path d="M140 52c8-4 16-3 22 1" />
+          <path d="M128 78c8-5 16-4 22 0" />
+          <path d="M122 106c8-5 16-4 22 0" />
+        </g>
+        <g fill="var(--amber)" opacity={0.85}>
+          <path d="M96 118l2.6 6.4 6.4 2.6-6.4 2.6L96 136l-2.6-6.4-6.4-2.6 6.4-2.6z" />
+          <path d="M132 150l1.9 4.6 4.6 1.9-4.6 1.9-1.9 4.6-1.9-4.6-4.6-1.9 4.6-1.9z" />
+          <path d="M112 172l1.4 3.4 3.4 1.4-3.4 1.4-1.4 3.4-1.4-3.4-3.4-1.4 3.4-1.4z" />
+        </g>
+      </svg>
+    </div>
+  );
+}
 
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
@@ -40,59 +59,56 @@ export function AppShell({ children }: { children: ReactNode }) {
   const room = NAV.find((n) => active(n.to))?.room ?? "notes";
 
   return (
-    <div className={cn("min-h-screen w-full", reduce && "reduce-motion", !grain && "no-grain")}>
-      <AmbientBackground />
+    <div
+      className={cn(
+        "min-h-screen w-full px-3 py-6 md:px-6 md:py-10",
+        reduce && "reduce-motion",
+        !grain && "no-grain",
+      )}
+      style={{ background: "var(--background)" }}
+    >
+      <div className="room paper-grain relative mx-auto w-full max-w-[820px] overflow-hidden rounded-[26px] p-3 md:p-4">
+        <CornerDecor />
 
-      <div className="mx-auto flex w-full max-w-[960px] gap-3 px-3 py-5 md:gap-4 md:px-6 md:py-7">
-      <aside className="sticky top-5 flex h-[calc(100vh-3.5rem)] w-[4.25rem] shrink-0 flex-col items-center gap-1 md:w-[9.5rem] md:items-stretch md:px-2">
-        <Link to="/" className="mb-5 flex flex-col items-center gap-1 md:flex-row md:gap-2 md:pl-1">
+        {/* scrapy peeking into the top-right corner */}
+        <div className="pointer-events-none absolute right-4 top-3 z-20 flex items-start gap-1.5">
           <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
-          <span className="hand text-3xl leading-none tracking-tight text-espresso">scrap</span>
-        </Link>
-
-        <nav className="flex w-full flex-col gap-1.5">
-          {NAV.map((n) => {
-            const on = active(n.to);
-            return (
-              <Link
-                key={n.to}
-                to={n.to}
-                className={cn(
-                  "group relative flex items-center gap-2.5 rounded-[4px] px-3 py-2 text-[0.95rem] transition-all",
-                  on ? "text-espresso" : "text-ink-soft hover:text-espresso",
-                )}
-              >
-                {on && (
-                  <span
-                    className="paper-grain absolute inset-0 -rotate-[0.6deg] rounded-[3px]"
-                    style={{
-                      background: "var(--paper)",
-                      boxShadow: "0 6px 14px -12px color-mix(in oklab, var(--espresso) 70%, transparent)",
-                      border: "1px solid color-mix(in oklab, var(--espresso) 12%, transparent)",
-                    }}
-                  />
-                )}
-                {on && (
-                  <span
-                    className="absolute -left-1 top-1/2 h-6 w-3 -translate-y-1/2 -rotate-12"
-                    style={{ background: ROOM_TAPE[n.room], opacity: 0.9 }}
-                  />
-                )}
-                <n.icon className="relative h-[17px] w-[17px]" strokeWidth={1.7} />
-                <span className="relative hidden md:inline">{n.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="mt-auto hidden px-1 md:block">
-          <p className="hand text-[0.95rem] leading-tight text-muted-foreground">
-            a cozy little place to read, write, doodle, and remember.
-          </p>
+          <span className="mt-1 rounded-[14px] border border-espresso/15 bg-paper px-2 py-1 text-[0.68rem] leading-tight text-espresso shadow-sm">
+            ready to create?
+          </span>
         </div>
-      </aside>
 
-        <main className="min-w-0 flex-1 pb-8">{children}</main>
+        <div className="relative flex gap-3 md:gap-4">
+          <aside className="w-[4.5rem] shrink-0 md:w-[8.5rem]">
+            <Link to="/" className="mb-3 flex items-center gap-1.5 px-1">
+              <span className="hand text-[1.7rem] leading-none text-room-ink md:text-[2rem]">scrap</span>
+              <Scrapy mood="happy" tape="var(--petal)" size={22} />
+            </Link>
+
+            <nav className="flex flex-col gap-0.5">
+              {NAV.map((n) => {
+                const on = active(n.to);
+                return (
+                  <Link
+                    key={n.to}
+                    to={n.to}
+                    className={cn(
+                      "flex items-center gap-2 rounded-full px-2.5 py-1.5 text-[0.8rem] transition-colors md:px-3",
+                      on
+                        ? "bg-room-pill text-room-ink"
+                        : "text-room-ink/60 hover:bg-room-pill/50 hover:text-room-ink",
+                    )}
+                  >
+                    <n.icon className="h-[15px] w-[15px] shrink-0" strokeWidth={1.7} />
+                    <span className="hidden truncate md:inline">{n.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </aside>
+
+          <main className="relative min-w-0 flex-1 pb-2 pr-1">{children}</main>
+        </div>
       </div>
     </div>
   );
@@ -108,10 +124,10 @@ export function PageHeader({
   right?: ReactNode;
 }) {
   return (
-    <header className="mb-4 flex flex-wrap items-end justify-between gap-2.5">
+    <header className="mb-2.5 flex flex-wrap items-end justify-between gap-2">
       <div className="min-w-0">
-        <h1 className="hand text-[1.75rem] leading-none text-espresso md:text-[2.1rem]">{title}</h1>
-        {note && <p className="mt-1 text-[0.75rem] text-muted-foreground md:text-[0.8rem]">{note}</p>}
+        <h1 className="hand text-[1.45rem] leading-none text-room-ink md:text-[1.7rem]">{title}</h1>
+        {note && <p className="mt-0.5 text-[0.68rem] text-room-ink/50">{note}</p>}
       </div>
       {right}
     </header>
