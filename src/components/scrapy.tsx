@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrapyBlob } from "@/lib/stickers";
 import { useScrap } from "@/lib/scrap-store";
 
