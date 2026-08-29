@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { BookOpen, FileText, CloudLightning, Smile, Settings2 } from "lucide-react";
-import { Scrapy, ROOM_TAPE } from "./scrapy";
+import { Scrapy, ROOM_TAPE, DraggableScrapy } from "./scrapy";
 import { hydrate, useScrap } from "@/lib/scrap-store";
 import { cn } from "@/lib/utils";
 
