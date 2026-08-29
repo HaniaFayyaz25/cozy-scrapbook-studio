@@ -76,18 +76,18 @@ const KEY = "scrap.state.v1";
 export const uid = () => Math.random().toString(36).slice(2, 10);
 
 const starterNote = (): Note => ({
-  id: uid(),
-  title: "math class observation",
+  id: "starter-note",
+  title: "first notes",
   tape: "var(--petal)",
   createdAt: Date.now(),
   updatedAt: Date.now(),
   pages: [
     {
-      id: uid(),
+      id: "starter-page",
       text: "things to remember\n\nthe margins are where the real reading happens.\ncome back to page 42 — something about the light.\n",
       items: [
-        { id: uid(), kind: "sticker", stickerId: "m-flower-pink", x: 420, y: 90, rot: -8, scale: 1 },
-        { id: uid(), kind: "sticker", stickerId: "sc-tape", x: 60, y: 40, rot: 6, scale: 1 },
+        { id: "starter-sticker-1", kind: "sticker", stickerId: "m-flower-pink", x: 420, y: 90, rot: -8, scale: 1 },
+        { id: "starter-sticker-2", kind: "sticker", stickerId: "sc-tape", x: 60, y: 40, rot: 6, scale: 1 },
       ],
     },
   ],
@@ -98,10 +98,10 @@ const defaultState: ScrapState = {
   pdfs: [],
   ideas: {
     items: [
-      { id: uid(), kind: "text", x: 120, y: 120, rot: -2, text: "summer project ideas", color: "var(--espresso)", hand: true, size: 34 },
-      { id: uid(), kind: "text", x: 150, y: 190, rot: 1, text: "zine · sticker pack · mini book", color: "var(--ink-soft)", hand: true, size: 26 },
-      { id: uid(), kind: "sticker", stickerId: "s-tape-sage", x: 96, y: 96, rot: -7, scale: 1 },
-      { id: uid(), kind: "sticker", stickerId: "b-daisy", x: 430, y: 210, rot: 5, scale: 1 },
+      { id: "starter-idea-1", kind: "text", x: 120, y: 120, rot: -2, text: "summer project ideas", color: "var(--espresso)", hand: true, size: 34 },
+      { id: "starter-idea-2", kind: "text", x: 150, y: 190, rot: 1, text: "zine · sticker pack · mini book", color: "var(--ink-soft)", hand: true, size: 26 },
+      { id: "starter-idea-3", kind: "sticker", stickerId: "s-tape-sage", x: 96, y: 96, rot: -7, scale: 1 },
+      { id: "starter-idea-4", kind: "sticker", stickerId: "b-daisy", x: 430, y: 210, rot: 5, scale: 1 },
     ],
   },
   settings: { ambient: 1, grain: true, reduceMotion: false, scrapyOn: true, paperTone: "cream" },
