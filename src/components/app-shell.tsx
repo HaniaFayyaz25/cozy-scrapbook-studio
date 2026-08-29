@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { BookOpen, FileText, CloudLightning, Smile, Settings2 } from "lucide-react";
-import { Scrapy, ROOM_TAPE } from "./scrapy";
+import { Scrapy, ROOM_TAPE, DraggableScrapy } from "./scrapy";
 import { hydrate, useScrap } from "@/lib/scrap-store";
 import { cn } from "@/lib/utils";
 
@@ -70,13 +70,15 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="room paper-grain relative mx-auto w-full max-w-[820px] overflow-hidden rounded-[26px] p-3 md:p-4">
         <CornerDecor />
 
-        {/* scrapy peeking into the top-right corner */}
-        <div className="pointer-events-none absolute right-4 top-3 z-20 flex items-start gap-1.5">
-          <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
-          <span className="mt-1 rounded-[14px] border border-espresso/15 bg-paper px-2 py-1 text-[0.68rem] leading-tight text-espresso shadow-sm">
-            ready to create?
-          </span>
-        </div>
+        {/* scrapy peeking into the top-right corner — pick him up and move him anywhere */}
+        <DraggableScrapy storageKey="scrapy-room-corner" className="right-4 top-3">
+          <div className="flex items-start gap-1.5">
+            <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
+            <span className="mt-1 rounded-[14px] border border-espresso/15 bg-paper px-2 py-1 text-[0.68rem] leading-tight text-espresso shadow-sm">
+              ready to create?
+            </span>
+          </div>
+        </DraggableScrapy>
 
         <div className="relative flex gap-3 md:gap-4">
           <aside className="w-[4.5rem] shrink-0 md:w-[8.5rem]">

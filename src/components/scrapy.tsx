@@ -153,6 +153,22 @@ export function DraggableScrapy({
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
 
+  // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
+  useEffect(() => {
+    console.log("[DraggableScrapy] effect running, storageKey=", storageKey);
+    try {
+      const raw = localStorage.getItem(storageKey);
+      console.log("[DraggableScrapy] raw=", raw);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { x: number; y: number };
+        console.log("[DraggableScrapy] setting pos to", parsed);
+        setPos(parsed);
+      }
+    } catch (e) {
+      console.log("[DraggableScrapy] error", e);
+    }
+  }, [storageKey]);
+
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const wrap = wrapRef.current;
     const parent = wrap?.offsetParent as HTMLElement | null;
@@ -207,6 +223,7 @@ export function DraggableScrapy({
       ref={wrapRef}
       role="button"
       aria-label="scrapy — drag me anywhere"
+      data-pos={pos ? `${pos.x},${pos.y}` : "null"}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -262,6 +279,16 @@ export function ScrapyHere({
   });
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+
+  // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(posKey);
+      if (raw) setPos(JSON.parse(raw) as { x: number; y: number });
+    } catch {
+      /* ignore */
+    }
+  }, [posKey]);
 
   const nightly = useMemo(() => {
     const h = new Date().getHours();
