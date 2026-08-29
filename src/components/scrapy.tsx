@@ -155,11 +155,17 @@ export function DraggableScrapy({
 
   // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
   useEffect(() => {
+    console.log("[DraggableScrapy] effect running, storageKey=", storageKey);
     try {
       const raw = localStorage.getItem(storageKey);
-      if (raw) setPos(JSON.parse(raw) as { x: number; y: number });
-    } catch {
-      /* ignore */
+      console.log("[DraggableScrapy] raw=", raw);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { x: number; y: number };
+        console.log("[DraggableScrapy] setting pos to", parsed);
+        setPos(parsed);
+      }
+    } catch (e) {
+      console.log("[DraggableScrapy] error", e);
     }
   }, [storageKey]);
 
