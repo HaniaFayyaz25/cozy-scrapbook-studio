@@ -153,6 +153,16 @@ export function DraggableScrapy({
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
 
+  // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) setPos(JSON.parse(raw) as { x: number; y: number });
+    } catch {
+      /* ignore */
+    }
+  }, [storageKey]);
+
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const wrap = wrapRef.current;
     const parent = wrap?.offsetParent as HTMLElement | null;
