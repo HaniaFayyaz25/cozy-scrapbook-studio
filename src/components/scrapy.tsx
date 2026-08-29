@@ -217,6 +217,7 @@ export function DraggableScrapy({
       ref={wrapRef}
       role="button"
       aria-label="scrapy — drag me anywhere"
+      data-pos={pos ? `${pos.x},${pos.y}` : "null"}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
