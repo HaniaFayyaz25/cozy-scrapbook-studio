@@ -80,7 +80,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </DraggableScrapy>
 
-        <div className="relative flex gap-3 md:gap-4">
+        <div className="relative flex min-h-0 flex-1 gap-3 md:gap-4">
           <aside className="w-[4.5rem] shrink-0 md:w-[8.5rem]">
             <Link to="/" className="mb-3 flex items-center gap-1.5 px-1">
               <span className="hand text-[1.7rem] leading-none text-room-ink md:text-[2rem]">scrap</span>
