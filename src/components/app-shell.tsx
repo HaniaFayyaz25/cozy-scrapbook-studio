@@ -61,13 +61,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "min-h-screen w-full px-3 py-6 md:px-6 md:py-10",
+        "flex h-dvh min-h-dvh w-full p-2 md:p-4",
         reduce && "reduce-motion",
         !grain && "no-grain",
       )}
       style={{ background: "var(--background)" }}
     >
-      <div className="room paper-grain relative mx-auto w-full max-w-[820px] overflow-hidden rounded-[26px] p-3 md:p-4">
+      <div className="room paper-grain relative mx-auto flex h-full w-full max-w-[820px] flex-col overflow-hidden rounded-[26px] p-3 md:p-4">
         <CornerDecor />
 
         {/* scrapy peeking into the top-right corner — pick him up and move him anywhere */}
