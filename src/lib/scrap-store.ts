@@ -149,6 +149,7 @@ export function hydrate() {
   if (hydrated || typeof window === "undefined") return;
   hydrated = true;
   state = load();
+  persist();
   emit();
 }
 
