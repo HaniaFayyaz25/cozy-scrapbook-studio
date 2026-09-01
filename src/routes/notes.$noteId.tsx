@@ -126,6 +126,11 @@ function NotePageView() {
         </button>
       </div>
 
+      {/* toolbar docked to the bottom edge of the working area */}
+      <div className="sticky bottom-0 z-30 -mx-1 mt-3 w-fit max-w-full px-1 pb-1">
+        <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} />
+      </div>
+
       <ScrapyHere
         room="notes"
         mood={mood}
