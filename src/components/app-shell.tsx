@@ -61,13 +61,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "flex h-dvh min-h-dvh w-full p-2 md:p-4",
+        "flex w-full justify-center p-2 md:h-dvh md:min-h-dvh md:p-4",
         reduce && "reduce-motion",
         !grain && "no-grain",
       )}
       style={{ background: "var(--background)" }}
     >
-      <div className="room paper-grain relative mx-auto flex h-full w-full max-w-[820px] flex-col overflow-hidden rounded-[26px] p-3 md:p-4">
+      <div className="room paper-grain relative mx-auto flex w-full max-w-[820px] flex-col overflow-hidden rounded-[22px] p-3 md:h-full md:rounded-[26px] md:p-4">
         <CornerDecor />
 
         {/* scrapy peeking into the top-right corner — pick him up and move him anywhere */}
@@ -80,10 +80,36 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </DraggableScrapy>
 
+        {/* mobile: compact top bar */}
+        <div className="mb-2 flex items-center gap-1.5 md:hidden">
+          <Link to="/" className="flex items-center gap-1 pr-1">
+            <span className="hand text-[1.5rem] leading-none text-room-ink">scrap</span>
+            <Scrapy mood="happy" tape="var(--petal)" size={18} />
+          </Link>
+        </div>
+        <nav className="-mx-1 mb-3 flex items-center gap-1 overflow-x-auto px-1 pb-1 md:hidden">
+          {NAV.map((n) => {
+            const on = active(n.to);
+            return (
+              <Link
+                key={n.to}
+                to={n.to}
+                className={cn(
+                  "flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.72rem] transition-colors",
+                  on ? "bg-room-pill text-room-ink" : "text-room-ink/60 hover:bg-room-pill/50",
+                )}
+              >
+                <n.icon className="h-[14px] w-[14px] shrink-0" strokeWidth={1.7} />
+                <span className="whitespace-nowrap">{n.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
         <div className="relative flex min-h-0 flex-1 gap-3 md:gap-4">
-          <aside className="w-[4.5rem] shrink-0 md:w-[8.5rem]">
+          <aside className="hidden w-[8.5rem] shrink-0 md:block">
             <Link to="/" className="mb-3 flex items-center gap-1.5 px-1">
-              <span className="hand text-[1.7rem] leading-none text-room-ink md:text-[2rem]">scrap</span>
+              <span className="hand text-[2rem] leading-none text-room-ink">scrap</span>
               <Scrapy mood="happy" tape="var(--petal)" size={22} />
             </Link>
 
@@ -95,21 +121,21 @@ export function AppShell({ children }: { children: ReactNode }) {
                     key={n.to}
                     to={n.to}
                     className={cn(
-                      "flex items-center gap-2 rounded-full px-2.5 py-1.5 text-[0.8rem] transition-colors md:px-3",
+                      "flex items-center gap-2 rounded-full px-3 py-1.5 text-[0.8rem] transition-colors",
                       on
                         ? "bg-room-pill text-room-ink"
                         : "text-room-ink/60 hover:bg-room-pill/50 hover:text-room-ink",
                     )}
                   >
                     <n.icon className="h-[15px] w-[15px] shrink-0" strokeWidth={1.7} />
-                    <span className="hidden truncate md:inline">{n.label}</span>
+                    <span className="truncate">{n.label}</span>
                   </Link>
                 );
               })}
             </nav>
           </aside>
 
-          <main className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden pb-2 pr-1">
+          <main className="relative min-w-0 flex-1 overflow-x-hidden pb-2 md:overflow-y-auto md:pr-1">
             {children}
           </main>
         </div>
@@ -117,6 +143,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
 
 export function PageHeader({
   title,
