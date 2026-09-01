@@ -85,9 +85,6 @@ function NotePageView() {
         </div>
       </div>
 
-      <div className="sticky top-3 z-30 mb-4 w-fit">
-        <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} />
-      </div>
 
       <ScrapCanvas
         items={page.items}
