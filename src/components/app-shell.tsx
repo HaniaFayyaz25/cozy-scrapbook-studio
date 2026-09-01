@@ -61,7 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "flex w-full justify-center p-2 md:h-dvh md:min-h-dvh md:p-4",
+        "flex w-full items-start justify-center p-2 md:h-dvh md:min-h-dvh md:p-4",
         reduce && "reduce-motion",
         !grain && "no-grain",
       )}

@@ -111,15 +111,19 @@ let state: ScrapState = defaultState;
 let hydrated = false;
 const listeners = new Set<() => void>();
 
+const REMOVED_TITLES = new Set(["math class observation", "maths class observation"]);
+
 function load(): ScrapState {
   if (typeof window === "undefined") return defaultState;
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return defaultState;
     const parsed = JSON.parse(raw) as ScrapState;
+    const notes = (parsed.notes ?? []).filter((n) => !REMOVED_TITLES.has(n.title.toLowerCase()));
     return {
       ...defaultState,
       ...parsed,
+      notes: notes.length ? notes : defaultState.notes,
       settings: { ...defaultState.settings, ...(parsed.settings ?? {}) },
       ideas: parsed.ideas ?? defaultState.ideas,
     };
@@ -145,6 +149,7 @@ export function hydrate() {
   if (hydrated || typeof window === "undefined") return;
   hydrated = true;
   state = load();
+  persist();
   emit();
 }
 
