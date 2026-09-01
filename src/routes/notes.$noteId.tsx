@@ -56,7 +56,7 @@ function NotePageView() {
   ];
 
   return (
-    <div className="relative pb-16">
+    <div className="relative pb-2">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Link
           to="/"
