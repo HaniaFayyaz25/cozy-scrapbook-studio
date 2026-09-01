@@ -56,7 +56,7 @@ function NotePageView() {
   ];
 
   return (
-    <div className="relative pb-16">
+    <div className="relative pb-2">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Link
           to="/"
@@ -85,9 +85,6 @@ function NotePageView() {
         </div>
       </div>
 
-      <div className="sticky top-3 z-30 mb-4 w-fit">
-        <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} />
-      </div>
 
       <ScrapCanvas
         items={page.items}
@@ -127,6 +124,11 @@ function NotePageView() {
         >
           <Plus className="h-3.5 w-3.5" /> add page
         </button>
+      </div>
+
+      {/* toolbar docked to the bottom edge of the working area */}
+      <div className="sticky bottom-0 z-30 -mx-1 mt-3 w-fit max-w-full px-1 pb-1">
+        <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} />
       </div>
 
       <ScrapyHere

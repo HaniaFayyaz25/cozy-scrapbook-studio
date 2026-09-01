@@ -30,7 +30,7 @@ function IdeaDump() {
   const mood = useTimeMood("excited");
 
   return (
-    <div className="relative pb-16">
+    <div className="relative pb-2">
       <PageHeader
         title="idea dump"
         note="no rules here. scribble, stick, arrow, repeat."

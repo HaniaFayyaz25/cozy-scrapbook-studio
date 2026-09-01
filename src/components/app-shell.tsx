@@ -61,13 +61,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "min-h-screen w-full px-3 py-6 md:px-6 md:py-10",
+        "flex h-dvh min-h-dvh w-full p-2 md:p-4",
         reduce && "reduce-motion",
         !grain && "no-grain",
       )}
       style={{ background: "var(--background)" }}
     >
-      <div className="room paper-grain relative mx-auto w-full max-w-[820px] overflow-hidden rounded-[26px] p-3 md:p-4">
+      <div className="room paper-grain relative mx-auto flex h-full w-full max-w-[820px] flex-col overflow-hidden rounded-[26px] p-3 md:p-4">
         <CornerDecor />
 
         {/* scrapy peeking into the top-right corner — pick him up and move him anywhere */}
@@ -80,7 +80,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </DraggableScrapy>
 
-        <div className="relative flex gap-3 md:gap-4">
+        <div className="relative flex min-h-0 flex-1 gap-3 md:gap-4">
           <aside className="w-[4.5rem] shrink-0 md:w-[8.5rem]">
             <Link to="/" className="mb-3 flex items-center gap-1.5 px-1">
               <span className="hand text-[1.7rem] leading-none text-room-ink md:text-[2rem]">scrap</span>
@@ -109,7 +109,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           </aside>
 
-          <main className="relative min-w-0 flex-1 pb-2 pr-1">{children}</main>
+          <main className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden pb-2 pr-1">
+            {children}
+          </main>
         </div>
       </div>
     </div>
