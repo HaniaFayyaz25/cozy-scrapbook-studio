@@ -80,31 +80,17 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </DraggableScrapy>
 
-        {/* mobile: compact top bar */}
-        <div className="mb-2 flex items-center gap-1.5 md:hidden">
-          <Link to="/" className="flex items-center gap-1 pr-1">
-            <span className="hand text-[1.5rem] leading-none text-room-ink">scrap</span>
-            <Scrapy mood="happy" tape="var(--petal)" size={18} />
+        {/* mobile: compact header — wordmark, current section, tiny scrapy */}
+        <div className="mb-1.5 flex items-center gap-2 pr-12 md:hidden">
+          <Link to="/" className="hand shrink-0 text-[1.35rem] leading-none text-room-ink">
+            scrap
           </Link>
+          <span className="h-3.5 w-px shrink-0 bg-room-ink/20" />
+          <span className="min-w-0 truncate text-[0.72rem] text-room-ink/60">
+            {NAV.find((n) => n.room === room)?.label}
+          </span>
+          <Scrapy mood="happy" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={20} />
         </div>
-        <nav className="-mx-1 mb-3 flex items-center gap-1 overflow-x-auto px-1 pb-1 md:hidden">
-          {NAV.map((n) => {
-            const on = active(n.to);
-            return (
-              <Link
-                key={n.to}
-                to={n.to}
-                className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.72rem] transition-colors",
-                  on ? "bg-room-pill text-room-ink" : "text-room-ink/60 hover:bg-room-pill/50",
-                )}
-              >
-                <n.icon className="h-[14px] w-[14px] shrink-0" strokeWidth={1.7} />
-                <span className="whitespace-nowrap">{n.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
 
         <div className="relative flex min-h-0 flex-1 gap-3 md:gap-4">
           <aside className="hidden w-[8.5rem] shrink-0 md:block">
@@ -135,10 +121,33 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           </aside>
 
-          <main className="relative min-w-0 flex-1 overflow-x-hidden pb-2 md:overflow-y-auto md:pr-1">
+          <main className="relative min-w-0 flex-1 overflow-x-hidden pb-14 md:overflow-y-auto md:pb-2 md:pr-1">
             {children}
           </main>
         </div>
+
+        {/* mobile: compact bottom nav — a taped strip of section pills */}
+        <nav className="sticky bottom-0 z-30 -mx-1 mt-1 md:hidden">
+          <div className="paper-card paper-grain mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full px-1.5 py-1 shadow-md">
+            {NAV.map((n) => {
+              const on = active(n.to);
+              return (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  aria-label={n.label}
+                  className={cn(
+                    "flex min-h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 py-1.5 text-[0.68rem] transition-colors",
+                    on ? "bg-espresso text-paper" : "text-espresso/60 hover:bg-paper-deep",
+                  )}
+                >
+                  <n.icon className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+                  {on && <span className="whitespace-nowrap">{n.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
       </div>
     </div>
   );
