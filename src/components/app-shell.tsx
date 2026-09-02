@@ -80,16 +80,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </DraggableScrapy>
 
-        {/* mobile: compact header — wordmark, current section, tiny scrapy */}
-        <div className="mb-1.5 flex items-center gap-2 pr-12 md:hidden">
-          <Link to="/" className="hand shrink-0 text-[1.35rem] leading-none text-room-ink">
+        {/* mobile: calm, compact header — wordmark and current section only */}
+        <div className="mb-1.5 flex items-center justify-between pr-12 md:hidden">
+          <Link to="/" className="hand text-[1.2rem] leading-none text-room-ink">
             scrap
           </Link>
-          <span className="h-3.5 w-px shrink-0 bg-room-ink/20" />
-          <span className="min-w-0 truncate text-[0.72rem] text-room-ink/60">
+          <span className="rounded-full bg-paper-deep px-2.5 py-1 text-[0.68rem] leading-none text-room-ink/70">
             {NAV.find((n) => n.room === room)?.label}
           </span>
-          <Scrapy mood="happy" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={20} />
         </div>
 
         <div className="relative flex min-h-0 flex-1 gap-3 md:gap-4">
