@@ -121,10 +121,33 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           </aside>
 
-          <main className="relative min-w-0 flex-1 overflow-x-hidden pb-2 md:overflow-y-auto md:pr-1">
+          <main className="relative min-w-0 flex-1 overflow-x-hidden pb-14 md:overflow-y-auto md:pb-2 md:pr-1">
             {children}
           </main>
         </div>
+
+        {/* mobile: compact bottom nav — a taped strip of section pills */}
+        <nav className="sticky bottom-0 z-30 -mx-1 mt-1 md:hidden">
+          <div className="paper-card paper-grain mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full px-1.5 py-1 shadow-md">
+            {NAV.map((n) => {
+              const on = active(n.to);
+              return (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  aria-label={n.label}
+                  className={cn(
+                    "flex min-h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 py-1.5 text-[0.68rem] transition-colors",
+                    on ? "bg-espresso text-paper" : "text-espresso/60 hover:bg-paper-deep",
+                  )}
+                >
+                  <n.icon className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+                  {on && <span className="whitespace-nowrap">{n.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
       </div>
     </div>
   );
