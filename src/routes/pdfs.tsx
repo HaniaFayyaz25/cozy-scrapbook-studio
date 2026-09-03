@@ -247,10 +247,10 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
       </div>
 
       <div
-        className="mb-3 flex flex-wrap items-center gap-2 rounded-[6px] border border-rose/25 px-3 py-2"
+        className="mb-3 flex flex-wrap items-center gap-1.5 rounded-[6px] border border-rose/25 px-2.5 py-1.5"
         style={{ background: "color-mix(in oklab, var(--petal) 28%, var(--paper))" }}
       >
-        <span className="hand text-lg text-espresso/70">soft highlights</span>
+        <span className="hand text-base text-espresso/70">soft highlights</span>
         {HIGHLIGHT_COLORS.slice(0, 4).map((c) => (
           <button
             key={c.id}
@@ -266,14 +266,14 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
           />
         ))}
         <span className="mx-1 h-5 w-px bg-rose/30" />
-        <span className="hand text-lg text-espresso/70">margin doodles</span>
+        <span className="hand text-base text-espresso/70">margin doodles</span>
         {MARGIN_DOODLES.map((id) => (
           <button
             key={id}
             title={id}
             onClick={() => setTool({ ...tool, tool: "sticker", stickerId: id })}
             className={cn(
-              "grid h-9 w-9 place-items-center rounded-[4px] transition-transform hover:-rotate-6",
+              "grid h-8 w-8 place-items-center rounded-[4px] transition-transform hover:-rotate-6",
               tool.stickerId === id && tool.tool === "sticker" && "bg-paper ring-1 ring-rose",
             )}
           >
