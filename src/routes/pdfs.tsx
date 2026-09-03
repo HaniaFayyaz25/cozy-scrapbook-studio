@@ -233,19 +233,17 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
 
   return (
     <div className="relative pb-2">
-      <div className="mb-4 flex flex-wrap items-center gap-2 md:gap-3">
+      <div className="mb-2 flex items-center gap-2">
         <button
           onClick={onClose}
           className="flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-espresso"
         >
           <ChevronLeft className="h-4 w-4" strokeWidth={1.7} /> shelf
         </button>
-        <p className="hand max-w-[calc(100%-4rem)] truncate text-2xl leading-none text-espresso md:text-3xl">
-          {doc.name}
-        </p>
-        <div className="ml-auto">
-          <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} compact />
-        </div>
+        <p className="hand truncate text-2xl leading-none text-espresso md:text-3xl">{doc.name}</p>
+      </div>
+      <div className="mb-2">
+        <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} compact />
       </div>
 
       <div
