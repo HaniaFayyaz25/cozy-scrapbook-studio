@@ -14,6 +14,7 @@ import {
   type CanvasItem,
   type PdfDoc,
 } from "@/lib/scrap-store";
+import { StickerArt } from "@/lib/stickers";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/pdfs")({
