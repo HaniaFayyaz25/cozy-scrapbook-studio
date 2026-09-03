@@ -288,13 +288,15 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
           style={{ width: size.w, height: size.h }}
         >
           <canvas ref={canvasRef} className="block" />
-          <ScrapCanvas
-            items={items}
-            onChange={setItems}
-            toolState={tool}
-            history={history}
-            className="absolute inset-0"
-          />
+          <div className="absolute inset-0">
+            <ScrapCanvas
+              items={items}
+              onChange={setItems}
+              toolState={tool}
+              history={history}
+              className="h-full w-full"
+            />
+          </div>
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-4">
