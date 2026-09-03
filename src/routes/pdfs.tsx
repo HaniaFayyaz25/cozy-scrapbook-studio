@@ -246,6 +246,42 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
         </div>
       </div>
 
+      <div
+        className="mb-3 flex flex-wrap items-center gap-2 rounded-[6px] border border-rose/25 px-3 py-2"
+        style={{ background: "color-mix(in oklab, var(--petal) 28%, var(--paper))" }}
+      >
+        <span className="hand text-lg text-espresso/70">soft highlights</span>
+        {HIGHLIGHT_COLORS.slice(0, 4).map((c) => (
+          <button
+            key={c.id}
+            title={c.id}
+            onClick={() => setTool({ ...tool, tool: "highlighter", highlight: c.v })}
+            className={cn(
+              "h-5 w-8 rounded-full border transition-transform",
+              tool.highlight === c.v && tool.tool === "highlighter"
+                ? "scale-110 border-espresso"
+                : "border-espresso/20 hover:scale-105",
+            )}
+            style={{ background: c.v }}
+          />
+        ))}
+        <span className="mx-1 h-5 w-px bg-rose/30" />
+        <span className="hand text-lg text-espresso/70">margin doodles</span>
+        {MARGIN_DOODLES.map((id) => (
+          <button
+            key={id}
+            title={id}
+            onClick={() => setTool({ ...tool, tool: "sticker", stickerId: id })}
+            className={cn(
+              "grid h-9 w-9 place-items-center rounded-[4px] transition-transform hover:-rotate-6",
+              tool.stickerId === id && tool.tool === "sticker" && "bg-paper ring-1 ring-rose",
+            )}
+          >
+            <StickerArt id={id} size={26} />
+          </button>
+        ))}
+      </div>
+
       <div ref={wrapRef} className="mx-auto max-w-4xl">
         <div
           className="paper-card paper-grain relative mx-auto overflow-hidden p-0"
