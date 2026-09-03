@@ -111,11 +111,29 @@ function PdfRoom() {
       />
 
       {pdfs.length === 0 ? (
-        <div className="paper-card paper-grain torn-edge mx-auto mt-10 max-w-md -rotate-1 p-10 text-center">
+        <div
+          className="paper-card paper-grain torn-edge mx-auto mt-8 max-w-md -rotate-1 p-8 text-center"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in oklab, var(--petal) 40%, var(--paper)), var(--paper))",
+          }}
+        >
+          <div className="mb-2 flex items-center justify-center gap-2">
+            <StickerArt id="m-flower-pink" size={34} />
+            <StickerArt id="m-bow" size={30} />
+            <StickerArt id="m-moon" size={28} />
+          </div>
           <p className="hand text-3xl text-espresso">nothing to read yet</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            add a pdf and it'll live here, annotations and all.
+            add a pdf and it'll live here — pale highlights, doodles and all.
           </p>
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="hand mt-4 rounded-[3px] border border-rose/40 bg-paper px-4 py-1.5 text-xl text-espresso transition-transform hover:-rotate-1"
+            style={{ background: "color-mix(in oklab, var(--petal) 45%, var(--paper))" }}
+          >
+            add a pdf
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-6">
