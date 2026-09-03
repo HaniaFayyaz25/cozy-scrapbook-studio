@@ -41,10 +41,11 @@ export const INK_COLORS = [
 
 export const HIGHLIGHT_COLORS = [
   { id: "dusty pink", v: "var(--petal)" },
+  { id: "pale rose", v: "oklch(0.86 0.055 15)" },
+  { id: "lilac", v: "oklch(0.85 0.045 305)" },
   { id: "lavender", v: "oklch(0.78 0.07 305)" },
   { id: "sage", v: "var(--sage)" },
   { id: "soft sky", v: "var(--sky)" },
-  { id: "warm gold", v: "var(--amber)" },
 ];
 
 /* ----------------------------- geometry ---------------------------------- */
