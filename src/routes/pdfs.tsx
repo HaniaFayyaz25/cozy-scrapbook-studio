@@ -195,7 +195,7 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
       canvas.style.height = `${viewport.height}px`;
       const ctx = canvas.getContext("2d")!;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      await p.render({ canvas, canvasContext: ctx, viewport }).promise;
+      await p.render({ canvasContext: ctx, viewport }).promise;
       if (!cancelled) setSize({ w: viewport.width, h: viewport.height });
     })();
     return () => {
