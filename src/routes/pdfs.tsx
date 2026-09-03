@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Trash2, Upload } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
-import { ScrapCanvas, useCanvasHistory, type ToolState } from "@/components/scrap-canvas";
+import { HIGHLIGHT_COLORS, ScrapCanvas, useCanvasHistory, type ToolState } from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
 import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import {
@@ -185,6 +185,8 @@ function PdfRoom() {
     </div>
   );
 }
+
+const MARGIN_DOODLES = ["m-flower-pink", "m-bow", "m-star", "m-moon", "m-sparkle", "m-heart-pink"];
 
 function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
   const [page, setPage] = useState(1);
