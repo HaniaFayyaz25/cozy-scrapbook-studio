@@ -142,13 +142,20 @@ function PdfRoom() {
             <div
               key={p.id}
               className="paper-card paper-grain group relative cursor-pointer p-4 pt-7 transition-transform hover:-translate-y-1"
-              style={{ transform: `rotate(${((i % 3) - 1) * 0.9}deg)` }}
+              style={{
+                transform: `rotate(${((i % 3) - 1) * 0.9}deg)`,
+                background:
+                  "linear-gradient(180deg, color-mix(in oklab, var(--petal) 30%, var(--paper)), var(--paper))",
+              }}
               onClick={() => setOpenId(p.id)}
             >
               <span
                 className="absolute -top-2 left-6 h-5 w-16 -rotate-6"
-                style={{ background: "var(--sky)", opacity: 0.85 }}
+                style={{ background: i % 2 ? "var(--rose)" : "var(--petal)", opacity: 0.85 }}
               />
+              <span className="absolute -right-1 -top-3 rotate-6">
+                <StickerArt id={i % 2 ? "m-bow" : "m-flower-pink"} size={26} />
+              </span>
               <p className="hand text-2xl leading-tight text-espresso">{p.name}</p>
               <p className="mt-1 text-[0.75rem] text-muted-foreground">{p.pageCount} pages</p>
               <button
