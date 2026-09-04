@@ -407,21 +407,82 @@ export function ScrapCanvas({
       {children}
 
       <svg className="absolute inset-0 h-full w-full" style={{ pointerEvents: "none", overflow: "visible" }}>
-        {strokes.map((st) => (
-          <g
-            key={st.id}
-            style={{ pointerEvents: toolState.tool === "eraser" ? "stroke" : "none", cursor: "cell" }}
-            onPointerDown={(e) => {
-              if (toolState.tool !== "eraser") return;
-              e.stopPropagation();
-              remove(st.id);
-            }}
-          >
-            <StrokeShape st={st} />
-          </g>
-        ))}
+        {strokes.map((st) => {
+          const b = bbox(st.points);
+          const pick = toolState.tool === "eraser" || toolState.tool === "select";
+          return (
+            <g key={st.id}>
+              <StrokeShape st={st} />
+              {selected === st.id && toolState.tool === "select" && (
+                <rect
+                  x={b.x1 - 8}
+                  y={b.y1 - 8}
+                  width={b.x2 - b.x1 + 16}
+                  height={b.y2 - b.y1 + 16}
+                  fill="none"
+                  stroke="var(--rose)"
+                  strokeOpacity={0.7}
+                  strokeDasharray="4 3"
+                  strokeWidth={1.5}
+                />
+              )}
+              {pick && (
+                <rect
+                  x={b.x1 - 8}
+                  y={b.y1 - 8}
+                  width={b.x2 - b.x1 + 16}
+                  height={b.y2 - b.y1 + 16}
+                  fill="transparent"
+                  style={{ pointerEvents: "all", cursor: toolState.tool === "eraser" ? "cell" : "grab" }}
+                  onPointerDown={(e) => {
+                    e.stopPropagation();
+                    if (toolState.tool === "eraser") {
+                      remove(st.id);
+                      return;
+                    }
+                    setSelected(st.id);
+                    const p = toLocal(e);
+                    drag.current = { id: st.id, dx: p.x, dy: p.y, orig: st };
+                  }}
+                />
+              )}
+            </g>
+          );
+        })}
         {draft && <StrokeShape st={draft} />}
       </svg>
+
+      {toolState.tool === "select" &&
+        strokes
+          .filter((st) => st.id === selected)
+          .map((st) => {
+            const b = bbox(st.points);
+            const cx = (b.x1 + b.x2) / 2;
+            const cy = (b.y1 + b.y2) / 2;
+            const scaleStroke = (f: number) =>
+              mutate(st.id, {
+                points: st.points.map((p) => ({ x: cx + (p.x - cx) * f, y: cy + (p.y - cy) * f })),
+              } as Partial<CanvasItem>);
+            return (
+              <div
+                key={`ui-${st.id}`}
+                className="paper-card absolute z-20 flex items-center gap-1 px-1.5 py-1 text-[11px]"
+                style={{ left: b.x1 - 8, top: b.y1 - 44, borderRadius: 4 }}
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                <button className="px-1" title="smaller" onClick={() => scaleStroke(0.85)}>
+                  −
+                </button>
+                <button className="px-1" title="bigger" onClick={() => scaleStroke(1.18)}>
+                  +
+                </button>
+                <button className="px-1 text-destructive" title="delete" onClick={() => remove(st.id)}>
+                  ✕
+                </button>
+              </div>
+            );
+          })}
+
 
       {objects.map((it) => {
         const isSel = selected === it.id;
