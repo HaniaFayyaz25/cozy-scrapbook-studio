@@ -20,12 +20,22 @@ export const Route = createFileRoute("/settings")({
   component: SettingsPage,
 });
 
-function Row({ label, note, children }: { label: string; note?: string; children: React.ReactNode }) {
+function Row({
+  label,
+  note,
+  children,
+}: {
+  label: string;
+  note?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 py-3.5 last:border-0">
       <div>
         <p className="hand text-xl leading-none text-espresso md:text-2xl">{label}</p>
-        {note && <p className="mt-1 text-[0.75rem] text-muted-foreground md:text-[0.8rem]">{note}</p>}
+        {note && (
+          <p className="mt-1 text-[0.75rem] text-muted-foreground md:text-[0.8rem]">{note}</p>
+        )}
       </div>
       <div className="flex items-center gap-1.5">{children}</div>
     </div>
@@ -46,7 +56,9 @@ function Choice({
       onClick={onClick}
       className={cn(
         "hand rounded-[3px] border px-2 py-0.5 text-base transition-colors md:px-3 md:text-lg",
-        on ? "border-espresso bg-secondary text-espresso" : "border-border text-muted-foreground hover:text-espresso",
+        on
+          ? "border-espresso bg-secondary text-espresso"
+          : "border-border text-muted-foreground hover:text-espresso",
       )}
     >
       {children}
@@ -85,7 +97,11 @@ function SettingsPage() {
       <div className="paper-card paper-grain px-5 py-2">
         <Row label="ambience" note="how alive the background feels">
           {["off", "calm", "lively"].map((l, i) => (
-            <Choice key={l} on={s.ambient === i} onClick={() => actions.setSettings({ ambient: i })}>
+            <Choice
+              key={l}
+              on={s.ambient === i}
+              onClick={() => actions.setSettings({ ambient: i })}
+            >
               {l}
             </Choice>
           ))}
@@ -93,7 +109,11 @@ function SettingsPage() {
 
         <Row label="paper tone" note="the colour of the page under everything">
           {(["cream", "warm", "cool"] as const).map((t) => (
-            <Choice key={t} on={s.paperTone === t} onClick={() => actions.setSettings({ paperTone: t })}>
+            <Choice
+              key={t}
+              on={s.paperTone === t}
+              onClick={() => actions.setSettings({ paperTone: t })}
+            >
               {t}
             </Choice>
           ))}
@@ -127,7 +147,10 @@ function SettingsPage() {
         </Row>
 
         <Row label="your scraps" note="everything lives in this browser">
-          <button onClick={exportAll} className="hand rounded-[3px] border border-border px-2 py-0.5 text-base md:px-3 md:text-lg">
+          <button
+            onClick={exportAll}
+            className="hand rounded-[3px] border border-border px-2 py-0.5 text-base md:px-3 md:text-lg"
+          >
             export
           </button>
           <label className="hand cursor-pointer rounded-[3px] border border-border px-2 py-0.5 text-base md:px-3 md:text-lg">
@@ -148,7 +171,11 @@ function SettingsPage() {
         prop="mug"
         size={50}
         flip
-        lines={["i like the cream paper best, personally.", "don't hide me. please.", "grain on. always."]}
+        lines={[
+          "i like the cream paper best, personally.",
+          "don't hide me. please.",
+          "grain on. always.",
+        ]}
         spots={["-right-6 top-16", "-right-4 bottom-16", "-left-8 top-1/2"]}
       />
     </div>

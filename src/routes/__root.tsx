@@ -18,9 +18,7 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="paper-card paper-grain max-w-md -rotate-1 p-8 text-center">
         <h1 className="hand text-6xl text-espresso">oops</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          this page slipped out of the notebook.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">this page slipped out of the notebook.</p>
         <Link to="/" className="hand mt-5 inline-block text-2xl underline decoration-wavy">
           back to notes
         </Link>

@@ -2,7 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Trash2, Upload } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
-import { HIGHLIGHT_COLORS, ScrapCanvas, useCanvasHistory, type ToolState } from "@/components/scrap-canvas";
+import {
+  HIGHLIGHT_COLORS,
+  ScrapCanvas,
+  useCanvasHistory,
+  type ToolState,
+} from "@/components/scrap-canvas";
 import { ToolBelt, defaultToolState } from "@/components/tool-belt";
 import { ScrapyHere, useTimeMood } from "@/components/scrapy";
 import {
@@ -179,7 +184,11 @@ function PdfRoom() {
         prop="book"
         peek
         size={56}
-        lines={["found anything worth underlining?", "one more chapter, then tea.", "pick a book, i'll read along."]}
+        lines={[
+          "found anything worth underlining?",
+          "one more chapter, then tea.",
+          "pick a book, i'll read along.",
+        ]}
         spots={["-top-3 right-8", "-bottom-4 left-10", "top-1/2 -left-8"]}
       />
     </div>
@@ -243,7 +252,13 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
         <p className="hand truncate text-2xl leading-none text-espresso md:text-3xl">{doc.name}</p>
       </div>
       <div className="mb-2">
-        <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} compact />
+        <ToolBelt
+          state={tool}
+          onChange={setTool}
+          onUndo={history.undo}
+          onRedo={history.redo}
+          compact
+        />
       </div>
 
       <div
@@ -325,7 +340,12 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
           "that bit deserves a highlight.",
           "i'll hold the pen for a sec.",
         ]}
-        spots={["top-28 -left-10", "bottom-24 -right-10", "top-1/2 -right-10", "bottom-32 -left-10"]}
+        spots={[
+          "top-28 -left-10",
+          "bottom-24 -right-10",
+          "top-1/2 -right-10",
+          "bottom-32 -left-10",
+        ]}
       />
     </div>
   );

@@ -92,12 +92,15 @@ export function ToolBelt({
 
         <div className="flex items-center gap-1">
           {(state.tool === "highlighter" ? HIGHLIGHT_COLORS : INK_COLORS).map((c) => {
-            const active = state.tool === "highlighter" ? state.highlight === c.v : state.color === c.v;
+            const active =
+              state.tool === "highlighter" ? state.highlight === c.v : state.color === c.v;
             return (
               <button
                 key={c.id}
                 title={c.id}
-                onClick={() => set(state.tool === "highlighter" ? { highlight: c.v } : { color: c.v })}
+                onClick={() =>
+                  set(state.tool === "highlighter" ? { highlight: c.v } : { color: c.v })
+                }
                 className={cn(
                   "h-5 w-5 rounded-full border transition-transform",
                   active ? "scale-110 border-espresso" : "border-espresso/25 hover:scale-105",
@@ -110,10 +113,18 @@ export function ToolBelt({
 
         <span className="mx-1 h-6 w-px bg-border" />
 
-        <button title="undo" onClick={onUndo} className="grid h-8 w-8 place-items-center rounded-[4px] hover:bg-secondary">
+        <button
+          title="undo"
+          onClick={onUndo}
+          className="grid h-8 w-8 place-items-center rounded-[4px] hover:bg-secondary"
+        >
           <Undo2 className="h-[17px] w-[17px]" strokeWidth={1.7} />
         </button>
-        <button title="redo" onClick={onRedo} className="grid h-8 w-8 place-items-center rounded-[4px] hover:bg-secondary">
+        <button
+          title="redo"
+          onClick={onRedo}
+          className="grid h-8 w-8 place-items-center rounded-[4px] hover:bg-secondary"
+        >
           <Redo2 className="h-[17px] w-[17px]" strokeWidth={1.7} />
         </button>
 

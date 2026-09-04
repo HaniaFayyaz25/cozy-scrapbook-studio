@@ -25,7 +25,10 @@ export const Route = createFileRoute("/")({
 });
 
 function preview(n: Note) {
-  const text = n.pages.map((p) => p.text).join(" ").trim();
+  const text = n.pages
+    .map((p) => p.text)
+    .join(" ")
+    .trim();
   return text ? text.slice(0, 90) : "";
 }
 
@@ -60,8 +63,12 @@ function NotesShelf() {
                     "polygon(0 8%,12% 0,28% 10%,45% 2%,62% 11%,80% 3%,100% 10%,100% 92%,82% 100%,64% 90%,46% 99%,28% 89%,12% 98%,0 90%)",
                 }}
               />
-              <h2 className="hand relative text-[1.15rem] leading-tight text-espresso">{n.title}</h2>
-              <p className="mt-1 line-clamp-2 text-[0.7rem] leading-relaxed text-ink-soft">{preview(n)}</p>
+              <h2 className="hand relative text-[1.15rem] leading-tight text-espresso">
+                {n.title}
+              </h2>
+              <p className="mt-1 line-clamp-2 text-[0.7rem] leading-relaxed text-ink-soft">
+                {preview(n)}
+              </p>
 
               {/* scrapy sitting on the page beside a tiny flower */}
               <span className="absolute bottom-1 left-2">

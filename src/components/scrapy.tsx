@@ -35,36 +35,84 @@ function TinyProp({ prop }: { prop: Prop }) {
     case "book":
       return (
         <g transform="translate(44 40) rotate(-8)">
-          <path d="M0 0h9v11H0z" fill="var(--sky)" stroke={ink} strokeWidth={1.6} strokeLinejoin="round" />
-          <path d="M9 0h9v11H9z" fill="var(--paper)" stroke={ink} strokeWidth={1.6} strokeLinejoin="round" />
+          <path
+            d="M0 0h9v11H0z"
+            fill="var(--sky)"
+            stroke={ink}
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+          />
+          <path
+            d="M9 0h9v11H9z"
+            fill="var(--paper)"
+            stroke={ink}
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+          />
           <path d="M9 0v11" stroke={ink} strokeWidth={1.2} />
         </g>
       );
     case "pen":
       return (
         <g transform="translate(46 30) rotate(24)">
-          <path d="M0 0h4v14H0z" fill="var(--amber)" stroke={ink} strokeWidth={1.4} strokeLinejoin="round" />
-          <path d="M0 14l2 4 2-4" fill="var(--paper)" stroke={ink} strokeWidth={1.4} strokeLinejoin="round" />
+          <path
+            d="M0 0h4v14H0z"
+            fill="var(--amber)"
+            stroke={ink}
+            strokeWidth={1.4}
+            strokeLinejoin="round"
+          />
+          <path
+            d="M0 14l2 4 2-4"
+            fill="var(--paper)"
+            stroke={ink}
+            strokeWidth={1.4}
+            strokeLinejoin="round"
+          />
         </g>
       );
     case "highlighter":
       return (
         <g transform="translate(45 31) rotate(18)">
-          <path d="M0 0h6v10H0z" fill="var(--petal)" stroke={ink} strokeWidth={1.4} strokeLinejoin="round" />
-          <path d="M0 10h6v5H0z" fill="var(--paper)" stroke={ink} strokeWidth={1.4} strokeLinejoin="round" />
+          <path
+            d="M0 0h6v10H0z"
+            fill="var(--petal)"
+            stroke={ink}
+            strokeWidth={1.4}
+            strokeLinejoin="round"
+          />
+          <path
+            d="M0 10h6v5H0z"
+            fill="var(--paper)"
+            stroke={ink}
+            strokeWidth={1.4}
+            strokeLinejoin="round"
+          />
         </g>
       );
     case "sticker":
       return (
         <g transform="translate(43 40) rotate(-12)">
-          <path d="M0 0h14v10H0z" fill="var(--sage)" stroke={ink} strokeWidth={1.4} strokeLinejoin="round" />
+          <path
+            d="M0 0h14v10H0z"
+            fill="var(--sage)"
+            stroke={ink}
+            strokeWidth={1.4}
+            strokeLinejoin="round"
+          />
           <path d="M3 5h8" stroke={ink} strokeWidth={1.2} strokeLinecap="round" />
         </g>
       );
     case "mug":
       return (
         <g transform="translate(45 42)">
-          <path d="M0 0h10v9a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3z" fill="var(--paper)" stroke={ink} strokeWidth={1.5} strokeLinejoin="round" />
+          <path
+            d="M0 0h10v9a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3z"
+            fill="var(--paper)"
+            stroke={ink}
+            strokeWidth={1.5}
+            strokeLinejoin="round"
+          />
           <path d="M10 3c3 0 3 5 0 5" fill="none" stroke={ink} strokeWidth={1.4} />
         </g>
       );
@@ -141,17 +189,13 @@ export function DraggableScrapy({
   className?: string;
   children?: React.ReactNode;
 }) {
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      const raw = localStorage.getItem(storageKey);
-      return raw ? (JSON.parse(raw) as { x: number; y: number }) : null;
-    } catch {
-      return null;
-    }
-  });
+  // Start null on both server and client so hydration matches; the effect below
+  // restores the saved spot right after mount.
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(
+    null,
+  );
 
   // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
   useEffect(() => {
@@ -169,7 +213,13 @@ export function DraggableScrapy({
     if (!wrap || !parent) return;
     const w = wrap.getBoundingClientRect();
     const p = parent.getBoundingClientRect();
-    dragRef.current = { sx: e.clientX, sy: e.clientY, ox: w.left - p.left, oy: w.top - p.top, moved: false };
+    dragRef.current = {
+      sx: e.clientX,
+      sy: e.clientY,
+      ox: w.left - p.left,
+      oy: w.top - p.top,
+      moved: false,
+    };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
@@ -272,7 +322,9 @@ export function ScrapyHere({
     }
   });
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(
+    null,
+  );
 
   // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
   useEffect(() => {
@@ -383,12 +435,12 @@ export function ScrapyHere({
     <div
       ref={wrapRef}
       className={`pointer-events-none absolute z-20 select-none ${
-        pos ? "" : `transition-all duration-[1200ms] ease-in-out ${spots[i % spots.length] ?? spots[0] ?? ""}`
+        pos
+          ? ""
+          : `transition-all duration-[1200ms] ease-in-out ${spots[i % spots.length] ?? spots[0] ?? ""}`
       }`}
       style={
-        pos
-          ? { left: pos.x, top: pos.y, opacity: peek ? 0.98 : 1 }
-          : { opacity: peek ? 0.98 : 1 }
+        pos ? { left: pos.x, top: pos.y, opacity: peek ? 0.98 : 1 } : { opacity: peek ? 0.98 : 1 }
       }
     >
       <div className="relative flex items-end gap-1.5">
@@ -409,7 +461,14 @@ export function ScrapyHere({
           aria-label="scrapy — drag me anywhere"
           style={{ clipPath: peek ? "inset(0 0 22% 0)" : undefined }}
         >
-          <Scrapy mood={mood} tape={ROOM_TAPE[room] ?? "var(--petal)"} size={size} prop={prop} flip={flip} bob />
+          <Scrapy
+            mood={mood}
+            tape={ROOM_TAPE[room] ?? "var(--petal)"}
+            size={size}
+            prop={prop}
+            flip={flip}
+            bob
+          />
         </button>
       </div>
     </div>

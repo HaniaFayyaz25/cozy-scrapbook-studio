@@ -35,7 +35,11 @@ export function AmbientBackground() {
       />
 
       {/* faint botanical silhouettes hugging the edges */}
-      <svg className="absolute inset-0 h-full w-full opacity-[0.08]" viewBox="0 0 1200 800" preserveAspectRatio="none">
+      <svg
+        className="absolute inset-0 h-full w-full opacity-[0.08]"
+        viewBox="0 0 1200 800"
+        preserveAspectRatio="none"
+      >
         <g fill="none" stroke="var(--forest)" strokeWidth={2} strokeLinecap="round">
           <path d="M-10 780c90-40 130-140 150-250" style={anim(70)} />
           <path d="M40 770c40-70 40-150 20-230" />
@@ -61,7 +65,8 @@ export function AmbientBackground() {
                 bottom: "-6vh",
                 width: 3 + (i % 3),
                 height: 3 + (i % 3),
-                background: i % 3 === 0 ? "var(--petal)" : i % 3 === 1 ? "var(--amber)" : "var(--sage)",
+                background:
+                  i % 3 === 0 ? "var(--petal)" : i % 3 === 1 ? "var(--amber)" : "var(--sage)",
                 opacity: 0.5,
                 animation: `floatUp ${(46 + (i % 7) * 9) * speed}s linear ${i * 2.4}s infinite`,
               }}
