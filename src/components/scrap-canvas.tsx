@@ -387,7 +387,8 @@ export function ScrapCanvas({
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
-        e.shiftKey ? history.redo() : history.undo();
+        if (e.shiftKey) history.redo();
+        else history.undo();
       }
       if ((e.key === "Backspace" || e.key === "Delete") && selected) {
         e.preventDefault();
