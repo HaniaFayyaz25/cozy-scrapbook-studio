@@ -515,6 +515,7 @@ export function ScrapCanvas({
                 id: it.id,
                 dx: p.x - (it as { x: number }).x,
                 dy: p.y - (it as { y: number }).y,
+                orig: it,
               };
             }}
           >
