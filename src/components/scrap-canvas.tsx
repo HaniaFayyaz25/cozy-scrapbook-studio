@@ -329,11 +329,18 @@ export function ScrapCanvas({
   const onPointerMove = (e: RPointerEvent<HTMLDivElement>) => {
     if (drag.current) {
       const p = toLocal(e);
-      const { id, dx, dy } = drag.current;
+      const { id, dx, dy, orig } = drag.current;
       onChange(
-        items.map((it) =>
-          it.id === id && it.kind !== "stroke" ? { ...it, x: p.x - dx, y: p.y - dy } : it,
-        ),
+        items.map((it) => {
+          if (it.id !== id) return it;
+          if (it.kind === "stroke") {
+            const o = orig as StrokeItem;
+            const ddx = p.x - dx;
+            const ddy = p.y - dy;
+            return { ...it, points: o.points.map((pt) => ({ x: pt.x + ddx, y: pt.y + ddy })) };
+          }
+          return { ...it, x: p.x - dx, y: p.y - dy };
+        }),
       );
       return;
     }
