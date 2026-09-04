@@ -546,6 +546,16 @@ export function ScrapCanvas({
                     </button>
                   </>
                 )}
+                {it.kind === "text" && (
+                  <>
+                    <button className="px-1" onClick={() => mutate(it.id, { size: Math.max(12, it.size - 4) })}>
+                      −
+                    </button>
+                    <button className="px-1" onClick={() => mutate(it.id, { size: Math.min(96, it.size + 4) })}>
+                      +
+                    </button>
+                  </>
+                )}
                 <button className="px-1" onClick={() => mutate(it.id, { rot: (it as { rot: number }).rot - 8 })}>
                   ↺
                 </button>
