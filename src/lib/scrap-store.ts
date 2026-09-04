@@ -96,14 +96,7 @@ const starterNote = (): Note => ({
 const defaultState: ScrapState = {
   notes: [starterNote()],
   pdfs: [],
-  ideas: {
-    items: [
-      { id: "starter-idea-1", kind: "text", x: 120, y: 120, rot: -2, text: "summer project ideas", color: "var(--espresso)", hand: true, size: 34 },
-      { id: "starter-idea-2", kind: "text", x: 150, y: 190, rot: 1, text: "zine · sticker pack · mini book", color: "var(--ink-soft)", hand: true, size: 26 },
-      { id: "starter-idea-3", kind: "sticker", stickerId: "s-tape-sage", x: 96, y: 96, rot: -7, scale: 1 },
-      { id: "starter-idea-4", kind: "sticker", stickerId: "b-daisy", x: 430, y: 210, rot: 5, scale: 1 },
-    ],
-  },
+  ideas: { items: [] },
   settings: { ambient: 1, grain: true, reduceMotion: false, scrapyOn: true, paperTone: "cream" },
 };
 
@@ -125,7 +118,7 @@ function load(): ScrapState {
       ...parsed,
       notes: notes.length ? notes : defaultState.notes,
       settings: { ...defaultState.settings, ...(parsed.settings ?? {}) },
-      ideas: parsed.ideas ?? defaultState.ideas,
+      ideas: { items: (parsed.ideas?.items ?? []).filter((i) => !i.id.startsWith("starter-idea")) },
     };
   } catch {
     return defaultState;
