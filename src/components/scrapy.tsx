@@ -189,15 +189,9 @@ export function DraggableScrapy({
   className?: string;
   children?: React.ReactNode;
 }) {
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      const raw = localStorage.getItem(storageKey);
-      return raw ? (JSON.parse(raw) as { x: number; y: number }) : null;
-    } catch {
-      return null;
-    }
-  });
+  // Start null on both server and client so hydration matches; the effect below
+  // restores the saved spot right after mount.
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(
     null,
