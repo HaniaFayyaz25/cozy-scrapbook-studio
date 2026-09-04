@@ -259,7 +259,7 @@ export function ScrapCanvas({
   const ref = useRef<HTMLDivElement>(null);
   const [draft, setDraft] = useState<StrokeItem | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
+  const drag = useRef<{ id: string; dx: number; dy: number; orig: CanvasItem } | null>(null);
   const { commit } = history;
 
   const drawing = toolState.tool !== "select" && toolState.tool !== "sticker" && toolState.tool !== "text";
