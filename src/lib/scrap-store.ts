@@ -118,7 +118,7 @@ function load(): ScrapState {
       ...parsed,
       notes: notes.length ? notes : defaultState.notes,
       settings: { ...defaultState.settings, ...(parsed.settings ?? {}) },
-      ideas: parsed.ideas ?? defaultState.ideas,
+      ideas: { items: (parsed.ideas?.items ?? []).filter((i) => !i.id.startsWith("starter-idea")) },
     };
   } catch {
     return defaultState;
