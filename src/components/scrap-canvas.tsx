@@ -153,7 +153,13 @@ function StrokeShape({ st }: { st: StrokeItem }) {
     case "arrow": {
       const [shaft, head] = arrowPaths(st.points);
       return (
-        <g fill="none" stroke={st.color} strokeWidth={st.width} strokeLinecap="round" strokeLinejoin="round">
+        <g
+          fill="none"
+          stroke={st.color}
+          strokeWidth={st.width}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d={shaft} />
           <path d={head} />
         </g>
@@ -236,7 +242,13 @@ export function useCanvasHistory(items: CanvasItem[], onChange: (i: CanvasItem[]
     force((n) => n + 1);
   }, [items, onChange]);
 
-  return { commit, undo, redo, canUndo: past.current.length > 0, canRedo: future.current.length > 0 };
+  return {
+    commit,
+    undo,
+    redo,
+    canUndo: past.current.length > 0,
+    canRedo: future.current.length > 0,
+  };
 }
 
 export function ScrapCanvas({
@@ -262,7 +274,8 @@ export function ScrapCanvas({
   const drag = useRef<{ id: string; dx: number; dy: number; orig: CanvasItem } | null>(null);
   const { commit } = history;
 
-  const drawing = toolState.tool !== "select" && toolState.tool !== "sticker" && toolState.tool !== "text";
+  const drawing =
+    toolState.tool !== "select" && toolState.tool !== "sticker" && toolState.tool !== "text";
 
   const toLocal = useCallback(
     (e: { clientX: number; clientY: number }): Point => {
@@ -406,7 +419,10 @@ export function ScrapCanvas({
     >
       {children}
 
-      <svg className="absolute inset-0 h-full w-full" style={{ pointerEvents: "none", overflow: "visible" }}>
+      <svg
+        className="absolute inset-0 h-full w-full"
+        style={{ pointerEvents: "none", overflow: "visible" }}
+      >
         {strokes.map((st) => {
           const b = bbox(st.points);
           const pick = toolState.tool === "eraser" || toolState.tool === "select";
@@ -433,7 +449,10 @@ export function ScrapCanvas({
                   width={b.x2 - b.x1 + 16}
                   height={b.y2 - b.y1 + 16}
                   fill="transparent"
-                  style={{ pointerEvents: "all", cursor: toolState.tool === "eraser" ? "cell" : "grab" }}
+                  style={{
+                    pointerEvents: "all",
+                    cursor: toolState.tool === "eraser" ? "cell" : "grab",
+                  }}
                   onPointerDown={(e) => {
                     e.stopPropagation();
                     if (toolState.tool === "eraser") {
@@ -476,13 +495,16 @@ export function ScrapCanvas({
                 <button className="px-1" title="bigger" onClick={() => scaleStroke(1.18)}>
                   +
                 </button>
-                <button className="px-1 text-destructive" title="delete" onClick={() => remove(st.id)}>
+                <button
+                  className="px-1 text-destructive"
+                  title="delete"
+                  onClick={() => remove(st.id)}
+                >
                   ✕
                 </button>
               </div>
             );
           })}
-
 
       {objects.map((it) => {
         const isSel = selected === it.id;
@@ -496,9 +518,13 @@ export function ScrapCanvas({
               transform: `translate(-50%,-50%) rotate(${(it as { rot: number }).rot}deg) scale(${
                 it.kind === "sticker" ? it.scale : 1
               })`,
-              pointerEvents: toolState.tool === "select" || toolState.tool === "eraser" ? "auto" : "none",
-              filter: "drop-shadow(0 2px 2px color-mix(in oklab, var(--espresso) 18%, transparent))",
-              outline: isSel ? "1.5px dashed color-mix(in oklab, var(--rose) 70%, transparent)" : undefined,
+              pointerEvents:
+                toolState.tool === "select" || toolState.tool === "eraser" ? "auto" : "none",
+              filter:
+                "drop-shadow(0 2px 2px color-mix(in oklab, var(--espresso) 18%, transparent))",
+              outline: isSel
+                ? "1.5px dashed color-mix(in oklab, var(--rose) 70%, transparent)"
+                : undefined,
               outlineOffset: 6,
             }}
             onPointerDown={(e) => {
@@ -538,28 +564,46 @@ export function ScrapCanvas({
               >
                 {it.kind === "sticker" && (
                   <>
-                    <button className="px-1" onClick={() => mutate(it.id, { scale: Math.max(0.4, it.scale - 0.15) })}>
+                    <button
+                      className="px-1"
+                      onClick={() => mutate(it.id, { scale: Math.max(0.4, it.scale - 0.15) })}
+                    >
                       −
                     </button>
-                    <button className="px-1" onClick={() => mutate(it.id, { scale: Math.min(3, it.scale + 0.15) })}>
+                    <button
+                      className="px-1"
+                      onClick={() => mutate(it.id, { scale: Math.min(3, it.scale + 0.15) })}
+                    >
                       +
                     </button>
                   </>
                 )}
                 {it.kind === "text" && (
                   <>
-                    <button className="px-1" onClick={() => mutate(it.id, { size: Math.max(12, it.size - 4) })}>
+                    <button
+                      className="px-1"
+                      onClick={() => mutate(it.id, { size: Math.max(12, it.size - 4) })}
+                    >
                       −
                     </button>
-                    <button className="px-1" onClick={() => mutate(it.id, { size: Math.min(96, it.size + 4) })}>
+                    <button
+                      className="px-1"
+                      onClick={() => mutate(it.id, { size: Math.min(96, it.size + 4) })}
+                    >
                       +
                     </button>
                   </>
                 )}
-                <button className="px-1" onClick={() => mutate(it.id, { rot: (it as { rot: number }).rot - 8 })}>
+                <button
+                  className="px-1"
+                  onClick={() => mutate(it.id, { rot: (it as { rot: number }).rot - 8 })}
+                >
                   ↺
                 </button>
-                <button className="px-1" onClick={() => mutate(it.id, { rot: (it as { rot: number }).rot + 8 })}>
+                <button
+                  className="px-1"
+                  onClick={() => mutate(it.id, { rot: (it as { rot: number }).rot + 8 })}
+                >
                   ↻
                 </button>
                 <button className="px-1 text-destructive" onClick={() => remove(it.id)}>

@@ -15,13 +15,7 @@ export const AMBER = "var(--amber)";
 export const PAPER = "var(--paper)";
 
 export type StickerCategory =
-  | "marginalia"
-  | "emotional"
-  | "reactions"
-  | "scrapbook"
-  | "botanical"
-  | "chaotic"
-  | "scrapy";
+  "marginalia" | "emotional" | "reactions" | "scrapbook" | "botanical" | "chaotic" | "scrapy";
 
 export type Sticker = {
   id: string;
@@ -44,7 +38,12 @@ export const CATEGORIES: { id: StickerCategory; label: string; note: string; tin
   { id: "scrapbook", label: "scrapbook stuff", note: "tape it. pin it. collect it.", tint: AMBER },
   { id: "botanical", label: "botanical", note: "for your soft, cozy pages", tint: FOREST },
   { id: "chaotic", label: "chaotic little marks", note: "your brain is not linear", tint: SKY },
-  { id: "scrapy", label: "scrapy's little things", note: "things that belong to scrapy", tint: PETAL },
+  {
+    id: "scrapy",
+    label: "scrapy's little things",
+    note: "things that belong to scrapy",
+    tint: PETAL,
+  },
 ];
 
 const s = (d: string, extra: Record<string, unknown> = {}) => (
@@ -59,7 +58,17 @@ const s = (d: string, extra: Record<string, unknown> = {}) => (
   />
 );
 
-function Flower({ c = PETAL, cx = 32, cy = 30, r = 8 }: { c?: string; cx?: number; cy?: number; r?: number }) {
+function Flower({
+  c = PETAL,
+  cx = 32,
+  cy = 30,
+  r = 8,
+}: {
+  c?: string;
+  cx?: number;
+  cy?: number;
+  r?: number;
+}) {
   const petals = [0, 72, 144, 216, 288];
   return (
     <g>
@@ -84,7 +93,17 @@ function Flower({ c = PETAL, cx = 32, cy = 30, r = 8 }: { c?: string; cx?: numbe
   );
 }
 
-function Heart({ c = ROSE, x = 32, y = 32, k = 1 }: { c?: string; x?: number; y?: number; k?: number }) {
+function Heart({
+  c = ROSE,
+  x = 32,
+  y = 32,
+  k = 1,
+}: {
+  c?: string;
+  x?: number;
+  y?: number;
+  k?: number;
+}) {
   return (
     <path
       transform={`translate(${x} ${y}) scale(${k}) translate(-32 -32)`}
@@ -97,7 +116,17 @@ function Heart({ c = ROSE, x = 32, y = 32, k = 1 }: { c?: string; x?: number; y?
   );
 }
 
-function Star({ c = AMBER, x = 32, y = 32, k = 1 }: { c?: string; x?: number; y?: number; k?: number }) {
+function Star({
+  c = AMBER,
+  x = 32,
+  y = 32,
+  k = 1,
+}: {
+  c?: string;
+  x?: number;
+  y?: number;
+  k?: number;
+}) {
   return (
     <path
       transform={`translate(${x} ${y}) scale(${k}) translate(-32 -32)`}
@@ -178,8 +207,20 @@ export function ScrapyBlob({
           <>
             {s("M22 31c1.8 2 4.2 2 6 0")}
             {s("M36 31c1.8 2 4.2 2 6 0")}
-            <path d="M24 34c-.6 4-2 6-1 8" stroke={SKY} strokeWidth={2.4} fill="none" strokeLinecap="round" />
-            <path d="M40 34c.6 4 2 6 1 8" stroke={SKY} strokeWidth={2.4} fill="none" strokeLinecap="round" />
+            <path
+              d="M24 34c-.6 4-2 6-1 8"
+              stroke={SKY}
+              strokeWidth={2.4}
+              fill="none"
+              strokeLinecap="round"
+            />
+            <path
+              d="M40 34c.6 4 2 6 1 8"
+              stroke={SKY}
+              strokeWidth={2.4}
+              fill="none"
+              strokeLinecap="round"
+            />
           </>
         );
       case "thinking":
@@ -199,7 +240,11 @@ export function ScrapyBlob({
               rx={2.6}
               ry={3}
               fill={INK}
-              style={blink ? { animation: "blink 5.5s infinite", transformOrigin: "25px 31px" } : undefined}
+              style={
+                blink
+                  ? { animation: "blink 5.5s infinite", transformOrigin: "25px 31px" }
+                  : undefined
+              }
             />
             <ellipse
               cx={39}
@@ -207,7 +252,11 @@ export function ScrapyBlob({
               rx={2.6}
               ry={3}
               fill={INK}
-              style={blink ? { animation: "blink 5.5s infinite", transformOrigin: "39px 31px" } : undefined}
+              style={
+                blink
+                  ? { animation: "blink 5.5s infinite", transformOrigin: "39px 31px" }
+                  : undefined
+              }
             />
           </>
         );
@@ -232,7 +281,9 @@ export function ScrapyBlob({
         );
       case "surprised":
       case "shocked":
-        return <ellipse cx={32} cy={39} rx={3.4} ry={4.2} fill={ROSE} stroke={INK} strokeWidth={2} />;
+        return (
+          <ellipse cx={32} cy={39} rx={3.4} ry={4.2} fill={ROSE} stroke={INK} strokeWidth={2} />
+        );
       case "sleepy":
       case "tired":
         return s("M29 39c1.6 1.4 3.4 1.4 5 0");
@@ -335,10 +386,21 @@ function tape(id: string, label: string, c: string, pattern?: "dots" | "grid" | 
           opacity={0.95}
         />
         {pattern === "dots" &&
-          [10, 26, 42, 58, 74, 88].map((x) => <circle key={x} cx={x} cy={31} r={2.4} fill={PAPER} opacity={0.8} />)}
+          [10, 26, 42, 58, 74, 88].map((x) => (
+            <circle key={x} cx={x} cy={31} r={2.4} fill={PAPER} opacity={0.8} />
+          ))}
         {pattern === "grid" &&
           [8, 22, 36, 50, 64, 78, 92].map((x) => (
-            <line key={x} x1={x} y1={22} x2={x} y2={42} stroke={PAPER} strokeWidth={1.6} opacity={0.7} />
+            <line
+              key={x}
+              x1={x}
+              y1={22}
+              x2={x}
+              y2={42}
+              stroke={PAPER}
+              strokeWidth={1.6}
+              opacity={0.7}
+            />
           ))}
       </g>
     ),
@@ -347,9 +409,27 @@ function tape(id: string, label: string, c: string, pattern?: "dots" | "grid" | 
 
 export const STICKERS: Sticker[] = [
   /* ---------------- marginalia ---------------- */
-  { id: "m-flower-pink", cat: "marginalia", label: "petal flower", size: 42, art: <Flower c={PETAL} /> },
-  { id: "m-flower-rose", cat: "marginalia", label: "rose flower", size: 42, art: <Flower c={ROSE} /> },
-  { id: "m-flower-sage", cat: "marginalia", label: "sage flower", size: 42, art: <Flower c={SAGE} /> },
+  {
+    id: "m-flower-pink",
+    cat: "marginalia",
+    label: "petal flower",
+    size: 42,
+    art: <Flower c={PETAL} />,
+  },
+  {
+    id: "m-flower-rose",
+    cat: "marginalia",
+    label: "rose flower",
+    size: 42,
+    art: <Flower c={ROSE} />,
+  },
+  {
+    id: "m-flower-sage",
+    cat: "marginalia",
+    label: "sage flower",
+    size: 42,
+    art: <Flower c={SAGE} />,
+  },
   {
     id: "m-leaf",
     cat: "marginalia",
@@ -384,7 +464,13 @@ export const STICKERS: Sticker[] = [
     ),
   },
   { id: "m-heart", cat: "marginalia", label: "heart", size: 38, art: <Heart /> },
-  { id: "m-heart-pink", cat: "marginalia", label: "soft heart", size: 34, art: <Heart c={PETAL} k={0.85} /> },
+  {
+    id: "m-heart-pink",
+    cat: "marginalia",
+    label: "soft heart",
+    size: 34,
+    art: <Heart c={PETAL} k={0.85} />,
+  },
   { id: "m-sparkle", cat: "marginalia", label: "sparkle", size: 34, art: <Sparkle /> },
   {
     id: "m-sparkle-trio",
@@ -407,8 +493,18 @@ export const STICKERS: Sticker[] = [
     size: 42,
     art: (
       <g>
-        <path d="M32 32c-6-12-20-12-18-2 1.6 8 12 10 18 2z" fill={PETAL} stroke={INK} strokeWidth={2} />
-        <path d="M32 32c6-12 20-12 18-2-1.6 8-12 10-18 2z" fill={PETAL} stroke={INK} strokeWidth={2} />
+        <path
+          d="M32 32c-6-12-20-12-18-2 1.6 8 12 10 18 2z"
+          fill={PETAL}
+          stroke={INK}
+          strokeWidth={2}
+        />
+        <path
+          d="M32 32c6-12 20-12 18-2-1.6 8-12 10-18 2z"
+          fill={PETAL}
+          stroke={INK}
+          strokeWidth={2}
+        />
         <path d="M32 32c-5 10-16 10-15 3" fill={ROSE} stroke={INK} strokeWidth={1.8} />
         <path d="M32 32c5 10 16 10 15 3" fill={ROSE} stroke={INK} strokeWidth={1.8} />
         {s("M32 28v12")}
@@ -449,11 +545,7 @@ export const STICKERS: Sticker[] = [
     cat: "marginalia",
     label: "dotted trail",
     size: 56,
-    art: (
-      <g>
-        {s("M6 40c8-6 16 6 24 0s16 6 26-2", { strokeDasharray: "1 6" })}
-      </g>
-    ),
+    art: <g>{s("M6 40c8-6 16 6 24 0s16 6 26-2", { strokeDasharray: "1 6" })}</g>,
   },
   {
     id: "m-squiggle",
@@ -492,7 +584,14 @@ export const STICKERS: Sticker[] = [
     label: "!!!",
     size: 40,
     art: (
-      <text x={32} y={44} textAnchor="middle" fontFamily="var(--font-hand)" fontSize={34} fill={INK}>
+      <text
+        x={32}
+        y={44}
+        textAnchor="middle"
+        fontFamily="var(--font-hand)"
+        fontSize={34}
+        fill={INK}
+      >
         !!!
       </text>
     ),
@@ -503,7 +602,14 @@ export const STICKERS: Sticker[] = [
     label: "???",
     size: 44,
     art: (
-      <text x={32} y={44} textAnchor="middle" fontFamily="var(--font-hand)" fontSize={32} fill={INK}>
+      <text
+        x={32}
+        y={44}
+        textAnchor="middle"
+        fontFamily="var(--font-hand)"
+        fontSize={32}
+        fill={INK}
+      >
         ???
       </text>
     ),
@@ -581,7 +687,16 @@ export const STICKERS: Sticker[] = [
     size: 78,
     art: (
       <g transform="rotate(-3 32 32)">
-        <rect x={2} y={20} width={74} height={24} rx={2} fill={PAPER} stroke={INK} strokeWidth={1.8} />
+        <rect
+          x={2}
+          y={20}
+          width={74}
+          height={24}
+          rx={2}
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={1.8}
+        />
         {s("M10 32h58", { strokeWidth: 1.2, strokeDasharray: "3 4" })}
       </g>
     ),
@@ -593,7 +708,14 @@ export const STICKERS: Sticker[] = [
     size: 70,
     art: (
       <g transform="rotate(4 32 32)">
-        <path d="M6 12h58v46l-12 8H6z" fill={AMBER} stroke={INK} strokeWidth={1.8} strokeLinejoin="round" opacity={0.9} />
+        <path
+          d="M6 12h58v46l-12 8H6z"
+          fill={AMBER}
+          stroke={INK}
+          strokeWidth={1.8}
+          strokeLinejoin="round"
+          opacity={0.9}
+        />
         {s("M14 26h40", { strokeWidth: 1.3 })}
         {s("M14 36h34", { strokeWidth: 1.3 })}
         {s("M14 46h24", { strokeWidth: 1.3 })}
@@ -626,7 +748,13 @@ export const STICKERS: Sticker[] = [
     size: 40,
     art: (
       <g>
-        <path d="M24 14h16l-3 14 8 8H19l8-8z" fill={ROSE} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d="M24 14h16l-3 14 8 8H19l8-8z"
+          fill={ROSE}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
         {s("M32 36v14")}
       </g>
     ),
@@ -639,7 +767,13 @@ export const STICKERS: Sticker[] = [
     art: (
       <g>
         {s("M14 14c10 6 26 6 36 0")}
-        <path d="M14 14l8 34 10-10 10 10 8-34" fill={PETAL} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d="M14 14l8 34 10-10 10 10 8-34"
+          fill={PETAL}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
       </g>
     ),
   },
@@ -648,7 +782,15 @@ export const STICKERS: Sticker[] = [
     cat: "scrapbook",
     label: "tiny tab",
     size: 40,
-    art: <path d="M12 22h40l-6 20H12z" fill={SAGE} stroke={INK} strokeWidth={1.8} strokeLinejoin="round" />,
+    art: (
+      <path
+        d="M12 22h40l-6 20H12z"
+        fill={SAGE}
+        stroke={INK}
+        strokeWidth={1.8}
+        strokeLinejoin="round"
+      />
+    ),
   },
   {
     id: "s-corner",
@@ -671,7 +813,13 @@ export const STICKERS: Sticker[] = [
     size: 44,
     art: (
       <g>
-        <path d="M22 20c4 6 6 12 10 12s6-6 10-12c2 10-2 18-10 18s-12-8-10-18z" fill={PETAL} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d="M22 20c4 6 6 12 10 12s6-6 10-12c2 10-2 18-10 18s-12-8-10-18z"
+          fill={PETAL}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
         {s("M32 38v18")}
         {s("M32 46c-6 0-9-3-10-8 6-1 9 2 10 8z", { fill: SAGE })}
       </g>
@@ -714,8 +862,24 @@ export const STICKERS: Sticker[] = [
         {s("M32 56V22")}
         {[22, 28, 34, 40].map((y) => (
           <g key={y}>
-            <ellipse cx={28} cy={y} rx={3.4} ry={2.6} fill="oklch(0.72 0.08 300)" stroke={INK} strokeWidth={1.4} />
-            <ellipse cx={36} cy={y + 3} rx={3.4} ry={2.6} fill="oklch(0.72 0.08 300)" stroke={INK} strokeWidth={1.4} />
+            <ellipse
+              cx={28}
+              cy={y}
+              rx={3.4}
+              ry={2.6}
+              fill="oklch(0.72 0.08 300)"
+              stroke={INK}
+              strokeWidth={1.4}
+            />
+            <ellipse
+              cx={36}
+              cy={y + 3}
+              rx={3.4}
+              ry={2.6}
+              fill="oklch(0.72 0.08 300)"
+              stroke={INK}
+              strokeWidth={1.4}
+            />
           </g>
         ))}
       </g>
@@ -729,8 +893,18 @@ export const STICKERS: Sticker[] = [
     art: (
       <g>
         {s("M32 56V26")}
-        <path d="M32 34c-8 0-12-4-13-11 8-1 13 4 13 11z" fill={SAGE} stroke={INK} strokeWidth={1.8} />
-        <path d="M32 40c8 0 12-4 13-11-8-1-13 4-13 11z" fill={FOREST} stroke={INK} strokeWidth={1.8} />
+        <path
+          d="M32 34c-8 0-12-4-13-11 8-1 13 4 13 11z"
+          fill={SAGE}
+          stroke={INK}
+          strokeWidth={1.8}
+        />
+        <path
+          d="M32 40c8 0 12-4 13-11-8-1-13 4-13 11z"
+          fill={FOREST}
+          stroke={INK}
+          strokeWidth={1.8}
+        />
       </g>
     ),
   },
@@ -743,7 +917,17 @@ export const STICKERS: Sticker[] = [
       <g>
         {s("M4 44c14 2 24-6 32-14s16-12 24-12")}
         {[16, 30, 44].map((x, i) => (
-          <ellipse key={x} cx={x} cy={40 - i * 6} rx={5} ry={3} fill={SAGE} stroke={INK} strokeWidth={1.5} transform={`rotate(-30 ${x} ${40 - i * 6})`} />
+          <ellipse
+            key={x}
+            cx={x}
+            cy={40 - i * 6}
+            rx={5}
+            ry={3}
+            fill={SAGE}
+            stroke={INK}
+            strokeWidth={1.5}
+            transform={`rotate(-30 ${x} ${40 - i * 6})`}
+          />
         ))}
       </g>
     ),
@@ -828,7 +1012,14 @@ export const STICKERS: Sticker[] = [
     label: "?!",
     size: 38,
     art: (
-      <text x={32} y={46} textAnchor="middle" fontFamily="var(--font-hand)" fontSize={36} fill={INK}>
+      <text
+        x={32}
+        y={46}
+        textAnchor="middle"
+        fontFamily="var(--font-hand)"
+        fontSize={36}
+        fill={INK}
+      >
         ?!
       </text>
     ),
@@ -839,7 +1030,14 @@ export const STICKERS: Sticker[] = [
     label: "<3",
     size: 40,
     art: (
-      <text x={32} y={44} textAnchor="middle" fontFamily="var(--font-hand)" fontSize={32} fill={ROSE}>
+      <text
+        x={32}
+        y={44}
+        textAnchor="middle"
+        fontFamily="var(--font-hand)"
+        fontSize={32}
+        fill={ROSE}
+      >
         &lt;3
       </text>
     ),
@@ -860,7 +1058,13 @@ export const STICKERS: Sticker[] = [
     size: 44,
     art: (
       <g transform="rotate(-12 32 32)">
-        <path d="M12 24h40l-3 16H15z" fill={PETAL} stroke={INK} strokeWidth={1.8} strokeLinejoin="round" />
+        <path
+          d="M12 24h40l-3 16H15z"
+          fill={PETAL}
+          stroke={INK}
+          strokeWidth={1.8}
+          strokeLinejoin="round"
+        />
       </g>
     ),
   },
@@ -872,7 +1076,13 @@ export const STICKERS: Sticker[] = [
     art: (
       <g transform="rotate(-40 32 32)">
         <rect x={26} y={10} width={12} height={34} fill={AMBER} stroke={INK} strokeWidth={1.8} />
-        <path d="M26 44h12l-6 10z" fill="var(--paper-deep)" stroke={INK} strokeWidth={1.8} strokeLinejoin="round" />
+        <path
+          d="M26 44h12l-6 10z"
+          fill="var(--paper-deep)"
+          stroke={INK}
+          strokeWidth={1.8}
+          strokeLinejoin="round"
+        />
         <rect x={26} y={6} width={12} height={5} fill={PETAL} stroke={INK} strokeWidth={1.6} />
       </g>
     ),
@@ -884,7 +1094,13 @@ export const STICKERS: Sticker[] = [
     size: 48,
     art: (
       <g>
-        <path d="M14 22h32v18a10 10 0 01-10 10H24a10 10 0 01-10-10z" fill={PAPER} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d="M14 22h32v18a10 10 0 01-10 10H24a10 10 0 01-10-10z"
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
         {s("M46 26c8-2 10 10 0 12")}
         <Heart c={ROSE} x={30} y={34} k={0.34} />
       </g>
@@ -897,8 +1113,23 @@ export const STICKERS: Sticker[] = [
     size: 48,
     art: (
       <g>
-        <path d="M16 26c0-8 6-12 16-12s16 4 16 12v22a4 4 0 01-4 4H20a4 4 0 01-4-4z" fill={SAGE} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
-        <rect x={24} y={34} width={16} height={12} rx={2} fill={PAPER} stroke={INK} strokeWidth={1.8} />
+        <path
+          d="M16 26c0-8 6-12 16-12s16 4 16 12v22a4 4 0 01-4 4H20a4 4 0 01-4-4z"
+          fill={SAGE}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
+        <rect
+          x={24}
+          y={34}
+          width={16}
+          height={12}
+          rx={2}
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={1.8}
+        />
         {s("M24 24c2-6 14-6 16 0", { strokeWidth: 1.6 })}
       </g>
     ),
@@ -910,7 +1141,13 @@ export const STICKERS: Sticker[] = [
     size: 56,
     art: (
       <g>
-        <path d="M6 26c16-6 36-6 52 0v20c-16 6-36 6-52 0z" fill={PETAL} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d="M6 26c16-6 36-6 52 0v20c-16 6-36 6-52 0z"
+          fill={PETAL}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
         {s("M6 34c16-5 36-5 52 0", { strokeWidth: 1.3 })}
         {s("M6 40c16-5 36-5 52 0", { strokeWidth: 1.3 })}
       </g>
@@ -923,7 +1160,13 @@ export const STICKERS: Sticker[] = [
     size: 56,
     art: (
       <g>
-        <path d="M8 16h48v26H26l-12 10 2-10H8z" fill={PAPER} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+        <path
+          d="M8 16h48v26H26l-12 10 2-10H8z"
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
       </g>
     ),
   },
@@ -934,7 +1177,12 @@ export const STICKERS: Sticker[] = [
     size: 56,
     art: (
       <g>
-        <path d="M16 16c14-8 34-4 34 8s-22 16-32 10-8-14-2-18z" fill={PAPER} stroke={INK} strokeWidth={2} />
+        <path
+          d="M16 16c14-8 34-4 34 8s-22 16-32 10-8-14-2-18z"
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={2}
+        />
         <circle cx={18} cy={44} r={4} fill={PAPER} stroke={INK} strokeWidth={1.8} />
         <circle cx={11} cy={54} r={2.6} fill={PAPER} stroke={INK} strokeWidth={1.6} />
       </g>
@@ -962,8 +1210,21 @@ export const STICKERS: Sticker[] = [
     size: 52,
     art: (
       <g>
-        <path d="M14 40c-8 0-10-10-2-12 0-8 10-12 16-6 6-6 16-2 15 6 8 1 7 12-1 12z" fill={PAPER} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
-        <text x={32} y={56} textAnchor="middle" fontFamily="var(--font-hand)" fontSize={16} fill={INK}>
+        <path
+          d="M14 40c-8 0-10-10-2-12 0-8 10-12 16-6 6-6 16-2 15 6 8 1 7 12-1 12z"
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
+        <text
+          x={32}
+          y={56}
+          textAnchor="middle"
+          fontFamily="var(--font-hand)"
+          fontSize={16}
+          fill={INK}
+        >
           zzz
         </text>
       </g>

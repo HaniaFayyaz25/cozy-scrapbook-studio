@@ -36,7 +36,9 @@ function StickerDrawer() {
           onClick={() => setCat("all")}
           className={cn(
             "hand rounded-[3px] px-2.5 py-0.5 text-xl transition-colors",
-            cat === "all" ? "bg-secondary text-espresso" : "text-muted-foreground hover:text-espresso",
+            cat === "all"
+              ? "bg-secondary text-espresso"
+              : "text-muted-foreground hover:text-espresso",
           )}
         >
           everything
@@ -80,7 +82,11 @@ function StickerDrawer() {
         prop="sticker"
         peek
         size={52}
-        lines={["the drawer is a bit full, sorry.", "i'm in here somewhere.", "take as many as you like."]}
+        lines={[
+          "the drawer is a bit full, sorry.",
+          "i'm in here somewhere.",
+          "take as many as you like.",
+        ]}
         spots={["-bottom-4 right-12", "-top-3 left-1/3", "-bottom-3 left-8", "top-1/2 -right-7"]}
       />
     </div>

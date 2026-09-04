@@ -85,7 +85,6 @@ function NotePageView() {
         </div>
       </div>
 
-
       <ScrapCanvas
         items={page.items}
         onChange={setItems}
@@ -109,7 +108,9 @@ function NotePageView() {
             key={p.id}
             onClick={() => setPageIdx(i)}
             className={`hand rounded-[3px] px-2 py-0.5 text-base transition-colors md:text-lg ${
-              i === pageIdx ? "bg-secondary text-espresso" : "text-muted-foreground hover:text-espresso"
+              i === pageIdx
+                ? "bg-secondary text-espresso"
+                : "text-muted-foreground hover:text-espresso"
             }`}
           >
             page {i + 1}
@@ -141,7 +142,11 @@ function NotePageView() {
           "i'll just sit here while you write.",
           "the margins are yours too.",
         ]}
-        spots={["top-24 right-2 lg:-right-6", "bottom-24 left-2 lg:-left-8", "top-1/2 right-2 lg:-right-8"]}
+        spots={[
+          "top-24 right-2 lg:-right-6",
+          "bottom-24 left-2 lg:-left-8",
+          "top-1/2 right-2 lg:-right-8",
+        ]}
       />
     </div>
   );

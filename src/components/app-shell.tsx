@@ -14,9 +14,21 @@ const NAV = [
 ] as const;
 
 const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
-  cream: { paper: "oklch(0.972 0.011 88)", deep: "oklch(0.936 0.018 84)", bg: "oklch(0.958 0.014 86)" },
-  warm: { paper: "oklch(0.962 0.024 62)", deep: "oklch(0.922 0.034 58)", bg: "oklch(0.946 0.028 60)" },
-  cool: { paper: "oklch(0.972 0.009 220)", deep: "oklch(0.934 0.014 224)", bg: "oklch(0.956 0.012 222)" },
+  cream: {
+    paper: "oklch(0.972 0.011 88)",
+    deep: "oklch(0.936 0.018 84)",
+    bg: "oklch(0.958 0.014 86)",
+  },
+  warm: {
+    paper: "oklch(0.962 0.024 62)",
+    deep: "oklch(0.922 0.034 58)",
+    bg: "oklch(0.946 0.028 60)",
+  },
+  cool: {
+    paper: "oklch(0.972 0.009 220)",
+    deep: "oklch(0.934 0.014 224)",
+    bg: "oklch(0.956 0.012 222)",
+  },
 };
 
 function CornerDecor() {
@@ -55,7 +67,8 @@ export function AppShell({ children }: { children: ReactNode }) {
     root.style.setProperty("--background", tone.bg);
   }, [paperTone]);
 
-  const active = (to: string) => (to === "/" ? path === "/" || path.startsWith("/notes") : path.startsWith(to));
+  const active = (to: string) =>
+    to === "/" ? path === "/" || path.startsWith("/notes") : path.startsWith(to);
   const room = NAV.find((n) => active(n.to))?.room ?? "notes";
 
   return (
@@ -150,7 +163,6 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
 
 export function PageHeader({
   title,
