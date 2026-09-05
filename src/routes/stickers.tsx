@@ -65,21 +65,47 @@ function StickerDrawer() {
 
       {active && <p className="hand mb-4 text-xl text-ink-soft">{active.note}</p>}
 
+      {pickedSticker && (
+        <div className="paper-card mb-4 flex flex-wrap items-center gap-3 px-3 py-2">
+          <StickerArt id={pickedSticker.id} size={34} />
+          <span className="hand text-xl text-espresso">
+            holding “{pickedSticker.label}” — tap a page to stick it down
+          </span>
+          <Link to="/ideas" className="hand text-xl underline decoration-wavy">
+            idea dump
+          </Link>
+          <Link to="/" className="hand text-xl underline decoration-wavy">
+            a note
+          </Link>
+          <button
+            onClick={() => pickSticker(null)}
+            className="hand text-xl text-muted-foreground hover:text-espresso"
+          >
+            put it back
+          </button>
+        </div>
+      )}
+
       <div className="paper-card paper-grain grid grid-cols-4 gap-3 p-4 sm:grid-cols-5 md:gap-4 md:p-5 lg:grid-cols-8">
         {list.map((s, i) => (
-          <div
+          <button
             key={s.id}
-            title={s.label}
-            className="sticker-pop grid place-items-center gap-1 rounded-[4px] p-2 transition-transform hover:-translate-y-1"
+            title={`pick ${s.label}`}
+            onClick={() => pickSticker(s.id)}
+            className={cn(
+              "sticker-pop grid place-items-center gap-1 rounded-[4px] p-2 transition-transform hover:-translate-y-1",
+              picked === s.id && "bg-secondary ring-1 ring-rose",
+            )}
             style={{ transform: `rotate(${((i % 5) - 2) * 1.4}deg)` }}
           >
             <StickerArt id={s.id} size={Math.min(56, s.size)} />
             <span className="text-center text-[0.65rem] leading-tight text-muted-foreground">
               {s.label}
             </span>
-          </div>
+          </button>
         ))}
       </div>
+
 
       <ScrapyHere
         room="stickers"
