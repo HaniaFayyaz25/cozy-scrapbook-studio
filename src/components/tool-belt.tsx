@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MousePointer2,
   PenLine,
@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { HIGHLIGHT_COLORS, INK_COLORS, type Tool, type ToolState } from "./scrap-canvas";
 import { CATEGORIES, STICKERS, StickerArt } from "@/lib/stickers";
+import { pickSticker, usePickedSticker } from "@/lib/sticker-pick";
 import { cn } from "@/lib/utils";
 
 const TOOLS: { id: Tool; label: string; icon: typeof PenLine }[] = [
@@ -44,8 +45,18 @@ export function ToolBelt({
 }) {
   const [trayOpen, setTrayOpen] = useState(false);
   const [cat, setCat] = useState(CATEGORIES[0]!.id);
+  const picked = usePickedSticker();
+  const applied = useRef<string | null>(null);
 
   const set = (patch: Partial<ToolState>) => onChange({ ...state, ...patch });
+
+  /* a sticker picked in the drawer arms this page's sticker tool once */
+  useEffect(() => {
+    if (!picked || applied.current === picked) return;
+    applied.current = picked;
+    onChange({ ...state, tool: "sticker", stickerId: picked });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picked]);
 
   return (
     <div className="relative">
@@ -160,7 +171,11 @@ export function ToolBelt({
               <button
                 key={s.id}
                 title={s.label}
-                onClick={() => set({ tool: "sticker", stickerId: s.id })}
+                onClick={() => {
+                  applied.current = s.id;
+                  pickSticker(s.id);
+                  set({ tool: "sticker", stickerId: s.id });
+                }}
                 className={cn(
                   "grid h-14 place-items-center rounded-[4px] p-1 transition-all hover:-rotate-3 hover:bg-secondary",
                   state.stickerId === s.id && "bg-secondary ring-1 ring-rose",
