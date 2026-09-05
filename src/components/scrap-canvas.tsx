@@ -378,8 +378,20 @@ export function ScrapCanvas({
     setSelected(null);
   };
 
+  const duplicate = (id: string) => {
+    const src = items.find((i) => i.id === id);
+    if (!src) return;
+    const copy: CanvasItem =
+      src.kind === "stroke"
+        ? { ...src, id: uid(), points: src.points.map((p) => ({ x: p.x + 18, y: p.y + 18 })) }
+        : ({ ...src, id: uid(), x: src.x + 18, y: src.y + 18 } as CanvasItem);
+    commit([...items, copy]);
+    setSelected(copy.id);
+  };
+
   const mutate = (id: string, patch: Partial<CanvasItem>) =>
     commit(items.map((i) => (i.id === id ? ({ ...i, ...patch } as CanvasItem) : i)));
+
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
