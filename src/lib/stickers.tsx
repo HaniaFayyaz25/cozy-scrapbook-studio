@@ -74,20 +74,23 @@ function Flower({
     <g>
       {petals.map((a) => {
         const rad = (a * Math.PI) / 180;
+        const px = Math.round((cx + Math.cos(rad) * r) * 1000) / 1000;
+        const py = Math.round((cy + Math.sin(rad) * r) * 1000) / 1000;
         return (
           <ellipse
             key={a}
-            cx={cx + Math.cos(rad) * r}
-            cy={cy + Math.sin(rad) * r}
+            cx={px}
+            cy={py}
             rx={r * 0.72}
             ry={r * 0.58}
             fill={c}
             stroke={INK}
             strokeWidth={1.9}
-            transform={`rotate(${a} ${cx + Math.cos(rad) * r} ${cy + Math.sin(rad) * r})`}
+            transform={`rotate(${a} ${px} ${py})`}
           />
         );
       })}
+
       <circle cx={cx} cy={cy} r={r * 0.45} fill={AMBER} stroke={INK} strokeWidth={1.9} />
     </g>
   );
