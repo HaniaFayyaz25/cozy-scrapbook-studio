@@ -508,7 +508,11 @@ export function ScrapCanvas({
                 <button className="px-1" title="bigger" onClick={() => scaleStroke(1.18)}>
                   +
                 </button>
+                <button className="px-1" title="duplicate" onClick={() => duplicate(st.id)}>
+                  ⧉
+                </button>
                 <button
+
                   className="px-1 text-destructive"
                   title="delete"
                   onClick={() => remove(st.id)}
@@ -619,7 +623,10 @@ export function ScrapCanvas({
                 >
                   ↻
                 </button>
-                <button className="px-1 text-destructive" onClick={() => remove(it.id)}>
+                <button className="px-1" title="duplicate" onClick={() => duplicate(it.id)}>
+                  ⧉
+                </button>
+                <button className="px-1 text-destructive" title="delete" onClick={() => remove(it.id)}>
                   ✕
                 </button>
               </div>
