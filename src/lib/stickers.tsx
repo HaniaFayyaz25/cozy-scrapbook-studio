@@ -712,16 +712,16 @@ export const STICKERS: Sticker[] = [
     art: (
       <g transform="rotate(4 32 32)">
         <path
-          d="M6 12h58v46l-12 8H6z"
+          d="M7 13c18-2 39-3 56-1 1 15 1 31 0 45-4 4-8 7-13 9-15 1-29 1-43-1-2-17-2-35 0-52z"
           fill={AMBER}
           stroke={INK}
           strokeWidth={1.8}
           strokeLinejoin="round"
           opacity={0.9}
         />
-        {s("M14 26h40", { strokeWidth: 1.3 })}
-        {s("M14 36h34", { strokeWidth: 1.3 })}
-        {s("M14 46h24", { strokeWidth: 1.3 })}
+        {s("M14 26c13-1 26-2 39-1", { strokeWidth: 1.2 })}
+        {s("M14 36c11-1 22-2 33-1", { strokeWidth: 1.2 })}
+        {s("M15 46c8-1 15-1 23 0", { strokeWidth: 1.2 })}
       </g>
     ),
   },
@@ -739,8 +739,15 @@ export const STICKERS: Sticker[] = [
     size: 44,
     art: (
       <g>
-        <rect x={16} y={26} width={32} height={24} rx={2} fill={INK} />
-        {s("M20 26l10-14h4l10 14", { strokeWidth: 2 })}
+        <path
+          d="M16 27c11-2 21-2 32 0 1 8 1 15 0 23-11 2-21 2-32 0-1-8-1-15 0-23z"
+          fill="var(--paper-deep)"
+          stroke={INK}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
+        {s("M21 27c3-5 7-10 10-14 2 0 3 0 5 1 3 4 6 8 8 13", { strokeWidth: 1.8 })}
+        {s("M20 34c9-1 19-1 28 0", { strokeWidth: 1.1 })}
       </g>
     ),
   },
@@ -752,7 +759,7 @@ export const STICKERS: Sticker[] = [
     art: (
       <g>
         <path
-          d="M24 14h16l-3 14 8 8H19l8-8z"
+          d="M24 14c5-1 11-1 16 0-1 5-2 10-3 14 3 3 6 5 8 8-9 1-17 1-26 0 3-3 6-5 8-8-1-5-2-9-3-14z"
           fill={ROSE}
           stroke={INK}
           strokeWidth={2}
@@ -771,7 +778,7 @@ export const STICKERS: Sticker[] = [
       <g>
         {s("M14 14c10 6 26 6 36 0")}
         <path
-          d="M14 14l8 34 10-10 10 10 8-34"
+          d="M14 15c3 11 5 22 8 33 4-3 7-7 10-10 4 3 7 7 10 10 3-11 6-22 8-33"
           fill={PETAL}
           stroke={INK}
           strokeWidth={2}
@@ -787,7 +794,7 @@ export const STICKERS: Sticker[] = [
     size: 40,
     art: (
       <path
-        d="M12 22h40l-6 20H12z"
+        d="M12 23c13-2 27-2 40-1-2 7-4 14-7 20-11 1-22 1-33 0-1-6-1-13 0-19z"
         fill={SAGE}
         stroke={INK}
         strokeWidth={1.8}
@@ -802,8 +809,20 @@ export const STICKERS: Sticker[] = [
     size: 46,
     art: (
       <g>
-        <path d="M10 10h44v44H10z" fill={PAPER} stroke={INK} strokeWidth={1.8} />
-        <path d="M54 40L40 54H54z" fill="var(--paper-deep)" stroke={INK} strokeWidth={1.6} />
+        <path
+          d="M11 11c15-1 29-1 43 0 1 14 1 29 0 43-14 1-29 1-43 0-1-14-1-29 0-43z"
+          fill={PAPER}
+          stroke={INK}
+          strokeWidth={1.8}
+          strokeLinejoin="round"
+        />
+        <path
+          d="M54 40c-5 5-9 10-14 14 5 1 10 1 14 0 1-5 1-9 0-14z"
+          fill="var(--paper-deep)"
+          stroke={INK}
+          strokeWidth={1.6}
+          strokeLinejoin="round"
+        />
       </g>
     ),
   },
@@ -1123,15 +1142,12 @@ export const STICKERS: Sticker[] = [
           strokeWidth={2}
           strokeLinejoin="round"
         />
-        <rect
-          x={24}
-          y={34}
-          width={16}
-          height={12}
-          rx={2}
+        <path
+          d="M24 35c6-1 11-1 17 0 1 4 1 8 0 12-6 1-11 1-17 0-1-4-1-8 0-12z"
           fill={PAPER}
           stroke={INK}
           strokeWidth={1.8}
+          strokeLinejoin="round"
         />
         {s("M24 24c2-6 14-6 16 0", { strokeWidth: 1.6 })}
       </g>
