@@ -392,7 +392,6 @@ export function ScrapCanvas({
   const mutate = (id: string, patch: Partial<CanvasItem>) =>
     commit(items.map((i) => (i.id === id ? ({ ...i, ...patch } as CanvasItem) : i)));
 
-
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
@@ -512,7 +511,6 @@ export function ScrapCanvas({
                   ⧉
                 </button>
                 <button
-
                   className="px-1 text-destructive"
                   title="delete"
                   onClick={() => remove(st.id)}
@@ -626,7 +624,11 @@ export function ScrapCanvas({
                 <button className="px-1" title="duplicate" onClick={() => duplicate(it.id)}>
                   ⧉
                 </button>
-                <button className="px-1 text-destructive" title="delete" onClick={() => remove(it.id)}>
+                <button
+                  className="px-1 text-destructive"
+                  title="delete"
+                  onClick={() => remove(it.id)}
+                >
                   ✕
                 </button>
               </div>

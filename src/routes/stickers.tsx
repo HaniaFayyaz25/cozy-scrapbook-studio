@@ -6,7 +6,6 @@ import { CATEGORIES, STICKERS, StickerArt, STICKER_MAP } from "@/lib/stickers";
 import { pickSticker, usePickedSticker } from "@/lib/sticker-pick";
 import { cn } from "@/lib/utils";
 
-
 export const Route = createFileRoute("/stickers")({
   head: () => ({
     meta: [
@@ -30,7 +29,6 @@ function StickerDrawer() {
   const pickedSticker = picked ? STICKER_MAP[picked] : undefined;
   const list = STICKERS.filter((s) => cat === "all" || s.cat === cat);
   const active = CATEGORIES.find((c) => c.id === cat);
-
 
   return (
     <div className="relative pb-16">
@@ -105,7 +103,6 @@ function StickerDrawer() {
           </button>
         ))}
       </div>
-
 
       <ScrapyHere
         room="stickers"

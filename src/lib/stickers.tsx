@@ -1277,7 +1277,13 @@ export function StickerArt({ id, size }: { id: string; size?: number }) {
             seed={seed}
             result="n"
           />
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1" xChannelSelector="R" yChannelSelector="G" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="n"
+            scale="1.1"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
         </filter>
       </defs>
       <g
@@ -1291,4 +1297,3 @@ export function StickerArt({ id, size }: { id: string; size?: number }) {
     </svg>
   );
 }
-
