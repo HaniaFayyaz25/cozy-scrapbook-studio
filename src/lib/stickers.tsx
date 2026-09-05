@@ -1236,13 +1236,59 @@ export const STICKER_MAP: Record<string, Sticker> = Object.fromEntries(
   STICKERS.map((st) => [st.id, st]),
 );
 
+/** natural drawing width of a sticker's art box (height is always 64) */
+export function stickerBox(st: Sticker) {
+  return { w: Math.max(64, st.size), h: 64 };
+}
+
+function hash(s: string) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+/**
+ * Every sticker gets a tiny paper-ink imperfection: a per-sticker tilt and a
+ * gentle turbulence displacement so no outline is machine-perfect.
+ */
 export function StickerArt({ id, size }: { id: string; size?: number }) {
   const st = STICKER_MAP[id];
+  const fid = `wob-${id}`;
   if (!st) return null;
+  const box = stickerBox(st);
   const w = size ?? st.size;
+  const h = (w * box.h) / box.w;
+  const h7 = hash(id);
+  const tilt = ((h7 % 9) - 4) * 0.55;
+  const seed = h7 % 97;
   return (
-    <svg viewBox="0 0 64 64" width={w} height={w} style={{ overflow: "visible", display: "block" }}>
-      {st.art}
+    <svg
+      viewBox={`0 0 ${box.w} ${box.h}`}
+      width={w}
+      height={h}
+      style={{ overflow: "visible", display: "block" }}
+    >
+      <defs>
+        <filter id={fid} x="-25%" y="-25%" width="150%" height="150%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.045"
+            numOctaves={2}
+            seed={seed}
+            result="n"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+      <g
+        filter={`url(#${fid})`}
+        transform={`rotate(${tilt} ${box.w / 2} ${box.h / 2})`}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {st.art}
+      </g>
     </svg>
   );
 }
+
