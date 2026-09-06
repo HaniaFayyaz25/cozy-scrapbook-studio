@@ -93,7 +93,7 @@
   }
   body {
     margin: 0;
-    background-color: var(--color-background);
+    background-color: var(--room);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
