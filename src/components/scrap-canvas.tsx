@@ -332,6 +332,13 @@ export function ScrapCanvas({
   };
 
   const onPointerMove = (e: RPointerEvent<HTMLDivElement>) => {
+    const tap = stickerTap.current;
+    if (tap) {
+      const p = toLocal(e);
+      // a real drag (not a click) cancels the placement
+      if (Math.hypot(p.x - tap.x, p.y - tap.y) > 8) stickerTap.current = null;
+      return;
+    }
     if (drag.current) {
       const p = toLocal(e);
       const { id, dx, dy, orig } = drag.current;
