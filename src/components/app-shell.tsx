@@ -1,7 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { BookOpen, FileText, CloudLightning, Smile, Settings2 } from "lucide-react";
-import { Scrapy, ROOM_TAPE, DraggableScrapy } from "./scrapy";
 import { hydrate, useScrap } from "@/lib/scrap-store";
 import { cn } from "@/lib/utils";
 
@@ -82,16 +81,6 @@ export function AppShell({ children }: { children: ReactNode }) {
     >
       <div className="room paper-grain relative mx-auto flex w-full max-w-[1440px] flex-col overflow-hidden rounded-[18px] p-3 md:rounded-[22px] md:p-4">
         <CornerDecor />
-
-        {/* scrapy peeking into the top-right corner — pick him up and move him anywhere */}
-        <DraggableScrapy storageKey="scrapy-room-corner" className="right-4 top-3">
-          <div className="flex items-start gap-1.5">
-            <Scrapy mood="greeting" tape={ROOM_TAPE[room] ?? "var(--petal)"} size={40} bob />
-            <span className="mt-1 rounded-[14px] border border-espresso/15 bg-paper px-2 py-1 text-[0.68rem] leading-tight text-espresso shadow-sm">
-              ready to create?
-            </span>
-          </div>
-        </DraggableScrapy>
 
         {/* mobile: calm, compact header — wordmark and current section only */}
         <div className="mb-1.5 flex items-center justify-between pr-12 md:hidden">
