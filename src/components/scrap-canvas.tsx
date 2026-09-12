@@ -289,18 +289,9 @@ export function ScrapCanvas({
     if (e.button !== 0) return;
     const p = toLocal(e);
     if (toolState.tool === "sticker" && toolState.stickerId) {
-      commit([
-        ...items,
-        {
-          id: uid(),
-          kind: "sticker",
-          stickerId: toolState.stickerId,
-          x: p.x,
-          y: p.y,
-          rot: Math.round((Math.random() - 0.5) * 16),
-          scale: 1,
-        },
-      ]);
+      // arm a single placement; it lands once on pointer-up so one click
+      // never stamps more than one sticker (and the tool stays selected)
+      stickerTap.current = { id: e.pointerId, x: p.x, y: p.y };
       return;
     }
     if (toolState.tool === "text") {
