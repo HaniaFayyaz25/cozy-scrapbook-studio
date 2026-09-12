@@ -361,7 +361,27 @@ export function ScrapCanvas({
     setDraft({ ...draft, points: [...draft.points, p] });
   };
 
-  const endStroke = () => {
+  const endStroke = (e?: RPointerEvent<HTMLDivElement>) => {
+    const tap = stickerTap.current;
+    if (tap) {
+      stickerTap.current = null;
+      // place exactly one sticker per click; the tool stays armed for the next
+      if (e && e.pointerId === tap.id && toolState.tool === "sticker" && toolState.stickerId) {
+        commit([
+          ...items,
+          {
+            id: uid(),
+            kind: "sticker",
+            stickerId: toolState.stickerId,
+            x: tap.x,
+            y: tap.y,
+            rot: Math.round((Math.random() - 0.5) * 16),
+            scale: 1,
+          },
+        ]);
+      }
+      return;
+    }
     if (drag.current) {
       drag.current = null;
       commit(items);
