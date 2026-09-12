@@ -272,6 +272,7 @@ export function ScrapCanvas({
   const [draft, setDraft] = useState<StrokeItem | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const drag = useRef<{ id: string; dx: number; dy: number; orig: CanvasItem } | null>(null);
+  const stickerTap = useRef<{ id: number; x: number; y: number } | null>(null);
   const { commit } = history;
 
   const drawing =
@@ -289,18 +290,9 @@ export function ScrapCanvas({
     if (e.button !== 0) return;
     const p = toLocal(e);
     if (toolState.tool === "sticker" && toolState.stickerId) {
-      commit([
-        ...items,
-        {
-          id: uid(),
-          kind: "sticker",
-          stickerId: toolState.stickerId,
-          x: p.x,
-          y: p.y,
-          rot: Math.round((Math.random() - 0.5) * 16),
-          scale: 1,
-        },
-      ]);
+      // arm a single placement; it lands once on pointer-up so one click
+      // never stamps more than one sticker (and the tool stays selected)
+      stickerTap.current = { id: e.pointerId, x: p.x, y: p.y };
       return;
     }
     if (toolState.tool === "text") {
@@ -340,6 +332,13 @@ export function ScrapCanvas({
   };
 
   const onPointerMove = (e: RPointerEvent<HTMLDivElement>) => {
+    const tap = stickerTap.current;
+    if (tap) {
+      const p = toLocal(e);
+      // a real drag (not a click) cancels the placement
+      if (Math.hypot(p.x - tap.x, p.y - tap.y) > 8) stickerTap.current = null;
+      return;
+    }
     if (drag.current) {
       const p = toLocal(e);
       const { id, dx, dy, orig } = drag.current;
@@ -362,7 +361,27 @@ export function ScrapCanvas({
     setDraft({ ...draft, points: [...draft.points, p] });
   };
 
-  const endStroke = () => {
+  const endStroke = (e?: RPointerEvent<HTMLDivElement>) => {
+    const tap = stickerTap.current;
+    if (tap) {
+      stickerTap.current = null;
+      // place exactly one sticker per click; the tool stays armed for the next
+      if (e && e.pointerId === tap.id && toolState.tool === "sticker" && toolState.stickerId) {
+        commit([
+          ...items,
+          {
+            id: uid(),
+            kind: "sticker",
+            stickerId: toolState.stickerId,
+            x: tap.x,
+            y: tap.y,
+            rot: Math.round((Math.random() - 0.5) * 16),
+            scale: 1,
+          },
+        ]);
+      }
+      return;
+    }
     if (drag.current) {
       drag.current = null;
       commit(items);
