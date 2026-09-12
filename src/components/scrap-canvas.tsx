@@ -272,6 +272,7 @@ export function ScrapCanvas({
   const [draft, setDraft] = useState<StrokeItem | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const drag = useRef<{ id: string; dx: number; dy: number; orig: CanvasItem } | null>(null);
+  const stickerTap = useRef<{ id: number; x: number; y: number } | null>(null);
   const { commit } = history;
 
   const drawing =
