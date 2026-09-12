@@ -175,118 +175,93 @@ export function Scrapy({
 
 const IDLE_MOODS: Mood[] = ["idle", "happy", "curious", "thinking", "proud"];
 
-/**
- * A scrapy you can pick up and drop anywhere inside the nearest positioned
- * parent. Remembers where you left him (localStorage) and stays there.
- */
-export function DraggableScrapy({
-  storageKey,
-  className = "",
-  children,
-}: {
-  storageKey: string;
-  /** default (undragged) positioning classes, e.g. "right-4 top-3" */
-  className?: string;
-  children?: React.ReactNode;
-}) {
-  // Start null on both server and client so hydration matches; the effect below
-  // restores the saved spot right after mount.
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(
-    null,
-  );
+/** what the user is doing right now — scrapy talks about this */
+export type ScrapyCtx = {
+  /** current tool id, when a canvas is on screen */
+  tool?: string;
+  /** sticker currently held */
+  stickerId?: string | null;
+  /** how many things are on the current surface */
+  items?: number;
+  /** pdf / note paging */
+  page?: number;
+  pageCount?: number;
+  /** the thing being worked on */
+  docName?: string;
+  /** shelf / drawer counts */
+  count?: number;
+};
 
-  // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (raw) setPos(JSON.parse(raw) as { x: number; y: number });
-    } catch {
-      /* ignore */
-    }
-  }, [storageKey]);
+const TOOL_LINES: Record<string, string[]> = {
+  pen: ["nice line. keep going.", "pen suits you.", "ink it before you forget it."],
+  pencil: ["soft pencil today? cosy.", "pencil means you can change your mind."],
+  highlighter: [
+    "that bit deserves a highlight.",
+    "the highlighter straightens itself, promise.",
+    "colour first, read later.",
+  ],
+  underline: ["underline it twice if it matters.", "straight-ish lines are still lines."],
+  arrow: ["arrows always point at the good bit.", "connect those two thoughts."],
+  circle: ["circle it. future you will thank you.", "a little loop around the important part."],
+  text: ["type it out, i'm listening.", "words go anywhere on the page here."],
+  sticker: [
+    "tap wherever you want it — as many as you like.",
+    "still holding it for you. click again for another.",
+    "stickers make anything look finished.",
+  ],
+  eraser: ["tidying up? i'll hold the crumbs.", "gone. no one saw it."],
+  select: ["drag things around, nothing is glued down.", "move it until it feels right."],
+};
 
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    const wrap = wrapRef.current;
-    const parent = wrap?.offsetParent as HTMLElement | null;
-    if (!wrap || !parent) return;
-    const w = wrap.getBoundingClientRect();
-    const p = parent.getBoundingClientRect();
-    dragRef.current = {
-      sx: e.clientX,
-      sy: e.clientY,
-      ox: w.left - p.left,
-      oy: w.top - p.top,
-      moved: false,
-    };
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
+function prettySticker(id?: string | null) {
+  return id ? id.replace(/^[a-z]+-/, "").replace(/-/g, " ") : "";
+}
 
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const d = dragRef.current;
-    const wrap = wrapRef.current;
-    const parent = wrap?.offsetParent as HTMLElement | null;
-    if (!d || !wrap || !parent) return;
-    const dx = e.clientX - d.sx;
-    const dy = e.clientY - d.sy;
-    if (!d.moved && Math.hypot(dx, dy) < 4) return;
-    d.moved = true;
-    const maxX = parent.clientWidth - wrap.offsetWidth;
-    const maxY = parent.clientHeight - wrap.offsetHeight;
-    setPos({
-      x: Math.min(Math.max(d.ox + dx, -6), Math.max(maxX, 0)),
-      y: Math.min(Math.max(d.oy + dy, -6), Math.max(maxY, 0)),
-    });
-  };
+/** builds fresh, situation-aware dialogue instead of one fixed line */
+export function scrapyLines(room: string, ctx: ScrapyCtx = {}, fallback: string[] = []): string[] {
+  const out: string[] = [];
+  const { tool, stickerId, items, page, pageCount, docName, count } = ctx;
 
-  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    const d = dragRef.current;
-    dragRef.current = null;
-    if (d?.moved) {
-      setPos((p) => {
-        if (p) {
-          try {
-            localStorage.setItem(storageKey, JSON.stringify(p));
-          } catch {
-            /* ignore */
-          }
-        }
-        return p;
-      });
-    }
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {
-      /* ignore */
-    }
-  };
+  if (tool === "sticker" && stickerId) {
+    out.push(`holding the ${prettySticker(stickerId)} — tap to stick it down.`);
+  }
+  if (tool && TOOL_LINES[tool]) out.push(...TOOL_LINES[tool]!);
 
-  return (
-    <div
-      ref={wrapRef}
-      role="button"
-      aria-label="scrapy — drag me anywhere"
-      data-pos={pos ? `${pos.x},${pos.y}` : "null"}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      className={`absolute z-30 cursor-grab touch-none select-none active:cursor-grabbing ${pos ? "" : className}`}
-      style={pos ? { left: pos.x, top: pos.y } : undefined}
-    >
-      {children}
-    </div>
-  );
+  if (typeof items === "number") {
+    if (items === 0) out.push("blank page. my favourite kind.", "go on, make the first mark.");
+    else if (items < 4) out.push("good start.", "it's taking shape already.");
+    else if (items < 15) out.push("this page is getting a personality.");
+    else out.push("gloriously messy. exactly right.", "no space left? make another page.");
+  }
+
+  if (page && pageCount) {
+    if (page === 1) out.push(`page one of ${pageCount}. tea first?`);
+    else if (page === pageCount) out.push("last page. how was it?");
+    else out.push(`page ${page} — still with you.`);
+  }
+
+  if (docName) out.push(`"${docName}" — the margins are the best part.`);
+  if (typeof count === "number") {
+    if (room === "pdfs") out.push(count === 0 ? "nothing to read yet." : `${count} on the shelf.`);
+    if (room === "stickers") out.push(`${count} little things in here.`);
+  }
+
+  const hour = new Date().getHours();
+  if (hour >= 23 || hour < 5) out.push("it's late. one more line, then bed?");
+  else if (hour < 9) out.push("morning. the paper's still warm.");
+
+  return out.length ? out : fallback;
 }
 
 /**
- * Scrapy living inside the composition. Placed absolutely inside a `relative`
- * parent using the given `spots`, drifting between them so he never feels pinned.
+ * Scrapy living inside the composition — one fixed spot, not draggable.
+ * His dialogue reacts to whatever the user is doing.
  */
 export function ScrapyHere({
   room,
   mood: baseMood,
   lines = [],
+  ctx,
   prop = "none",
   size = 62,
   spots,
@@ -296,152 +271,61 @@ export function ScrapyHere({
   room: keyof typeof ROOM_TAPE;
   mood: Mood;
   lines?: string[];
+  ctx?: ScrapyCtx;
   prop?: Prop;
   size?: number;
-  /** tailwind positioning classes; scrapy drifts between them */
+  /** tailwind positioning classes; the first one is used */
   spots: string[];
   flip?: boolean;
   /** tuck him partly behind the paper, like he's peeking */
   peek?: boolean;
 }) {
   const on = useScrap((s) => s.settings.scrapyOn);
-  const [i, setI] = useState(0);
   const [mood, setMood] = useState<Mood>(baseMood);
-  const [line, setLine] = useState<string | null>(lines[0] ?? null);
+  const [line, setLine] = useState<string | null>(null);
+  const [showLine, setShowLine] = useState(true);
 
-  // user-dragged position (px, relative to the positioned parent) — once
-  // scrapy is placed by hand he stays put instead of wandering
-  const posKey = `scrapy-pos-${room}`;
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      const raw = localStorage.getItem(posKey);
-      return raw ? (JSON.parse(raw) as { x: number; y: number }) : null;
-    } catch {
-      return null;
-    }
-  });
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(
-    null,
-  );
-
-  // Re-read localStorage after hydration so SSR doesn't keep him pinned to default.
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(posKey);
-      if (raw) setPos(JSON.parse(raw) as { x: number; y: number });
-    } catch {
-      /* ignore */
-    }
-  }, [posKey]);
+  const sig = JSON.stringify(ctx ?? null);
+  const pool = useMemo(() => scrapyLines(room, ctx ?? {}, lines), [room, sig, lines]);
 
   const nightly = useMemo(() => {
     const h = new Date().getHours();
     return h >= 23 || h < 5;
   }, []);
 
-  // arrive in the room with the contextual mood, then settle into idle states
+  // arrive with the contextual mood, then settle
   useEffect(() => {
     setMood(nightly ? "sleepy" : baseMood);
     const t = setTimeout(() => setMood(nightly ? "sleepy" : IDLE_MOODS[0]!), 8000);
     return () => clearTimeout(t);
   }, [baseMood, nightly]);
 
-  // wander between spots + shift idle expression — only while the user hasn't
-  // placed scrapy by hand
+  // say something fresh whenever the situation changes, then keep chatting
   useEffect(() => {
-    if (pos) return;
-    if (spots.length < 2 && lines.length < 2) return;
+    if (!pool.length) return;
+    setLine(pool[Math.floor(Math.random() * pool.length)]!);
+    setShowLine(true);
     const t = setInterval(() => {
-      setI((v) => (v + 1) % Math.max(spots.length, 1));
-      setLine(lines.length ? lines[Math.floor(Math.random() * lines.length)]! : null);
+      setLine(pool[Math.floor(Math.random() * pool.length)]!);
+      setShowLine(true);
       if (!nightly) setMood(IDLE_MOODS[Math.floor(Math.random() * IDLE_MOODS.length)]!);
-    }, 16000);
+    }, 14000);
     return () => clearInterval(t);
-  }, [spots.length, lines, nightly, pos]);
+  }, [pool, nightly]);
 
   // the little speech scrap only lingers a moment
-  const [showLine, setShowLine] = useState(true);
   useEffect(() => {
-    setShowLine(true);
+    if (!showLine) return;
     const t = setTimeout(() => setShowLine(false), 7000);
     return () => clearTimeout(t);
-  }, [line]);
+  }, [line, showLine]);
 
   if (!on) return null;
 
-  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const wrap = wrapRef.current;
-    const parent = wrap?.offsetParent as HTMLElement | null;
-    if (!wrap || !parent) return;
-    const w = wrap.getBoundingClientRect();
-    const p = parent.getBoundingClientRect();
-    dragRef.current = {
-      sx: e.clientX,
-      sy: e.clientY,
-      ox: w.left - p.left,
-      oy: w.top - p.top,
-      moved: false,
-    };
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const d = dragRef.current;
-    const wrap = wrapRef.current;
-    const parent = wrap?.offsetParent as HTMLElement | null;
-    if (!d || !wrap || !parent) return;
-    const dx = e.clientX - d.sx;
-    const dy = e.clientY - d.sy;
-    if (!d.moved && Math.hypot(dx, dy) < 4) return;
-    d.moved = true;
-    // keep him inside the room, roughly
-    const maxX = parent.clientWidth - wrap.offsetWidth;
-    const maxY = parent.clientHeight - wrap.offsetHeight * (peek ? 0.7 : 1);
-    setPos({
-      x: Math.min(Math.max(d.ox + dx, -8), Math.max(maxX, 0)),
-      y: Math.min(Math.max(d.oy + dy, -8), Math.max(maxY, 0)),
-    });
-  };
-
-  const onPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const d = dragRef.current;
-    dragRef.current = null;
-    if (!d) return;
-    if (d.moved) {
-      setPos((p) => {
-        if (p) {
-          try {
-            localStorage.setItem(posKey, JSON.stringify(p));
-          } catch {
-            /* ignore */
-          }
-        }
-        return p;
-      });
-    } else {
-      // a simple tap still toggles the speech scrap
-      setShowLine((v) => !v);
-    }
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {
-      /* ignore */
-    }
-  };
-
   return (
     <div
-      ref={wrapRef}
-      className={`pointer-events-none absolute z-20 select-none ${
-        pos
-          ? ""
-          : `transition-all duration-[1200ms] ease-in-out ${spots[i % spots.length] ?? spots[0] ?? ""}`
-      }`}
-      style={
-        pos ? { left: pos.x, top: pos.y, opacity: peek ? 0.98 : 1 } : { opacity: peek ? 0.98 : 1 }
-      }
+      className={`pointer-events-none absolute z-20 select-none ${spots[0] ?? ""}`}
+      style={{ opacity: peek ? 0.98 : 1 }}
     >
       <div className="relative flex items-end gap-1.5">
         {showLine && line && (
@@ -454,11 +338,9 @@ export function ScrapyHere({
         )}
         <button
           type="button"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          className="pointer-events-auto cursor-grab touch-none transition-transform duration-300 hover:-translate-y-1 active:cursor-grabbing"
-          aria-label="scrapy — drag me anywhere"
+          onClick={() => setShowLine((v) => !v)}
+          className="pointer-events-auto transition-transform duration-300 hover:-translate-y-1"
+          aria-label="scrapy"
           style={{ clipPath: peek ? "inset(0 0 22% 0)" : undefined }}
         >
           <Scrapy
