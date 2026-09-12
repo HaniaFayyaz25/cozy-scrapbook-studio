@@ -96,7 +96,6 @@ export function AppShell({ children }: { children: ReactNode }) {
           <aside className="hidden w-[8.5rem] shrink-0 md:block">
             <Link to="/" className="mb-3 flex items-center gap-1.5 px-1">
               <span className="hand text-[2rem] leading-none text-room-ink">scrap</span>
-              <Scrapy mood="happy" tape="var(--petal)" size={22} />
             </Link>
 
             <nav className="flex flex-col gap-0.5">
