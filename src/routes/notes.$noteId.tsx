@@ -10,10 +10,7 @@ export const Route = createFileRoute("/notes/$noteId")({
   head: () => ({
     meta: [
       { title: "Notebook — Scrap" },
-      {
-        name: "description",
-        content: "Write, doodle, highlight and stick things onto a warm paper page.",
-      },
+      { name: "description", content: "Write, doodle, highlight and stick things onto a warm paper page." },
       { property: "og:title", content: "Notebook — Scrap" },
       { property: "og:description", content: "A warm paper page you can write and doodle on." },
     ],
@@ -40,9 +37,7 @@ function NotePageView() {
     return (
       <div className="paper-card paper-grain mx-auto mt-20 max-w-sm -rotate-1 p-8 text-center">
         <p className="hand text-3xl text-espresso">this page isn't here</p>
-        <Link to="/" className="hand mt-3 inline-block text-xl underline decoration-wavy">
-          back to the shelf
-        </Link>
+        <Link to="/" className="hand mt-3 inline-block text-xl underline decoration-wavy">back to the shelf</Link>
       </div>
     );
   }
@@ -58,10 +53,7 @@ function NotePageView() {
   return (
     <div className="relative pb-2">
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <Link
-          to="/"
-          className="flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-espresso"
-        >
+        <Link to="/" className="flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-espresso">
           <ArrowLeft className="h-4 w-4" strokeWidth={1.7} /> shelf
         </Link>
         <input
@@ -75,9 +67,7 @@ function NotePageView() {
             <button
               key={t.id}
               onClick={() => actions.updateNote(note.id, { tape: t.v })}
-              className={`h-5 w-7 -rotate-3 rounded-[2px] transition-transform hover:-translate-y-0.5 ${
-                note.tape === t.v ? "ring-1 ring-espresso" : ""
-              }`}
+              className={`h-5 w-7 -rotate-3 rounded-[2px] transition-transform hover:-translate-y-0.5 ${note.tape === t.v ? "ring-1 ring-espresso" : ""}`}
               style={{ background: t.v }}
               aria-label={`${t.id} tape`}
             />
@@ -104,15 +94,7 @@ function NotePageView() {
 
       <div className="mx-auto mt-4 flex max-w-4xl flex-wrap items-center gap-1.5 md:gap-2">
         {note.pages.map((p, i) => (
-          <button
-            key={p.id}
-            onClick={() => setPageIdx(i)}
-            className={`hand rounded-[3px] px-2 py-0.5 text-base transition-colors md:text-lg ${
-              i === pageIdx
-                ? "bg-secondary text-espresso"
-                : "text-muted-foreground hover:text-espresso"
-            }`}
-          >
+          <button key={p.id} onClick={() => setPageIdx(i)} className={`hand rounded-[3px] px-2 py-0.5 text-base transition-colors md:text-lg ${i === pageIdx ? "bg-secondary text-espresso" : "text-muted-foreground hover:text-espresso"}`}>
             page {i + 1}
           </button>
         ))}
@@ -127,7 +109,6 @@ function NotePageView() {
         </button>
       </div>
 
-      {/* toolbar docked to the bottom edge of the working area */}
       <div className="sticky bottom-0 z-30 -mx-1 mt-3 w-fit max-w-full px-1 pb-1">
         <ToolBelt state={tool} onChange={setTool} onUndo={history.undo} onRedo={history.redo} />
       </div>
@@ -135,18 +116,17 @@ function NotePageView() {
       <ScrapyHere
         room="notes"
         mood={mood}
-        prop={tool.tool === "highlighter" ? "highlighter" : tool.tool === "pen" ? "pen" : "mug"}
+        ctx={{
+          tool: tool.tool,
+          stickerId: tool.stickerId,
+          items: page.items.length,
+          page: pageIdx + 1,
+          pageCount: note.pages.length,
+          docName: note.title,
+        }}
+        prop={tool.tool === "highlighter" ? "highlighter" : tool.tool === "pen" ? "pen" : tool.tool === "sticker" ? "sticker" : "mug"}
         size={56}
-        lines={[
-          "try the highlighter — it straightens itself out.",
-          "i'll just sit here while you write.",
-          "the margins are yours too.",
-        ]}
-        spots={[
-          "top-24 right-2 lg:-right-6",
-          "bottom-24 left-2 lg:-left-8",
-          "top-1/2 right-2 lg:-right-8",
-        ]}
+        spots={["top-24 right-2 lg:-right-6", "bottom-24 left-2 lg:-left-8", "top-1/2 right-2 lg:-right-8"]}
       />
     </div>
   );
