@@ -184,11 +184,7 @@ function PdfRoom() {
         prop="book"
         peek
         size={56}
-        lines={[
-          "found anything worth underlining?",
-          "one more chapter, then tea.",
-          "pick a book, i'll read along.",
-        ]}
+        ctx={{ count: pdfs.length }}
         spots={["-top-3 right-8", "-bottom-4 left-10", "top-1/2 -left-8"]}
       />
     </div>
@@ -335,17 +331,8 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
         mood={mood}
         prop={tool.tool === "highlighter" ? "highlighter" : tool.tool === "pen" ? "pen" : "book"}
         size={54}
-        lines={[
-          "the margins are where the real reading happens.",
-          "that bit deserves a highlight.",
-          "i'll hold the pen for a sec.",
-        ]}
-        spots={[
-          "top-28 -left-10",
-          "bottom-24 -right-10",
-          "top-1/2 -right-10",
-          "bottom-32 -left-10",
-        ]}
+        ctx={{ tool: tool.tool, stickerId: tool.stickerId, items: items.length, page, pageCount: doc.pageCount, docName: doc.name }}
+        spots={["top-28 -left-10", "bottom-24 -right-10", "top-1/2 -right-10", "bottom-32 -left-10"]}
       />
     </div>
   );
