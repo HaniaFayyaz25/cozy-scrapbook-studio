@@ -58,11 +58,7 @@ function IdeaDump() {
         mood={mood}
         prop="sticker"
         size={54}
-        lines={[
-          "messy is the point. keep going!",
-          "ooh, what's that one?",
-          "my brain looks like this too.",
-        ]}
+        ctx={{ tool: tool.tool, stickerId: tool.stickerId, items: items.length }}
         spots={["-bottom-4 left-8", "-top-3 right-6", "bottom-10 -right-7", "-bottom-3 right-1/3"]}
       />
     </div>
