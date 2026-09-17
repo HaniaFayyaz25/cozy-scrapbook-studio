@@ -73,13 +73,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "flex w-full items-start justify-center p-1 md:p-2",
+        "flex min-h-[100dvh] w-full items-stretch justify-center p-0 md:p-1",
         reduce && "reduce-motion",
         !grain && "no-grain",
       )}
       style={{ background: "var(--room)" }}
     >
-      <div className="room paper-grain relative mx-auto flex w-full max-w-[1440px] flex-col overflow-hidden rounded-[18px] p-3 md:rounded-[22px] md:p-4">
+      <div className="room paper-grain relative mx-auto flex min-h-[100dvh] w-full max-w-none flex-col overflow-hidden rounded-none p-2 md:rounded-[14px] md:p-2.5">
         <CornerDecor />
 
         {/* mobile: calm, compact header — wordmark and current section only */}
@@ -92,9 +92,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           </span>
         </div>
 
-        <div className="relative flex min-h-0 flex-1 gap-3 md:gap-4">
-          <aside className="hidden w-[8.5rem] shrink-0 md:block">
-            <Link to="/" className="mb-3 flex items-center gap-1.5 px-1">
+        <div className="relative flex min-h-0 flex-1 gap-2 md:gap-2.5">
+          <aside className="hidden w-[8.25rem] shrink-0 md:block">
+            <Link to="/" className="mb-2 flex items-center gap-1.5 px-1">
               <span className="hand text-[2rem] leading-none text-room-ink">scrap</span>
             </Link>
 
@@ -120,7 +120,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           </aside>
 
-          <main className="relative min-w-0 flex-1 overflow-x-hidden pb-14 md:overflow-y-auto md:pb-2 md:pr-1">
+          <main className="relative min-h-0 min-w-0 flex-1 overflow-x-hidden pb-14 md:overflow-y-auto md:pb-1 md:pr-0.5">
             {children}
           </main>
         </div>
@@ -162,7 +162,7 @@ export function PageHeader({
   right?: ReactNode;
 }) {
   return (
-    <header className="mb-2.5 flex flex-wrap items-end justify-between gap-2">
+    <header className="mb-2 flex flex-wrap items-end justify-between gap-1.5">
       <div className="min-w-0">
         <h1 className="hand text-[1.45rem] leading-none text-room-ink md:text-[1.7rem]">{title}</h1>
         {note && <p className="mt-0.5 text-[0.68rem] text-room-ink/50">{note}</p>}
