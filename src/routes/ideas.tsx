@@ -30,7 +30,7 @@ function IdeaDump() {
   const mood = useTimeMood("excited");
 
   return (
-    <div className="relative pb-2">
+    <div className="relative flex min-h-[calc(100dvh-1.25rem)] flex-col">
       <PageHeader
         title="idea dump"
         note="no rules here. scribble, stick, arrow, repeat."
@@ -50,7 +50,7 @@ function IdeaDump() {
         onChange={actions.setIdeas}
         toolState={tool}
         history={history}
-        className="paper-card paper-grain dot-grid min-h-[50vh] w-full p-4 md:min-h-[58vh] md:p-5"
+        className="paper-card paper-grain dot-grid min-h-[calc(100dvh-5.5rem)] w-full flex-1 p-3 md:min-h-0 md:p-4"
       />
 
       <ScrapyHere
