@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { ScrapyBlob } from "@/lib/stickers";
 import { useScrap } from "@/lib/scrap-store";
 
@@ -28,7 +28,7 @@ export const ROOM_TAPE: Record<string, string> = {
   settings: "var(--amber)",
 };
 
-function TinyProp({ prop }: { prop: Prop }) {
+const TinyProp = memo(function TinyProp({ prop }: { prop: Prop }) {
   const ink = "var(--espresso)";
   switch (prop) {
     case "book":
@@ -80,9 +80,9 @@ function TinyProp({ prop }: { prop: Prop }) {
     default:
       return null;
   }
-}
+});
 
-export function Scrapy({
+export const Scrapy = memo(function Scrapy({
   mood = "idle",
   tape = "var(--petal)",
   size = 64,
@@ -108,7 +108,7 @@ export function Scrapy({
       <TinyProp prop={prop} />
     </svg>
   );
-}
+});
 
 export type ScrapyCtx = {
   tool?: string;
