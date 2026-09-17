@@ -188,11 +188,11 @@ function StickerDrawer() {
         prop="sticker"
         peek
         size={52}
-        lines={[
-          "the drawer is a bit full, sorry.",
-          "i'm in here somewhere.",
-          "take as many as you like.",
-        ]}
+        ctx={{
+          stickerId: picked,
+          count: filtered.length,
+          items: picked ? 1 : 0,
+        }}
         spots={["-bottom-4 right-12", "-top-3 left-1/3", "-bottom-3 left-8", "top-1/2 -right-7"]}
       />
     </div>
