@@ -1,4 +1,5 @@
 import {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -125,7 +126,7 @@ function arrowPaths(pts: Point[]) {
 
 /* ----------------------------- stroke render ----------------------------- */
 
-function StrokeShape({ st }: { st: StrokeItem }) {
+const StrokeShape = memo(function StrokeShape({ st }: { st: StrokeItem }) {
   if (st.points.length < 2) return null;
   switch (st.tool) {
     case "highlighter":
@@ -206,7 +207,7 @@ function StrokeShape({ st }: { st: StrokeItem }) {
         />
       );
   }
-}
+});
 
 /* -------------------------------- editor --------------------------------- */
 
@@ -290,8 +291,6 @@ export function ScrapCanvas({
     if (e.button !== 0) return;
     const p = toLocal(e);
     if (toolState.tool === "sticker" && toolState.stickerId) {
-      // arm a single placement; it lands once on pointer-up so one click
-      // never stamps more than one sticker (and the tool stays selected)
       stickerTap.current = { id: e.pointerId, x: p.x, y: p.y };
       return;
     }
@@ -335,7 +334,6 @@ export function ScrapCanvas({
     const tap = stickerTap.current;
     if (tap) {
       const p = toLocal(e);
-      // a real drag (not a click) cancels the placement
       if (Math.hypot(p.x - tap.x, p.y - tap.y) > 8) stickerTap.current = null;
       return;
     }
@@ -365,7 +363,6 @@ export function ScrapCanvas({
     const tap = stickerTap.current;
     if (tap) {
       stickerTap.current = null;
-      // place exactly one sticker per click; the tool stays armed for the next
       if (e && e.pointerId === tap.id && toolState.tool === "sticker" && toolState.stickerId) {
         commit([
           ...items,
@@ -435,8 +432,19 @@ export function ScrapCanvas({
     return "crosshair";
   }, [toolState.tool]);
 
-  const strokes = items.filter((i): i is StrokeItem => i.kind === "stroke");
-  const objects = items.filter((i) => i.kind !== "stroke");
+  const strokes = useMemo(
+    () => items.filter((i): i is StrokeItem => i.kind === "stroke"),
+    [items],
+  );
+  const objects = useMemo(() => items.filter((i) => i.kind !== "stroke"), [items]);
+  const pickStrokeBoxes = useMemo(
+    () =>
+      new Map(
+        strokes.map((st) => [st.id, bbox(st.points)] as const),
+      ),
+    [strokes],
+  );
+  const pickObjects = toolState.tool === "select" || toolState.tool === "eraser";
 
   return (
     <div
@@ -455,8 +463,7 @@ export function ScrapCanvas({
         style={{ pointerEvents: "none", overflow: "visible" }}
       >
         {strokes.map((st) => {
-          const b = bbox(st.points);
-          const pick = toolState.tool === "eraser" || toolState.tool === "select";
+          const b = pickStrokeBoxes.get(st.id)!;
           return (
             <g key={st.id}>
               <StrokeShape st={st} />
@@ -473,7 +480,7 @@ export function ScrapCanvas({
                   strokeWidth={1.5}
                 />
               )}
-              {pick && (
+              {pickObjects && (
                 <rect
                   x={b.x1 - 8}
                   y={b.y1 - 8}
@@ -506,7 +513,7 @@ export function ScrapCanvas({
         strokes
           .filter((st) => st.id === selected)
           .map((st) => {
-            const b = bbox(st.points);
+            const b = pickStrokeBoxes.get(st.id)!;
             const cx = (b.x1 + b.x2) / 2;
             const cy = (b.y1 + b.y2) / 2;
             const scaleStroke = (f: number) =>
@@ -549,13 +556,8 @@ export function ScrapCanvas({
             style={{
               left: (it as { x: number }).x,
               top: (it as { y: number }).y,
-              transform: `translate(-50%,-50%) rotate(${(it as { rot: number }).rot}deg) scale(${
-                it.kind === "sticker" ? it.scale : 1
-              })`,
-              pointerEvents:
-                toolState.tool === "select" || toolState.tool === "eraser" ? "auto" : "none",
-              filter:
-                "drop-shadow(0 2px 2px color-mix(in oklab, var(--espresso) 18%, transparent))",
+              transform: `translate(-50%,-50%) rotate(${(it as { rot: number }).rot}deg) scale(${it.kind === "sticker" ? it.scale : 1})`,
+              pointerEvents: pickObjects ? "auto" : "none",
               outline: isSel
                 ? "1.5px dashed color-mix(in oklab, var(--rose) 70%, transparent)"
                 : undefined,
