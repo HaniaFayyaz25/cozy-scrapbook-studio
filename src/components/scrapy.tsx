@@ -102,7 +102,13 @@ export const Scrapy = memo(function Scrapy({
       viewBox="0 0 64 64"
       width={size}
       height={size}
-      style={{ overflow: "visible", animation: bob ? "bob 4.5s ease-in-out infinite" : undefined, transform: flip ? "scaleX(-1)" : undefined }}
+      style={{
+        overflow: "visible",
+        animation: bob ? "bob 3.2s ease-in-out infinite" : undefined,
+        transform: flip ? "scaleX(-1)" : undefined,
+        transformOrigin: "center bottom",
+        transition: "transform 180ms ease, filter 180ms ease",
+      }}
     >
       <ScrapyBlob face={mood} tape={tape} />
       <TinyProp prop={prop} />
@@ -141,10 +147,6 @@ function describeTool(tool?: string) {
   return names[tool ?? ""] ?? tool;
 }
 
-/**
- * Builds commentary from the current situation. There is no timer and no
- * rotating script. A changed action/context creates the next observation.
- */
 export function scrapyLines(room: string, ctx: ScrapyCtx = {}): string[] {
   const { tool, stickerId, items, page, pageCount, docName, count } = ctx;
   const out: string[] = [];
@@ -163,13 +165,8 @@ export function scrapyLines(room: string, ctx: ScrapyCtx = {}): string[] {
     else out.push(`${items} things on this page. okay, this has personality now.`);
   }
 
-  if (page && pageCount) {
-    out.push(`you're on page ${page} of ${pageCount}.`);
-  }
-
-  if (docName) {
-    out.push(`back to “${docName}”.`);
-  }
+  if (page && pageCount) out.push(`you're on page ${page} of ${pageCount}.`);
+  if (docName) out.push(`back to “${docName}”.`);
 
   if (typeof count === "number") {
     if (room === "pdfs") out.push(count === 0 ? "your reading shelf is empty for now." : `${count} PDF${count === 1 ? "" : "s"} waiting on the shelf.`);
@@ -200,7 +197,6 @@ export function ScrapyHere({
 }: {
   room: keyof typeof ROOM_TAPE;
   mood: Mood;
-  /** Kept for backwards compatibility. Scrapy no longer uses fixed dialogue. */
   lines?: string[];
   ctx?: ScrapyCtx;
   prop?: Prop;
@@ -245,20 +241,28 @@ export function ScrapyHere({
     <div className={`pointer-events-none absolute z-20 select-none ${spots[0] ?? ""}`} style={{ opacity: peek ? 0.98 : 1 }}>
       <div className="relative flex items-end gap-1.5">
         {showLine && line && (
-          <div className="paper-card paper-grain absolute bottom-[85%] right-0 w-max max-w-[13rem] -rotate-2 px-2.5 py-1.5" style={{ borderRadius: 3 }}>
+          <div
+            className="paper-card paper-grain absolute bottom-[85%] right-0 w-max max-w-[13rem] -rotate-2 px-2.5 py-1.5"
+            style={{
+              borderRadius: 3,
+              animation: "scrapyBubbleIn 220ms ease-out both",
+              transformOrigin: "bottom right",
+            }}
+          >
             <p className="hand text-[1rem] leading-tight text-espresso">{line}</p>
           </div>
         )}
         <button
           type="button"
           onClick={() => setShowLine((v) => !v)}
-          className="pointer-events-auto transition-transform duration-300 hover:-translate-y-1"
+          className="pointer-events-auto transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.06] active:scale-95"
           aria-label="scrapy"
           style={{ clipPath: peek ? "inset(0 0 22% 0)" : undefined }}
         >
-          <Scrapy mood={mood} tape={ROOM_TAPE[room] ?? "var(--petal)"} size={size} prop={prop} flip={flip} bob={false} />
+          <Scrapy mood={mood} tape={ROOM_TAPE[room] ?? "var(--petal)"} size={size} prop={prop} flip={flip} bob={!peek} />
         </button>
       </div>
+      <style>{`@keyframes scrapyBubbleIn { from { opacity: 0; transform: translateY(5px) rotate(-2deg) scale(.92); } to { opacity: 1; transform: translateY(0) rotate(-2deg) scale(1); } }`}</style>
     </div>
   );
 }
