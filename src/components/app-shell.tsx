@@ -1,16 +1,21 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { BookOpen, FileText, CloudLightning, Smile, Settings2 } from "lucide-react";
+import {
+  Bell,
+  BookOpen,
+  FileText,
+  FolderHeart,
+  Home,
+  Image,
+  LayoutGrid,
+  Leaf,
+  NotebookPen,
+  Search,
+  Settings2,
+  Sparkles,
+} from "lucide-react";
 import { hydrate, useScrap } from "@/lib/scrap-store";
 import { cn } from "@/lib/utils";
-
-const NAV = [
-  { to: "/", room: "notes", label: "notes", icon: BookOpen },
-  { to: "/pdfs", room: "pdfs", label: "pdfs", icon: FileText },
-  { to: "/ideas", room: "ideas", label: "idea dump", icon: CloudLightning },
-  { to: "/stickers", room: "stickers", label: "stickers", icon: Smile },
-  { to: "/settings", room: "settings", label: "settings", icon: Settings2 },
-] as const;
 
 const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
   cream: { paper: "oklch(0.972 0.011 88)", deep: "oklch(0.936 0.018 84)", bg: "oklch(0.958 0.014 86)" },
@@ -18,30 +23,9 @@ const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
   cool: { paper: "oklch(0.972 0.009 220)", deep: "oklch(0.934 0.014 224)", bg: "oklch(0.956 0.012 222)" },
 };
 
-function CornerDecor({ ambient }: { ambient: number }) {
-  if (ambient === 0) return null;
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-40 select-none" style={{ opacity: ambient === 1 ? 0.38 : 0.72 }}>
-      <svg viewBox="0 0 160 200" className="absolute inset-0 h-full w-full" style={{ animation: ambient === 2 ? "drift 14s ease-in-out infinite" : undefined }}>
-        <g fill="none" stroke="var(--amber)" strokeWidth={1} strokeLinecap="round" opacity={0.55}>
-          <path d="M156 30c-22 14-34 40-38 74" />
-          <path d="M140 52c8-4 16-3 22 1" />
-          <path d="M128 78c8-5 16-4 22 0" />
-          <path d="M122 106c8-5 16-4 22 0" />
-        </g>
-        <g fill="var(--amber)" opacity={0.85}>
-          <path d="M96 118l2.6 6.4 6.4 2.6-6.4 2.6L96 136l-2.6-6.4-6.4-2.6 6.4-2.6z" />
-          <path d="M132 150l1.9 4.6 4.6 1.9-4.6 1.9-1.9 4.6-1.9-4.6-4.6-1.9 4.6-1.9z" />
-          <path d="M112 172l1.4 3.4 3.4 1.4-3.4 1.4-1.4 3.4-1.4-3.4-3.4-1.4 3.4-1.4z" />
-        </g>
-      </svg>
-    </div>
-  );
-}
-
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const { reduceMotion: reduce, grain, paperTone, ambient } = useScrap((s) => s.settings);
+  const { reduceMotion: reduce, grain, paperTone } = useScrap((s) => s.settings);
 
   useEffect(() => { hydrate(); }, []);
 
@@ -53,40 +37,80 @@ export function AppShell({ children }: { children: ReactNode }) {
     root.style.setProperty("--background", tone.bg);
   }, [paperTone]);
 
-  const active = (to: string) => to === "/" ? path === "/" || path.startsWith("/notes") : path.startsWith(to);
-  const room = NAV.find((n) => active(n.to))?.room ?? "notes";
+  const isCanvas = path.startsWith("/notes") || path === "/";
+  const canvasTarget = path.startsWith("/notes/") ? path : "/";
+
+  const nav = [
+    { label: "Home", icon: Home, to: "/", active: path === "/" },
+    { label: "Canvas", icon: LayoutGrid, to: canvasTarget, active: path.startsWith("/notes") },
+    { label: "Idea Dump", icon: Sparkles, to: "/ideas", active: path.startsWith("/ideas") },
+    { label: "PDF Shelf", icon: FileText, to: "/pdfs", active: path.startsWith("/pdfs") },
+    { label: "Rooms", icon: FolderHeart, to: "/", active: false },
+    { label: "Notebooks", icon: NotebookPen, to: "/", active: false },
+    { label: "Settings", icon: Settings2, to: "/settings", active: path.startsWith("/settings") },
+  ];
 
   return (
-    <div className={cn("flex min-h-[100dvh] w-full items-stretch justify-center p-0 md:p-1", reduce && "reduce-motion", !grain && "no-grain")} style={{ background: "var(--room)" }}>
-      <div className="room paper-grain relative mx-auto flex min-h-[100dvh] w-full max-w-none flex-col overflow-hidden rounded-none p-1.5 md:rounded-[14px] md:p-2">
-        <CornerDecor ambient={ambient} />
+    <div className={cn("min-h-[100dvh] w-full", reduce && "reduce-motion", !grain && "no-grain")} style={{ background: "var(--room)" }}>
+      <div className="room paper-grain flex min-h-[100dvh] w-full flex-col overflow-hidden">
+        <header className="flex h-[66px] shrink-0 items-center border-b border-espresso/10 bg-paper/95 px-5 md:px-7">
+          <div className="flex w-[235px] shrink-0 items-center gap-2">
+            <div className="relative">
+              <span className="hand text-[2rem] leading-none text-room-ink">scrap</span>
+              <span className="absolute -right-4 -top-2 text-[11px] text-forest">✿</span>
+            </div>
+            <span className="hidden text-[10px] tracking-wide text-room-ink/45 xl:inline">Small ideas. Big dreams. ♡</span>
+          </div>
 
-        <div className="mb-1 flex items-center justify-between pr-10 md:hidden">
-          <Link to="/" className="hand text-[1.15rem] leading-none text-room-ink">scrap</Link>
-          <span className="rounded-full bg-paper-deep px-2 py-0.5 text-[0.65rem] leading-none text-room-ink/70">{NAV.find((n) => n.room === room)?.label}</span>
-        </div>
+          <div className="flex flex-1 justify-center">
+            <button className="flex items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-4 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:bg-paper-deep">
+              Main Room <span className="text-[10px]">⌄</span>
+            </button>
+          </div>
 
-        <div className="relative flex min-h-0 flex-1 gap-1.5 md:gap-2">
-          <aside className="hidden w-[7.5rem] shrink-0 md:block">
-            <Link to="/" className="mb-1.5 flex items-center gap-1 px-1"><span className="hand text-[1.85rem] leading-none text-room-ink">scrap</span></Link>
-            <nav className="flex flex-col gap-0.5">
-              {NAV.map((n) => {
-                const on = active(n.to);
-                return <Link key={n.to} to={n.to} className={cn("flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.78rem] transition-colors", on ? "bg-room-pill text-room-ink" : "text-room-ink/60 hover:bg-room-pill/50 hover:text-room-ink")}><n.icon className="h-[14px] w-[14px] shrink-0" strokeWidth={1.7} /><span className="truncate">{n.label}</span></Link>;
+          <div className="flex w-[235px] shrink-0 items-center justify-end gap-2 text-room-ink/60">
+            <button aria-label="leaf" className="grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Leaf className="h-4 w-4" /></button>
+            <button aria-label="search" className="grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Search className="h-4 w-4" /></button>
+            <button aria-label="notifications" className="relative grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Bell className="h-4 w-4" /><span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose" /></button>
+            <div className="grid h-8 w-8 place-items-center rounded-full border border-espresso/10 bg-paper-deep text-xs text-espresso">H</div>
+          </div>
+        </header>
+
+        <div className="flex min-h-0 flex-1">
+          <aside className="hidden w-[214px] shrink-0 border-r border-espresso/10 bg-paper/70 px-4 py-5 md:block">
+            <nav className="space-y-1.5">
+              {nav.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    className={cn(
+                      "group flex items-center gap-3 rounded-xl px-4 py-2.5 text-[13px] transition-all",
+                      item.active ? "bg-rose/25 font-medium text-espresso shadow-sm" : "text-room-ink/60 hover:bg-paper-deep/65 hover:text-room-ink",
+                    )}
+                  >
+                    <Icon className="h-[17px] w-[17px]" strokeWidth={1.7} />
+                    <span>{item.label}</span>
+                  </Link>
+                );
               })}
             </nav>
+
+            <div className="mt-8 rounded-2xl border border-espresso/8 bg-paper-deep/45 p-4">
+              <div className="mb-2 flex items-center gap-2 text-xs text-room-ink/60"><BookOpen className="h-4 w-4" /> little reminder</div>
+              <p className="hand text-lg leading-tight text-room-ink/75">make space for tiny ideas.</p>
+            </div>
           </aside>
 
-          <main className="relative min-h-0 min-w-0 flex-1 overflow-x-hidden pb-12 md:overflow-y-auto md:pb-0 md:pr-0">{children}</main>
+          <main className="min-h-0 min-w-0 flex-1 overflow-hidden">{children}</main>
         </div>
 
-        <nav className="sticky bottom-0 z-30 -mx-0.5 mt-0.5 md:hidden">
-          <div className="paper-card paper-grain mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full px-1 py-0.5 shadow-md">
-            {NAV.map((n) => {
-              const on = active(n.to);
-              return <Link key={n.to} to={n.to} aria-label={n.label} className={cn("flex min-h-8 min-w-8 items-center justify-center gap-1 rounded-full px-2 py-1 text-[0.65rem] transition-colors", on ? "bg-espresso text-paper" : "text-espresso/60 hover:bg-paper-deep")}><n.icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} />{on && <span className="whitespace-nowrap">{n.label}</span>}</Link>;
-            })}
-          </div>
+        <nav className="flex shrink-0 items-center justify-around border-t border-espresso/10 bg-paper/95 px-2 py-2 md:hidden">
+          {nav.slice(0, 5).map((item) => {
+            const Icon = item.icon;
+            return <Link key={item.label} to={item.to} className={cn("grid place-items-center gap-0.5 rounded-lg px-2 py-1 text-[9px]", item.active ? "bg-rose/25 text-espresso" : "text-room-ink/55")}><Icon className="h-4 w-4" /><span>{item.label}</span></Link>;
+          })}
         </nav>
       </div>
     </div>
