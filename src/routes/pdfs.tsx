@@ -43,6 +43,7 @@ export const Route = createFileRoute("/pdfs")({
 
 type PdfJs = typeof import("pdfjs-dist");
 let pdfjsPromise: Promise<PdfJs> | null = null;
+const pdfDocumentCache = new Map<string, Promise<Awaited<ReturnType<PdfJs["getDocument"]>["promise"]>>>();
 
 function getPdfjs(): Promise<PdfJs> {
   if (!pdfjsPromise) {
@@ -54,6 +55,25 @@ function getPdfjs(): Promise<PdfJs> {
     })();
   }
   return pdfjsPromise;
+}
+
+async function getPdfDocument(id: string): Promise<Awaited<ReturnType<PdfJs["getDocument"]>["promise"]>> {
+  const cached = pdfDocumentCache.get(id);
+  if (cached) return cached;
+
+  const promise = (async () => {
+    const [pdfjs, data] = await Promise.all([getPdfjs(), loadFile(id)]);
+    if (!data) throw new Error("PDF file is missing");
+    return pdfjs.getDocument({ data }).promise;
+  })();
+
+  pdfDocumentCache.set(id, promise);
+  try {
+    return await promise;
+  } catch (error) {
+    pdfDocumentCache.delete(id);
+    throw error;
+  }
 }
 
 function PdfRoom() {
@@ -81,6 +101,7 @@ function PdfRoom() {
         annotations: {},
       };
       actions.addPdf(rec);
+      pdfDocumentCache.set(id, Promise.resolve(doc));
       setOpenId(id);
     } finally {
       setBusy(false);
@@ -166,6 +187,7 @@ function PdfRoom() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  pdfDocumentCache.delete(p.id);
                   actions.deletePdf(p.id);
                 }}
                 aria-label={`remove ${p.name}`}
@@ -210,29 +232,39 @@ function PdfReader({ doc, onClose }: { doc: PdfDoc; onClose: () => void }) {
 
   useEffect(() => {
     let cancelled = false;
+    let renderTask: { cancel: () => void } | null = null;
+
     (async () => {
-      const [pdfjs, data] = await Promise.all([getPdfjs(), loadFile(doc.id)]);
-      if (!data || cancelled) return;
-      const pdf = await pdfjs.getDocument({ data: data.slice(0) }).promise;
-      const p = await pdf.getPage(Math.min(page, pdf.numPages));
-      const width = wrapRef.current?.clientWidth ?? 800;
-      const base = p.getViewport({ scale: 1 });
-      const scale = Math.min(1.8, width / base.width);
-      const viewport = p.getViewport({ scale });
-      const canvas = canvasRef.current;
-      if (!canvas || cancelled) return;
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = viewport.width * dpr;
-      canvas.height = viewport.height * dpr;
-      canvas.style.width = `${viewport.width}px`;
-      canvas.style.height = `${viewport.height}px`;
-      const ctx = canvas.getContext("2d")!;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      await p.render({ canvasContext: ctx, viewport }).promise;
-      if (!cancelled) setSize({ w: viewport.width, h: viewport.height });
+      try {
+        const pdf = await getPdfDocument(doc.id);
+        if (cancelled) return;
+        const p = await pdf.getPage(Math.min(page, pdf.numPages));
+        if (cancelled) return;
+        const width = wrapRef.current?.clientWidth ?? 800;
+        const base = p.getViewport({ scale: 1 });
+        const scale = Math.min(1.8, width / base.width);
+        const viewport = p.getViewport({ scale });
+        const canvas = canvasRef.current;
+        if (!canvas || cancelled) return;
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        canvas.width = Math.ceil(viewport.width * dpr);
+        canvas.height = Math.ceil(viewport.height * dpr);
+        canvas.style.width = `${viewport.width}px`;
+        canvas.style.height = `${viewport.height}px`;
+        const ctx = canvas.getContext("2d");
+        if (!ctx || cancelled) return;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        renderTask = p.render({ canvasContext: ctx, viewport });
+        await renderTask.promise;
+        if (!cancelled) setSize({ w: viewport.width, h: viewport.height });
+      } catch (error) {
+        if (!cancelled) console.error("Unable to render PDF page", error);
+      }
     })();
+
     return () => {
       cancelled = true;
+      renderTask?.cancel();
     };
   }, [doc.id, page]);
 
