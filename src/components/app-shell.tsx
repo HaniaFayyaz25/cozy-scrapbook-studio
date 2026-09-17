@@ -21,16 +21,8 @@ const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
 function CornerDecor({ ambient }: { ambient: number }) {
   if (ambient === 0) return null;
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-y-0 right-0 w-40 select-none"
-      style={{ opacity: ambient === 1 ? 0.38 : 0.72 }}
-    >
-      <svg
-        viewBox="0 0 160 200"
-        className="absolute inset-0 h-full w-full"
-        style={{ animation: ambient === 2 ? "drift 14s ease-in-out infinite" : undefined }}
-      >
+    <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-40 select-none" style={{ opacity: ambient === 1 ? 0.38 : 0.72 }}>
+      <svg viewBox="0 0 160 200" className="absolute inset-0 h-full w-full" style={{ animation: ambient === 2 ? "drift 14s ease-in-out infinite" : undefined }}>
         <g fill="none" stroke="var(--amber)" strokeWidth={1} strokeLinecap="round" opacity={0.55}>
           <path d="M156 30c-22 14-34 40-38 74" />
           <path d="M140 52c8-4 16-3 22 1" />
@@ -65,43 +57,34 @@ export function AppShell({ children }: { children: ReactNode }) {
   const room = NAV.find((n) => active(n.to))?.room ?? "notes";
 
   return (
-    <div
-      className={cn("flex min-h-[100dvh] w-full items-stretch justify-center p-0 md:p-1", reduce && "reduce-motion", !grain && "no-grain")}
-      style={{ background: "var(--room)" }}
-    >
-      <div className="room paper-grain relative mx-auto flex min-h-[100dvh] w-full max-w-none flex-col overflow-hidden rounded-none p-2 md:rounded-[14px] md:p-2.5">
+    <div className={cn("flex min-h-[100dvh] w-full items-stretch justify-center p-0 md:p-1", reduce && "reduce-motion", !grain && "no-grain")} style={{ background: "var(--room)" }}>
+      <div className="room paper-grain relative mx-auto flex min-h-[100dvh] w-full max-w-none flex-col overflow-hidden rounded-none p-1.5 md:rounded-[14px] md:p-2">
         <CornerDecor ambient={ambient} />
 
-        <div className="mb-1.5 flex items-center justify-between pr-12 md:hidden">
-          <Link to="/" className="hand text-[1.2rem] leading-none text-room-ink">scrap</Link>
-          <span className="rounded-full bg-paper-deep px-2.5 py-1 text-[0.68rem] leading-none text-room-ink/70">
-            {NAV.find((n) => n.room === room)?.label}
-          </span>
+        <div className="mb-1 flex items-center justify-between pr-10 md:hidden">
+          <Link to="/" className="hand text-[1.15rem] leading-none text-room-ink">scrap</Link>
+          <span className="rounded-full bg-paper-deep px-2 py-0.5 text-[0.65rem] leading-none text-room-ink/70">{NAV.find((n) => n.room === room)?.label}</span>
         </div>
 
-        <div className="relative flex min-h-0 flex-1 gap-2 md:gap-2.5">
-          <aside className="hidden w-[8.25rem] shrink-0 md:block">
-            <Link to="/" className="mb-2 flex items-center gap-1.5 px-1"><span className="hand text-[2rem] leading-none text-room-ink">scrap</span></Link>
+        <div className="relative flex min-h-0 flex-1 gap-1.5 md:gap-2">
+          <aside className="hidden w-[7.5rem] shrink-0 md:block">
+            <Link to="/" className="mb-1.5 flex items-center gap-1 px-1"><span className="hand text-[1.85rem] leading-none text-room-ink">scrap</span></Link>
             <nav className="flex flex-col gap-0.5">
               {NAV.map((n) => {
                 const on = active(n.to);
-                return <Link key={n.to} to={n.to} className={cn("flex items-center gap-2 rounded-full px-3 py-1.5 text-[0.8rem] transition-colors", on ? "bg-room-pill text-room-ink" : "text-room-ink/60 hover:bg-room-pill/50 hover:text-room-ink")}>
-                  <n.icon className="h-[15px] w-[15px] shrink-0" strokeWidth={1.7} /><span className="truncate">{n.label}</span>
-                </Link>;
+                return <Link key={n.to} to={n.to} className={cn("flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.78rem] transition-colors", on ? "bg-room-pill text-room-ink" : "text-room-ink/60 hover:bg-room-pill/50 hover:text-room-ink")}><n.icon className="h-[14px] w-[14px] shrink-0" strokeWidth={1.7} /><span className="truncate">{n.label}</span></Link>;
               })}
             </nav>
           </aside>
 
-          <main className="relative min-h-0 min-w-0 flex-1 overflow-x-hidden pb-14 md:overflow-y-auto md:pb-1 md:pr-0.5">{children}</main>
+          <main className="relative min-h-0 min-w-0 flex-1 overflow-x-hidden pb-12 md:overflow-y-auto md:pb-0 md:pr-0">{children}</main>
         </div>
 
-        <nav className="sticky bottom-0 z-30 -mx-1 mt-1 md:hidden">
-          <div className="paper-card paper-grain mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full px-1.5 py-1 shadow-md">
+        <nav className="sticky bottom-0 z-30 -mx-0.5 mt-0.5 md:hidden">
+          <div className="paper-card paper-grain mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full px-1 py-0.5 shadow-md">
             {NAV.map((n) => {
               const on = active(n.to);
-              return <Link key={n.to} to={n.to} aria-label={n.label} className={cn("flex min-h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 py-1.5 text-[0.68rem] transition-colors", on ? "bg-espresso text-paper" : "text-espresso/60 hover:bg-paper-deep")}>
-                <n.icon className="h-4 w-4 shrink-0" strokeWidth={1.7} />{on && <span className="whitespace-nowrap">{n.label}</span>}
-              </Link>;
+              return <Link key={n.to} to={n.to} aria-label={n.label} className={cn("flex min-h-8 min-w-8 items-center justify-center gap-1 rounded-full px-2 py-1 text-[0.65rem] transition-colors", on ? "bg-espresso text-paper" : "text-espresso/60 hover:bg-paper-deep")}><n.icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} />{on && <span className="whitespace-nowrap">{n.label}</span>}</Link>;
             })}
           </div>
         </nav>
@@ -111,5 +94,5 @@ export function AppShell({ children }: { children: ReactNode }) {
 }
 
 export function PageHeader({ title, note, right }: { title: string; note?: string; right?: ReactNode }) {
-  return <header className="mb-2 flex flex-wrap items-end justify-between gap-1.5"><div className="min-w-0"><h1 className="hand text-[1.45rem] leading-none text-room-ink md:text-[1.7rem]">{title}</h1>{note && <p className="mt-0.5 text-[0.68rem] text-room-ink/50">{note}</p>}</div>{right}</header>;
+  return <header className="mb-1.5 flex flex-wrap items-end justify-between gap-1"><div className="min-w-0"><h1 className="hand text-[1.4rem] leading-none text-room-ink md:text-[1.65rem]">{title}</h1>{note && <p className="mt-0.5 text-[0.67rem] text-room-ink/50">{note}</p>}</div>{right}</header>;
 }
