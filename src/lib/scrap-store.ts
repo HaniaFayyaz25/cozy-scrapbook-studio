@@ -34,45 +34,14 @@ export type TextItem = {
 };
 
 export type CanvasItem = StrokeItem | StickerItem | TextItem;
-
 export type NotePage = { id: string; text: string; items: CanvasItem[] };
-
-export type Note = {
-  id: string;
-  title: string;
-  pages: NotePage[];
-  createdAt: number;
-  updatedAt: number;
-  tape: string;
-};
-
-export type PdfDoc = {
-  id: string;
-  name: string;
-  addedAt: number;
-  pageCount: number;
-  annotations: Record<string, CanvasItem[]>;
-};
-
+export type Note = { id: string; title: string; pages: NotePage[]; createdAt: number; updatedAt: number; tape: string };
+export type PdfDoc = { id: string; name: string; addedAt: number; pageCount: number; annotations: Record<string, CanvasItem[]> };
 export type IdeaBoard = { items: CanvasItem[] };
-
-export type Settings = {
-  ambient: number; // 0 = off, 1 = calm, 2 = lively
-  grain: boolean;
-  reduceMotion: boolean;
-  scrapyOn: boolean;
-  paperTone: "cream" | "warm" | "cool";
-};
-
-export type ScrapState = {
-  notes: Note[];
-  pdfs: PdfDoc[];
-  ideas: IdeaBoard;
-  settings: Settings;
-};
+export type Settings = { ambient: number; grain: boolean; reduceMotion: boolean; scrapyOn: boolean; paperTone: "cream" | "warm" | "cool" };
+export type ScrapState = { notes: Note[]; pdfs: PdfDoc[]; ideas: IdeaBoard; settings: Settings };
 
 const KEY = "scrap.state.v1";
-
 export const uid = () => Math.random().toString(36).slice(2, 10);
 
 const starterNote = (): Note => ({
@@ -81,32 +50,14 @@ const starterNote = (): Note => ({
   tape: "var(--petal)",
   createdAt: Date.now(),
   updatedAt: Date.now(),
-  pages: [
-    {
-      id: "starter-page",
-      text: "things to remember\n\nthe margins are where the real reading happens.\ncome back to page 42 — something about the light.\n",
-      items: [
-        {
-          id: "starter-sticker-1",
-          kind: "sticker",
-          stickerId: "m-flower-pink",
-          x: 420,
-          y: 90,
-          rot: -8,
-          scale: 1,
-        },
-        {
-          id: "starter-sticker-2",
-          kind: "sticker",
-          stickerId: "sc-tape",
-          x: 60,
-          y: 40,
-          rot: 6,
-          scale: 1,
-        },
-      ],
-    },
-  ],
+  pages: [{
+    id: "starter-page",
+    text: "things to remember\n\nthe margins are where the real reading happens.\ncome back to page 42 — something about the light.\n",
+    items: [
+      { id: "starter-sticker-1", kind: "sticker", stickerId: "m-flower-pink", x: 420, y: 90, rot: -8, scale: 1 },
+      { id: "starter-sticker-2", kind: "sticker", stickerId: "sc-tape", x: 60, y: 40, rot: 6, scale: 1 },
+    ],
+  }],
 });
 
 const defaultState: ScrapState = {
@@ -119,7 +70,6 @@ const defaultState: ScrapState = {
 let state: ScrapState = defaultState;
 let hydrated = false;
 const listeners = new Set<() => void>();
-
 const REMOVED_TITLES = new Set(["math class observation", "maths class observation"]);
 
 function load(): ScrapState {
@@ -141,13 +91,23 @@ function load(): ScrapState {
   }
 }
 
-function persist() {
+function persistNow() {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(state));
   } catch {
     /* quota — ignore */
   }
+}
+
+let persistTimer: ReturnType<typeof setTimeout> | undefined;
+function schedulePersist() {
+  if (typeof window === "undefined") return;
+  if (persistTimer) clearTimeout(persistTimer);
+  persistTimer = setTimeout(() => {
+    persistTimer = undefined;
+    persistNow();
+  }, 250);
 }
 
 function emit() {
@@ -158,13 +118,18 @@ export function hydrate() {
   if (hydrated || typeof window === "undefined") return;
   hydrated = true;
   state = load();
-  persist();
+  persistNow();
   emit();
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("pagehide", persistNow);
+  window.addEventListener("beforeunload", persistNow);
 }
 
 export function setState(updater: (s: ScrapState) => ScrapState) {
   state = updater(state);
-  persist();
+  schedulePersist();
   emit();
 }
 
@@ -182,8 +147,6 @@ export function useScrap<T>(selector: (s: ScrapState) => T): T {
 }
 
 export const getState = () => state;
-
-/* ------------------------------- actions -------------------------------- */
 
 export const actions = {
   createNote(title = "untitled page") {
@@ -257,8 +220,6 @@ export const actions = {
     setState(() => next);
   },
 };
-
-/* --------------------------- PDF blob storage ---------------------------- */
 
 const DB = "scrap-files";
 
