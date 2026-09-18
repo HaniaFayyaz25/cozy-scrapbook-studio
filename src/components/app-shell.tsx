@@ -15,6 +15,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { hydrate, useScrap } from "@/lib/scrap-store";
+import { Scrapy } from "@/components/scrapy";
 import { cn } from "@/lib/utils";
 
 const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
@@ -53,7 +54,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className={cn("min-h-[100dvh] w-full", reduce && "reduce-motion", !grain && "no-grain")} style={{ background: "var(--room)" }}>
       <div className="room paper-grain flex min-h-[100dvh] w-full flex-col overflow-hidden">
-        <header className="flex h-[66px] shrink-0 items-center border-b border-espresso/10 bg-paper/95 px-5 md:px-7">
+        <header className="flex h-[60px] shrink-0 items-center border-b border-espresso/10 bg-paper/95 px-4 md:px-6">
           <div className="flex w-[235px] shrink-0 items-center gap-2">
             <div className="relative">
               <span className="hand text-[2rem] leading-none text-room-ink">scrap</span>
@@ -77,8 +78,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         </header>
 
         <div className="flex min-h-0 flex-1">
-          <aside className="hidden w-[214px] shrink-0 border-r border-espresso/10 bg-paper/70 px-4 py-5 md:block">
-            <nav className="space-y-1.5">
+          <aside className="hidden w-[214px] shrink-0 border-r border-espresso/10 bg-paper/88 px-3.5 py-4 md:block">
+            <nav className="space-y-1">
               {nav.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -86,7 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     key={item.label}
                     to={item.to}
                     className={cn(
-                      "group flex items-center gap-3 rounded-xl px-4 py-2.5 text-[13px] transition-all",
+                      "group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[13px] transition-all",
                       item.active ? "bg-rose/25 font-medium text-espresso shadow-sm" : "text-room-ink/60 hover:bg-paper-deep/65 hover:text-room-ink",
                     )}
                   >
@@ -97,9 +98,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               })}
             </nav>
 
-            <div className="mt-8 rounded-2xl border border-espresso/8 bg-paper-deep/45 p-4">
-              <div className="mb-2 flex items-center gap-2 text-xs text-room-ink/60"><BookOpen className="h-4 w-4" /> little reminder</div>
-              <p className="hand text-lg leading-tight text-room-ink/75">make space for tiny ideas.</p>
+            <div className="relative mt-8 min-h-[220px] overflow-hidden rounded-2xl border border-espresso/10 bg-paper-deep/55 p-4 shadow-sm">
+              <div className="mb-1 flex items-center gap-2 text-xs text-room-ink/60"><BookOpen className="h-4 w-4" /> little reminder</div>
+              <p className="hand max-w-[130px] text-lg leading-tight text-room-ink/80">make space for tiny ideas.</p>
+              <p className="hand mt-2 text-sm text-room-ink/55">you got this &lt;3</p>
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2"><Scrapy mood="happy" size={86} /></div>
             </div>
           </aside>
 
