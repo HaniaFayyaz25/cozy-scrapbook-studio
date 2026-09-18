@@ -45,15 +45,62 @@ const toolbar = [
 
 function DecorativePaper() {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute left-[7%] top-[8%] h-24 w-20 rotate-[-7deg] rounded-sm border border-espresso/10 bg-rose/25 shadow-sm" />
-      <div className="absolute left-[10%] top-[6%] h-3 w-20 rotate-[-7deg] bg-amber/50" />
-      <div className="absolute right-[9%] top-[10%] h-28 w-24 rotate-[5deg] rounded-sm border border-espresso/10 bg-sky/20 shadow-sm" />
-      <div className="absolute left-[22%] top-[58%] rotate-[-4deg] font-serif text-5xl text-rose/45">♡</div>
-      <div className="absolute right-[17%] bottom-[18%] rotate-[8deg] font-serif text-6xl text-forest/25">✿</div>
-      <div className="absolute left-[48%] top-[18%] rotate-[-2deg] text-4xl text-amber/45">✦</div>
-      <div className="absolute bottom-[12%] left-[13%] h-20 w-28 rotate-[3deg] rounded-sm border border-espresso/10 bg-paper shadow-sm" />
-      <div className="absolute bottom-[13%] left-[14%] font-serif text-xs uppercase tracking-[0.2em] text-espresso/30">collect / keep / create</div>
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden scrapbook-surface">
+      <div className="absolute left-[4%] top-[5%] w-44 rotate-[-5deg] rounded-sm border border-espresso/10 bg-rose/35 px-5 py-4 shadow-md">
+        <div className="hand text-[1.45rem] leading-tight text-espresso">same girl...<br />bigger dreams ♡</div>
+      </div>
+      <div className="absolute left-[7%] top-[3%] h-7 w-20 rotate-[-24deg] rounded-sm bg-amber/55" />
+
+      <div className="absolute left-[24%] top-[12%] h-[220px] w-[180px] rotate-[-2deg] border-[8px] border-paper bg-paper shadow-xl">
+        <div className="scrapbook-photo h-full w-full" />
+        <div className="absolute -top-5 left-1/2 h-7 w-20 -translate-x-1/2 rotate-[1deg] bg-amber/45" />
+      </div>
+
+      <div className="absolute right-[24%] top-[7%] h-[105px] w-[125px] rotate-[-6deg] border-[7px] border-paper bg-paper shadow-lg">
+        <div className="scrapbook-photo h-full w-full" />
+      </div>
+      <div className="absolute right-[10%] top-[15%] h-[125px] w-[105px] rotate-[8deg] border-[7px] border-paper bg-paper shadow-lg">
+        <div className="scrapbook-photo h-full w-full" />
+      </div>
+
+      <div className="absolute left-[4%] top-[40%] h-32 w-10 rotate-[7deg] rounded-full bg-sage/60 blur-[1px]" />
+      <div className="absolute left-[2%] top-[48%] font-serif text-5xl text-forest/60">✿</div>
+      <div className="absolute right-[5%] top-[6%] rotate-[12deg] text-6xl text-forest/55">❧</div>
+
+      <div className="absolute left-[7%] bottom-[13%] w-[190px] rotate-[-2deg] border-[7px] border-paper bg-paper p-2 shadow-xl">
+        <div className="h-28 rounded-sm bg-gradient-to-br from-espresso/70 via-amber/35 to-sage/55" />
+        <div className="mt-1 grid gap-0.5 text-center font-serif text-[10px] text-espresso">
+          <span>Zindagi Gulzar Hai</span><span>Yakeen Ka Safar</span><span>Alif</span><span>Ehd-e-Wafa</span>
+        </div>
+      </div>
+
+      <div className="absolute right-[35%] top-[39%] w-48 rotate-[1deg] border border-espresso/10 bg-petal/55 px-5 py-4 shadow-lg">
+        <div className="hand text-2xl text-espresso">today:</div>
+        <div className="mt-2 space-y-1 font-serif text-sm text-espresso">
+          <div>□ study</div><div>□ read</div><div>□ create</div><div>□ be proud ♡</div>
+        </div>
+      </div>
+
+      <div className="absolute right-[13%] top-[43%] rounded-full border-2 border-espresso/60 bg-paper/75 px-5 py-4 text-center font-serif text-sm text-espresso shadow-sm">
+        This looks<br />amazing! ♡
+      </div>
+
+      <div className="absolute left-[38%] bottom-[9%] w-36 rotate-[-4deg] border border-espresso/10 bg-paper/90 px-5 py-4 text-center shadow-md">
+        <div className="hand text-xl text-espresso">better<br />things<br />take time ♡</div>
+      </div>
+
+      <div className="absolute right-[30%] bottom-[5%] h-32 w-[210px] rotate-[4deg] border-[7px] border-paper bg-paper p-1 shadow-xl">
+        <div className="h-full rounded-sm bg-gradient-to-br from-sky/80 via-forest/45 to-sage/70" />
+      </div>
+      <div className="absolute right-[5%] bottom-[8%] w-48 rotate-[-5deg] border border-espresso/10 bg-amber/30 px-4 py-4 text-center shadow-md">
+        <div className="hand text-lg text-espresso">“A little progress each day<br />adds up to big results.”</div>
+      </div>
+
+      <div className="absolute left-[1%] bottom-[0%] h-28 w-56 rotate-[2deg] rounded-t-[45%] bg-rose/20" />
+      <div className="absolute left-[18%] top-[55%] text-4xl text-espresso/70">♡</div>
+      <div className="absolute right-[28%] top-[27%] text-4xl text-espresso/70">♡</div>
+      <div className="absolute right-[9%] top-[37%] text-4xl text-espresso/70">♡</div>
+      <div className="absolute left-[41%] bottom-[27%] text-4xl text-espresso/65">✦</div>
     </div>
   );
 }
@@ -143,8 +190,8 @@ function NotePageView() {
       <div className="min-h-0 flex flex-1">
         <div className="flex min-w-0 flex-1 flex-col">
           <CanvasToolbar tool={tool} setTool={setTool} undo={history.undo} redo={history.redo} />
-          <div className="min-h-0 flex-1 overflow-hidden bg-paper-deep/35 p-3 md:p-5">
-            <ScrapCanvas items={page.items} onChange={setItems} toolState={tool} history={history} className="paper-card paper-grain ruled-lines relative h-full min-h-0 overflow-hidden rounded-2xl border border-espresso/10 p-5 shadow-[0_8px_30px_rgba(83,64,45,0.08)] md:p-8">
+          <div className="min-h-0 flex-1 overflow-hidden bg-paper-deep/45 p-2 md:p-3">
+            <ScrapCanvas items={page.items} onChange={setItems} toolState={tool} history={history} className="paper-card paper-grain relative h-full min-h-0 overflow-hidden rounded-[18px] border border-espresso/10 p-3 shadow-[0_14px_45px_rgba(83,64,45,0.14)] md:p-4">
               <DecorativePaper />
               <textarea value={page.text} onChange={(e) => actions.setPage(note.id, page.id, { text: e.target.value })} placeholder="start writing..." onPointerDown={(e) => tool.tool === "select" && e.stopPropagation()} style={{ pointerEvents: tool.tool === "select" ? "auto" : "none", position: "relative", zIndex: 2 }} className="hand relative min-h-full w-full resize-none bg-transparent pr-[8%] text-[1.1rem] leading-8 text-espresso outline-none placeholder:text-room-ink/30 md:text-[1.2rem]" />
             </ScrapCanvas>
