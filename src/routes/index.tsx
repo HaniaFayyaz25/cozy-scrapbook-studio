@@ -29,7 +29,7 @@ function NotesShelf() {
   };
 
   return (
-    <div className="relative h-full overflow-auto scrapbook-surface">
+    <div data-scrapbook-build="2026-09-18" className="relative h-full overflow-auto scrapbook-surface">
       <div className="mx-auto min-h-full max-w-[1500px] p-4 md:p-6">
         <div className="relative mb-5">
           <div className="inline-flex rotate-[-2deg] items-center gap-3 rounded-sm border border-espresso/10 bg-paper px-6 py-2.5 shadow-md">
