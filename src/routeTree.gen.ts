@@ -11,14 +11,22 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as CanvasRouteImport } from './routes/canvas'
 import { Route as PdfsRouteImport } from './routes/pdfs'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RoomsRouteImport } from './routes/rooms'
+import { Route as NotebooksRouteImport } from './routes/notebooks'
 import { Route as StickersRouteImport } from './routes/stickers'
 import { Route as NotesNoteIdRouteImport } from './routes/notes.$noteId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanvasRoute = CanvasRouteImport.update({
+  id: '/canvas',
+  path: '/canvas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IdeasRoute = IdeasRouteImport.update({
@@ -29,6 +37,16 @@ const IdeasRoute = IdeasRouteImport.update({
 const PdfsRoute = PdfsRouteImport.update({
   id: '/pdfs',
   path: '/pdfs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomsRoute = RoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotebooksRoute = NotebooksRouteImport.update({
+  id: '/notebooks',
+  path: '/notebooks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -49,7 +67,10 @@ const NotesNoteIdRoute = NotesNoteIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/canvas': typeof CanvasRoute
   '/ideas': typeof IdeasRoute
+  '/rooms': typeof RoomsRoute
+  '/notebooks': typeof NotebooksRoute
   '/pdfs': typeof PdfsRoute
   '/settings': typeof SettingsRoute
   '/stickers': typeof StickersRoute
@@ -57,7 +78,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/canvas': typeof CanvasRoute
   '/ideas': typeof IdeasRoute
+  '/rooms': typeof RoomsRoute
+  '/notebooks': typeof NotebooksRoute
   '/pdfs': typeof PdfsRoute
   '/settings': typeof SettingsRoute
   '/stickers': typeof StickersRoute
@@ -66,7 +90,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/canvas': typeof CanvasRoute
   '/ideas': typeof IdeasRoute
+  '/rooms': typeof RoomsRoute
+  '/notebooks': typeof NotebooksRoute
   '/pdfs': typeof PdfsRoute
   '/settings': typeof SettingsRoute
   '/stickers': typeof StickersRoute
@@ -106,6 +133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/canvas': {
+      id: '/canvas'
+      path: '/canvas'
+      fullPath: '/canvas'
+      preLoaderRoute: typeof CanvasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ideas': {
       id: '/ideas'
       path: '/ideas'
@@ -118,6 +152,20 @@ declare module '@tanstack/react-router' {
       path: '/pdfs'
       fullPath: '/pdfs'
       preLoaderRoute: typeof PdfsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rooms': {
+      id: '/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof RoomsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notebooks': {
+      id: '/notebooks'
+      path: '/notebooks'
+      fullPath: '/notebooks'
+      preLoaderRoute: typeof NotebooksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -146,7 +194,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CanvasRoute: CanvasRoute,
   IdeasRoute: IdeasRoute,
+  RoomsRoute: RoomsRoute,
+  NotebooksRoute: NotebooksRoute,
   PdfsRoute: PdfsRoute,
   SettingsRoute: SettingsRoute,
   StickersRoute: StickersRoute,
