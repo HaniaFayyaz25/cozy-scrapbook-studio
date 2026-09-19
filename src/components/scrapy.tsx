@@ -174,11 +174,31 @@ export function scrapyLines(room: string, ctx: ScrapyCtx = {}): string[] {
   }
 
   if (!out.length) {
-    if (room === "notes") out.push("you're in the notes. i'm keeping an eye on the page.");
-    else if (room === "pdfs") out.push("reading mode. got it.");
-    else if (room === "ideas") out.push("idea dump. let the page get messy.");
-    else if (room === "stickers") out.push("sticker drawer. i'm curious what you're picking.");
-    else out.push("i'm here. carry on.");
+    if (room === "notes") out.push(
+      "this page is quiet, but i can see the idea taking shape.",
+      "i'm keeping an eye on the little details. they matter.",
+      "blank space is allowed. you don't have to fill every corner."
+    );
+    else if (room === "pdfs") out.push(
+      "one page at a time. tell me what you're looking for.",
+      "reading shelf check: nothing needs to be rushed.",
+      "i'll keep watch while you work through the PDFs."
+    );
+    else if (room === "ideas") out.push(
+      "drop the idea before you polish it. rough thoughts are useful.",
+      "that thought doesn't need to be perfect yet. keep going.",
+      "i'm listening. what are you trying to figure out?"
+    );
+    else if (room === "stickers") out.push(
+      "okay, which little piece belongs on the page?",
+      "don't worry, we can change our minds about the decoration.",
+      "i'm judging the sticker placement very seriously. respectfully."
+    );
+    else out.push(
+      "i'm here. tell me what you're working on.",
+      "i noticed you came back. let's pick up where you left off.",
+      "no dramatic speech. just me keeping you company while you build."
+    );
   }
 
   return out;
@@ -225,15 +245,22 @@ export function ScrapyHere({
 
   useEffect(() => {
     if (!on || !pool.length) return;
-    const next = pool[seen % pool.length]!;
+    const next = pool[0]!;
     setLine(next);
     setShowLine(true);
     setMood(nightly ? "sleepy" : pool.length > 1 ? "curious" : baseMood);
-    setSeen((n) => n + 1);
-
     const t = window.setTimeout(() => setShowLine(false), 5200);
     return () => window.clearTimeout(t);
   }, [on, sig, pool, nightly, baseMood]);
+
+  const speak = () => {
+    if (!pool.length) return;
+    const nextIndex = (seen + 1) % pool.length;
+    setSeen(nextIndex);
+    setLine(pool[nextIndex]!);
+    setShowLine(true);
+    setMood(nightly ? "sleepy" : pool.length > 1 ? "curious" : baseMood);
+  };
 
   if (!on) return null;
 
@@ -254,7 +281,7 @@ export function ScrapyHere({
         )}
         <button
           type="button"
-          onClick={() => setShowLine((v) => !v)}
+          onClick={speak}
           className="pointer-events-auto transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.06] active:scale-95"
           aria-label="scrapy"
           style={{ clipPath: peek ? "inset(0 0 22% 0)" : undefined }}
