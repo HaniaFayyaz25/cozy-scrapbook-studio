@@ -304,4 +304,6 @@
   background: linear-gradient(145deg, #6f553f 0%, #c9a17a 36%, #efc78f 58%, #6b7780 100%);
   box-shadow: 0 8px 18px -12px rgba(52,38,28,.75);
 }
-\n\n.header-popover { position: absolute; top: calc(100% + 10px); z-index: 100; width: 190px; border: 1px solid color-mix(in oklab, var(--espresso) 12%, transparent); border-radius: 14px; background: var(--paper); padding: 12px; box-shadow: 0 14px 30px -16px rgba(70,48,34,.45); }
+
+
+.header-popover { position: absolute; top: calc(100% + 10px); z-index: 100; width: 190px; border: 1px solid color-mix(in oklab, var(--espresso) 12%, transparent); border-radius: 14px; background: var(--paper); padding: 12px; box-shadow: 0 14px 30px -16px rgba(70,48,34,.45); }
