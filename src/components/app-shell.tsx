@@ -137,6 +137,17 @@ export function AppShell({ children }: { children: ReactNode }) {
           <main className="min-h-0 min-w-0 flex-1 overflow-hidden">{children}</main>
         </div>
 
+        <div className="pointer-events-none fixed bottom-[68px] right-4 z-[80] md:bottom-5 md:right-6">
+          <div className="relative flex flex-col items-end">
+            <div className="pointer-events-none mb-1.5 mr-2 rounded-[10px] border border-espresso/10 bg-paper/95 px-2.5 py-1.5 shadow-md">
+              <p className="hand text-sm leading-none text-espresso">i'm still here ♡</p>
+            </div>
+            <div className="pointer-events-auto">
+              <Scrapy mood="happy" size={70} bob />
+            </div>
+          </div>
+        </div>
+
         <nav className="flex shrink-0 items-center gap-1 overflow-x-auto border-t border-espresso/10 bg-paper/95 px-2 py-2 md:hidden">
           {nav.map((item) => {
             const Icon = item.icon;
