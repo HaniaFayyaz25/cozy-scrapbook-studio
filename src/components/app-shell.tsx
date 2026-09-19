@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Bell,
   BookOpen,
@@ -26,7 +26,7 @@ const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const { reduceMotion: reduce, grain, paperTone, ambient } = useScrap((s) => s.settings);
+  const { reduceMotion: reduce, grain, paperTone, ambient } = useScrap((s) => s.settings);\n  const [headerPanel, setHeaderPanel] = useState<"room" | "leaf" | "search" | "bell" | "profile" | null>(null);\n  const [search, setSearch] = useState("");
 
   useEffect(() => { hydrate(); }, []);
 
@@ -62,31 +62,46 @@ export function AppShell({ children }: { children: ReactNode }) {
             </a>
           </div>
 
-          <a href="/rooms" aria-label="Open Main Room" className="flex shrink-0 items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-3.5 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:-translate-y-px hover:bg-paper-deep hover:shadow-md sm:px-4">
-            Main Room <span className="text-[10px]">⌄</span>
-          </a>
-
-          <div className="flex min-w-0 items-center justify-end gap-0.5 text-room-ink/60 sm:gap-1">
-            <button
-              aria-label="Toggle ambience"
-              title="Toggle ambience"
-              onClick={() => actions.setSettings({ ambient: ambient > 0 ? 0 : 1 })}
-              className="grid h-8 w-8 place-items-center rounded-full transition hover:bg-paper-deep hover:text-forest"
-            >
-              <Leaf className="h-4 w-4" />
+          <div className="relative flex shrink-0">
+            <button onClick={() => setHeaderPanel(headerPanel === "room" ? null : "room")} className="flex items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-3.5 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:bg-paper-deep sm:px-4">
+              Main Room <span className="text-[10px]">⌄</span>
             </button>
-            <a href="/ideas" aria-label="Search ideas" title="Search" className="grid h-8 w-8 place-items-center rounded-full transition hover:bg-paper-deep">
-              <Search className="h-4 w-4" />
-            </a>
-            <a href="/settings" aria-label="Notifications and settings" title="Notifications" className="relative grid h-8 w-8 place-items-center rounded-full transition hover:bg-paper-deep">
-              <Bell className="h-4 w-4" />
-              <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose" />
-            </a>
-            <a href="/settings" aria-label="Open profile settings" title="Profile" className="grid h-8 w-8 place-items-center rounded-full border border-espresso/10 bg-paper-deep text-xs text-espresso transition hover:shadow-sm">
-              H
-            </a>
+            {headerPanel === "room" && <div className="header-popover left-1/2 -translate-x-1/2">
+              <p className="hand text-lg text-espresso">Main Room</p>
+              <p className="mt-1 text-[11px] text-room-ink/55">Your cozy workspace</p>
+              <a href="/canvas" onClick={() => setHeaderPanel(null)} className="mt-3 block rounded-lg bg-rose/20 px-3 py-2 text-xs text-espresso hover:bg-rose/30">Open canvas</a>
+              <a href="/rooms" onClick={() => setHeaderPanel(null)} className="mt-1 block rounded-lg px-3 py-2 text-xs text-espresso hover:bg-paper-deep">View rooms</a>
+            </div>}
           </div>
-        </header>
+
+          <div className="relative flex min-w-0 items-center justify-end gap-0.5 text-room-ink/60 sm:gap-1">
+            <button aria-label="Ambience" title="Ambience" onClick={() => setHeaderPanel(headerPanel === "leaf" ? null : "leaf")} className="grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep hover:text-forest"><Leaf className="h-4 w-4" /></button>
+            <button aria-label="Search" title="Search" onClick={() => setHeaderPanel(headerPanel === "search" ? null : "search")} className="grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Search className="h-4 w-4" /></button>
+            <button aria-label="Notifications" title="Notifications" onClick={() => setHeaderPanel(headerPanel === "bell" ? null : "bell")} className="relative grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Bell className="h-4 w-4" /><span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose" /></button>
+            <button aria-label="Profile" title="Profile" onClick={() => setHeaderPanel(headerPanel === "profile" ? null : "profile")} className="grid h-8 w-8 place-items-center rounded-full border border-espresso/10 bg-paper-deep text-xs text-espresso">H</button>
+
+            {headerPanel === "leaf" && <div className="header-popover right-[88px]">
+              <p className="hand text-lg text-espresso">Ambience</p>
+              <p className="mt-1 text-[11px] text-room-ink/55">Set the mood of this room.</p>
+              <div className="mt-3 grid grid-cols-3 gap-1">
+                {[["0","Quiet"],["1","Calm"],["2","Lively"]].map(([v,label]) => <button key={v} onClick={() => { actions.setSettings({ambient:Number(v)}); setHeaderPanel(null); }} className={cn("rounded-lg px-2 py-2 text-[10px]", ambient === Number(v) ? "bg-rose/25 text-espresso" : "bg-paper-deep/60 text-room-ink/60")}>{label}</button>)}
+              </div>
+            </div>}
+            {headerPanel === "search" && <div className="header-popover right-[48px] w-[270px]">
+              <p className="hand text-lg text-espresso">Search your Scrap</p>
+              <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search notes, ideas..." className="mt-2 w-full rounded-lg border border-espresso/10 bg-paper px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-rose/40" />
+              <p className="mt-2 text-[10px] text-room-ink/50">Search stays here instead of opening another section.</p>
+            </div>}
+            {headerPanel === "bell" && <div className="header-popover right-[28px] w-[235px]">
+              <p className="hand text-lg text-espresso">Notifications</p>
+              <div className="mt-2 rounded-lg bg-paper-deep/55 p-3 text-[11px] text-room-ink/60">No new notifications. Your room is quiet. ♡</div>
+            </div>}
+            {headerPanel === "profile" && <div className="header-popover right-0 w-[190px]">
+              <p className="hand text-lg text-espresso">Profile</p>
+              <p className="mt-1 text-[11px] text-room-ink/55">Your Scrap workspace</p>
+              <a href="/settings" onClick={() => setHeaderPanel(null)} className="mt-3 block rounded-lg px-3 py-2 text-xs hover:bg-paper-deep">Settings</a>
+            </div>}
+          </div>        </header>
 
         <div className="flex min-h-0 flex-1">
           <aside className="hidden w-[214px] shrink-0 border-r border-espresso/10 bg-paper/88 px-3.5 py-4 md:block">
