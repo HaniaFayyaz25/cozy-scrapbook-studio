@@ -426,9 +426,11 @@ export function ScrapCanvas({
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  // Keep the browser cursor clean and scrapbook-like. The old crosshair/cell
-  // cursors made the canvas feel like a drawing program instead of a scrapbook.
-  const cursor = useMemo(() => "default", []);
+  const cursor = useMemo(() => {
+    if (toolState.tool === "select") return "default";
+    if (toolState.tool === "eraser") return "cell";
+    return "crosshair";
+  }, [toolState.tool]);
 
   const strokes = useMemo(
     () => items.filter((i): i is StrokeItem => i.kind === "stroke"),
