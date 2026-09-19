@@ -14,7 +14,7 @@ import {
   Settings2,
   Sparkles,
 } from "lucide-react";
-import { hydrate, useScrap } from "@/lib/scrap-store";
+import { actions, hydrate, useScrap } from "@/lib/scrap-store";
 import { Scrapy } from "@/components/scrapy";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,9 @@ const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const { reduceMotion: reduce, grain, paperTone, ambient } = useScrap((s) => s.settings);\n  const [headerPanel, setHeaderPanel] = useState<"room" | "leaf" | "search" | "bell" | "profile" | null>(null);\n  const [search, setSearch] = useState("");
+  const { reduceMotion: reduce, grain, paperTone, ambient } = useScrap((s) => s.settings);
+  const [headerPanel, setHeaderPanel] = useState<"room" | "leaf" | "search" | "bell" | "profile" | null>(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => { hydrate(); }, []);
 
