@@ -38,16 +38,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     root.style.setProperty("--background", tone.bg);
   }, [paperTone]);
 
-  const isCanvas = path.startsWith("/notes") || path === "/";
-  const canvasTarget = path.startsWith("/notes/") ? path : "/";
-
   const nav = [
     { label: "Home", icon: Home, to: "/", active: path === "/" },
-    { label: "Canvas", icon: LayoutGrid, to: canvasTarget, active: path.startsWith("/notes") },
+    { label: "Canvas", icon: LayoutGrid, to: "/canvas", active: path === "/canvas" || path.startsWith("/notes") },
     { label: "Idea Dump", icon: Sparkles, to: "/ideas", active: path.startsWith("/ideas") },
     { label: "PDF Shelf", icon: FileText, to: "/pdfs", active: path.startsWith("/pdfs") },
-    { label: "Rooms", icon: FolderHeart, to: "/", active: false },
-    { label: "Notebooks", icon: NotebookPen, to: "/", active: false },
+    { label: "Rooms", icon: FolderHeart, to: "/rooms", active: path.startsWith("/rooms") },
+    { label: "Notebooks", icon: NotebookPen, to: "/notebooks", active: path.startsWith("/notebooks") },
     { label: "Settings", icon: Settings2, to: "/settings", active: path.startsWith("/settings") },
   ];
 
