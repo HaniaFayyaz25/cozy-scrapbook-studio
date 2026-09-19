@@ -26,7 +26,7 @@ const TONES: Record<string, { paper: string; deep: string; bg: string }> = {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const { reduceMotion: reduce, grain, paperTone } = useScrap((s) => s.settings);
+  const { reduceMotion: reduce, grain, paperTone, ambient } = useScrap((s) => s.settings);
 
   useEffect(() => { hydrate(); }, []);
 
@@ -51,26 +51,40 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className={cn("min-h-[100dvh] w-full", reduce && "reduce-motion", !grain && "no-grain")} style={{ background: "var(--room)" }}>
       <div className="room paper-grain flex min-h-[100dvh] w-full flex-col overflow-hidden">
-        <header className="flex h-[60px] shrink-0 items-center border-b border-espresso/10 bg-paper/95 px-4 md:px-6">
-          <div className="flex w-[235px] shrink-0 items-center gap-2">
-            <div className="relative">
-              <span className="hand text-[2rem] leading-none text-room-ink">scrap</span>
-              <span className="absolute -right-4 -top-2 text-[11px] text-forest">✿</span>
-            </div>
-            <span className="hidden text-[10px] tracking-wide text-room-ink/45 xl:inline">Small ideas. Big dreams. ♡</span>
-          </div>
-
-          <div className="flex flex-1 justify-center">
-            <a href="/rooms" className="flex items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-4 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:bg-paper-deep">
-              Main Room <span className="text-[10px]">⌄</span>
+        <header className="grid h-[60px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b border-espresso/10 bg-paper/95 px-3 sm:px-4 md:px-6">
+          <div className="flex min-w-0 items-center justify-start">
+            <a href="/" aria-label="Scrap home" className="group flex items-center gap-2 rounded-xl px-1.5 py-1 transition hover:bg-paper-deep/70">
+              <span className="relative hand text-[1.8rem] leading-none text-room-ink sm:text-[2rem]">
+                scrap
+                <span className="absolute -right-3 -top-1 text-[10px] text-forest">✿</span>
+              </span>
+              <span className="hidden text-[10px] tracking-wide text-room-ink/45 lg:inline">Small ideas. Big dreams. ♡</span>
             </a>
           </div>
 
-          <div className="flex w-[235px] shrink-0 items-center justify-end gap-2 text-room-ink/60">
-            <button aria-label="leaf" className="grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Leaf className="h-4 w-4" /></button>
-            <button aria-label="search" className="grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Search className="h-4 w-4" /></button>
-            <button aria-label="notifications" className="relative grid h-8 w-8 place-items-center rounded-full hover:bg-paper-deep"><Bell className="h-4 w-4" /><span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose" /></button>
-            <div className="grid h-8 w-8 place-items-center rounded-full border border-espresso/10 bg-paper-deep text-xs text-espresso">H</div>
+          <a href="/rooms" aria-label="Open Main Room" className="flex shrink-0 items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-3.5 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:-translate-y-px hover:bg-paper-deep hover:shadow-md sm:px-4">
+            Main Room <span className="text-[10px]">⌄</span>
+          </a>
+
+          <div className="flex min-w-0 items-center justify-end gap-0.5 text-room-ink/60 sm:gap-1">
+            <button
+              aria-label="Toggle ambience"
+              title="Toggle ambience"
+              onClick={() => actions.setSettings({ ambient: ambient > 0 ? 0 : 1 })}
+              className="grid h-8 w-8 place-items-center rounded-full transition hover:bg-paper-deep hover:text-forest"
+            >
+              <Leaf className="h-4 w-4" />
+            </button>
+            <a href="/ideas" aria-label="Search ideas" title="Search" className="grid h-8 w-8 place-items-center rounded-full transition hover:bg-paper-deep">
+              <Search className="h-4 w-4" />
+            </a>
+            <a href="/settings" aria-label="Notifications and settings" title="Notifications" className="relative grid h-8 w-8 place-items-center rounded-full transition hover:bg-paper-deep">
+              <Bell className="h-4 w-4" />
+              <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose" />
+            </a>
+            <a href="/settings" aria-label="Open profile settings" title="Profile" className="grid h-8 w-8 place-items-center rounded-full border border-espresso/10 bg-paper-deep text-xs text-espresso transition hover:shadow-sm">
+              H
+            </a>
           </div>
         </header>
 
