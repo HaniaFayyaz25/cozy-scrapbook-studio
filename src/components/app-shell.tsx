@@ -61,9 +61,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex flex-1 justify-center">
-            <button className="flex items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-4 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:bg-paper-deep">
+            <a href="/rooms" className="flex items-center gap-2 rounded-full border border-espresso/10 bg-paper-deep/55 px-4 py-2 text-xs font-medium text-room-ink shadow-sm transition hover:bg-paper-deep">
               Main Room <span className="text-[10px]">⌄</span>
-            </button>
+            </a>
           </div>
 
           <div className="flex w-[235px] shrink-0 items-center justify-end gap-2 text-room-ink/60">
@@ -80,9 +80,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               {nav.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <Link
+                  <a
                     key={item.label}
-                    to={item.to}
+                    href={item.to}
                     className={cn(
                       "group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[13px] transition-all",
                       item.active ? "bg-rose/25 font-medium text-espresso shadow-sm" : "text-room-ink/60 hover:bg-paper-deep/65 hover:text-room-ink",
@@ -90,7 +90,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   >
                     <Icon className="h-[17px] w-[17px]" strokeWidth={1.7} />
                     <span>{item.label}</span>
-                  </Link>
+                  </a>
                 );
               })}
             </nav>
@@ -106,10 +106,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <main className="min-h-0 min-w-0 flex-1 overflow-hidden">{children}</main>
         </div>
 
-        <nav className="flex shrink-0 items-center justify-around border-t border-espresso/10 bg-paper/95 px-2 py-2 md:hidden">
-          {nav.slice(0, 5).map((item) => {
+        <nav className="flex shrink-0 items-center gap-1 overflow-x-auto border-t border-espresso/10 bg-paper/95 px-2 py-2 md:hidden">
+          {nav.map((item) => {
             const Icon = item.icon;
-            return <Link key={item.label} to={item.to} className={cn("grid place-items-center gap-0.5 rounded-lg px-2 py-1 text-[9px]", item.active ? "bg-rose/25 text-espresso" : "text-room-ink/55")}><Icon className="h-4 w-4" /><span>{item.label}</span></Link>;
+            return <a key={item.label} href={item.to} className={cn("grid min-w-[54px] shrink-0 place-items-center gap-0.5 rounded-lg px-2 py-1 text-[9px]", item.active ? "bg-rose/25 text-espresso" : "text-room-ink/55")}><Icon className="h-4 w-4" /><span>{item.label}</span></a>;
           })}
         </nav>
       </div>
